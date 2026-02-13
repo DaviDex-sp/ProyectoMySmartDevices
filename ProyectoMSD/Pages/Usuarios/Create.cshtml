@@ -1,0 +1,282 @@
+﻿@page
+@model ProyectoMSD.Pages.Usuarios.CreateModel
+
+        @{
+        ViewData["Title"] = "Create";
+        }
+
+<div class="container py-4">
+    <div class="row">
+        <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Crear Nuevo Usuario</h3>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" id="userForm">
+                        <!-- MOSTRAR TODOS los errores -->
+                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+                        <!-- FILA 1: Información Personal -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Nombre" class="form-label fw-bold">
+                                    <i class="fas fa-user me-1"></i>Nombre Completo
+                                </label>
+                                <input asp-for="Usuario.Nombre" class="form-control" placeholder="Ej: Juan Pérez García" id="inputNombre">
+                                <span asp-validation-for="Usuario.Nombre" class="text-danger fw-bold"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Correo" class="form-label fw-bold">
+                                    <i class="fas fa-envelope me-1"></i>Correo Electrónico
+                                </label>
+                                <input asp-for="Usuario.Correo" type="text" class="form-control" placeholder="usuario@ejemplo.com" id="inputCorreo">
+                                <span asp-validation-for="Usuario.Correo" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- FILA 2: Seguridad -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Clave" class="form-label fw-bold">
+                                    <i class="fas fa-lock me-1"></i>Contraseña
+                                </label>
+                                <input asp-for="Usuario.Clave" type="password" class="form-control" placeholder="••••••••">
+                                <span asp-validation-for="Usuario.Clave" class="text-danger fw-bold"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Rol" class="form-label fw-bold">
+                                    <i class="fas fa-user-tag me-1"></i>Rol del Usuario
+                                </label>
+                                <select asp-for="Usuario.Rol" class="form-select" id="inputRol">
+                                    <option value="">Seleccionar rol...</option>
+                                    <option value="Usuario">👤 Usuario</option>
+                                    <option value="Huesped">🔍 Huesped</option>
+                                </select>
+                                <span asp-validation-for="Usuario.Rol" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- FILA 3: Contacto -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Telefono" class="form-label fw-bold">
+                                    <i class="fas fa-phone me-1"></i>Teléfono
+                                </label>
+                                <input asp-for="Usuario.Telefono" type="number" class="form-control" placeholder="Ej: 3001234567" id="inputTelefono">
+                                <span asp-validation-for="Usuario.Telefono" class="text-danger fw-bold"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Ubicacion" class="form-label fw-bold">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Ubicación
+                                </label>
+                                <input asp-for="Usuario.Ubicacion" class="form-control" placeholder="Ej: Bogotá, Colombia" id="inputUbicacion">
+                                <span asp-validation-for="Usuario.Ubicacion" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- FILA 4: Documentación -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Documento" class="form-label fw-bold">
+                                    <i class="fas fa-id-card me-1"></i>Documento de Identidad
+                                </label>
+                                <input asp-for="Usuario.Documento" type="number" class="form-control" placeholder="Ej: 1234567890" id="inputDocumento">
+                                <span asp-validation-for="Usuario.Documento" class="text-danger fw-bold"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Usuario.Rut" class="form-label fw-bold">
+                                    <i class="fas fa-building me-1"></i>RUT (Opcional)
+                                </label>
+                                <input asp-for="Usuario.Rut" class="form-control" placeholder="Ej: 123456789-0" id="inputRut">
+                                <span asp-validation-for="Usuario.Rut" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- FILA 5: Configuración Avanzada -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Usuario.Permisos" class="form-label fw-bold">
+                                    <i class="fas fa-shield-alt me-1"></i>Permisos del Sistema
+                                </label>
+                                <select asp-for="Usuario.Permisos" class="form-select" id="inputPermisos">
+                                    <option value="">Seleccionar permisos...</option>
+                                    <option value="completo">🔓 Acceso Parcial</option>
+                                    <option value="solo_lectura">👁️ Solo Lectura</option>
+                                </select>
+                                <span asp-validation-for="Usuario.Permisos" class="text-danger fw-bold"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="Usuario.Acesso" class="form-label fw-bold">
+                                    <i class="fas fa-toggle-on me-1"></i>Estado de Acceso
+                                </label>
+                                <select asp-for="Usuario.Acesso" class="form-select" id="inputAcceso">
+                                    <option value="">Seleccionar acceso...</option>
+                                    <option value="activo">✅ Activo</option>
+                                    <option value="inactivo">❌ Inactivo</option>
+                                </select>
+                                <span asp-validation-for="Usuario.Acesso" class="text-danger fw-bold"></span>
+                            </div>
+                        </div>
+
+                        <!-- BOTONES DE ACCIÓN -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Volver a Lista
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-user-plus me-1"></i>Crear Usuario
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: VISTA PREVIA -->
+        <div class="col-lg-4">
+            <div class="card shadow position-sticky" style="top: 20px;">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-eye me-2"></i>Vista Previa</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <!-- Avatar dinámico -->
+                        <div class="avatar bg-primary text-white me-3 fs-4 d-flex justify-content-center align-items-center rounded-circle" style="width:50px; height:50px;" id="previewAvatar">
+                            ?
+                        </div>
+
+                        <!-- Info del usuario (usando tu estructura) -->
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1" id="previewNombre">Nombre del usuario</h5>
+                            <p class="mb-1 text-muted">
+                                <i class="fas fa-envelope me-2"></i><span id="previewCorreo">correo@ejemplo.com</span>
+                            </p>
+                            <p class="mb-1">
+                                <span class="badge bg-secondary text-white" id="previewRol">Sin rol</span>
+                            </p>
+                            <p class="mb-1 text-muted">
+                                <i class="fas fa-phone me-2"></i><span id="previewTelefono">000000000</span>
+                            </p>
+                            <p class="mb-1 text-muted">
+                                <i class="fas fa-map-marker-alt me-2"></i><span id="previewUbicacion">Sin ubicación</span>
+                            </p>
+                            <p class="mb-1 text-muted">
+                                <i class="fas fa-id-card me-2"></i><span id="previewDocumento">Sin documento</span>
+                            </p>
+                            <p class="mb-1 text-muted">
+                                <i class="fas fa-building me-2"></i><span id="previewRut">Sin RUT</span>
+                            </p>
+                            <p class="mb-0 fw-bold">
+                                <i class="fas fa-circle me-2 text-secondary" id="previewAccesoIcon"></i><span id="previewAcceso">Sin estado</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a los elementos del formulario
+            const inputNombre = document.getElementById('inputNombre');
+            const inputCorreo = document.getElementById('inputCorreo');
+            const inputRol = document.getElementById('inputRol');
+            const inputTelefono = document.getElementById('inputTelefono');
+            const inputUbicacion = document.getElementById('inputUbicacion');
+            const inputDocumento = document.getElementById('inputDocumento');
+            const inputRut = document.getElementById('inputRut');
+            const inputAcceso = document.getElementById('inputAcceso');
+
+            // Referencias a los elementos de la vista previa
+            const previewAvatar = document.getElementById('previewAvatar');
+            const previewNombre = document.getElementById('previewNombre');
+            const previewCorreo = document.getElementById('previewCorreo');
+            const previewRol = document.getElementById('previewRol');
+            const previewTelefono = document.getElementById('previewTelefono');
+            const previewUbicacion = document.getElementById('previewUbicacion');
+            const previewDocumento = document.getElementById('previewDocumento');
+            const previewRut = document.getElementById('previewRut');
+            const previewAcceso = document.getElementById('previewAcceso');
+            const previewAccesoIcon = document.getElementById('previewAccesoIcon');
+
+            // Función para actualizar la vista previa
+            function actualizarPreview() {
+                // Actualizar avatar (primera letra del nombre)
+                const nombre = inputNombre.value.trim();
+                previewAvatar.textContent = nombre ? nombre.charAt(0).toUpperCase() : '?';
+
+                // Actualizar nombre
+                previewNombre.textContent = nombre || 'Nombre del usuario';
+
+                // Actualizar correo
+                previewCorreo.textContent = inputCorreo.value || 'correo@ejemplo.com';
+
+                // Actualizar rol con colores
+                const rol = inputRol.value;
+                const rolText = inputRol.options[inputRol.selectedIndex]?.text || 'Sin rol';
+                previewRol.textContent = rolText;
+
+                // Aplicar colores según el rol (tu lógica original)
+                const rolClass = rol?.toLowerCase() === 'admin' ? 'bg-danger text-white' :
+                               rol?.toLowerCase() === 'usuario' ? 'bg-success text-white' :
+                               rol?.toLowerCase() === 'huesped' ? 'bg-warning text-dark' :
+                               'bg-secondary text-white';
+
+                previewRol.className = `badge ${rolClass}`;
+
+                // Actualizar teléfono
+                previewTelefono.textContent = inputTelefono.value || '000000000';
+
+                // Actualizar ubicación
+                previewUbicacion.textContent = inputUbicacion.value || 'Sin ubicación';
+
+                // Actualizar documento
+                previewDocumento.textContent = inputDocumento.value || 'Sin documento';
+
+                // Actualizar RUT
+                previewRut.textContent = inputRut.value || 'Sin RUT';
+
+                // Actualizar estado de acceso (tu lógica original)
+                const acceso = inputAcceso.value;
+                const accesoText = inputAcceso.options[inputAcceso.selectedIndex]?.text || 'Sin estado';
+                previewAcceso.textContent = accesoText;
+
+                const accesoClass = acceso?.toLowerCase() === 'activo' ? 'text-success' : 'text-danger';
+                const accesoIcon = acceso?.toLowerCase() === 'activo' ? 'fa-check-circle' : 'fa-times-circle';
+
+                previewAcceso.className = `fw-bold ${accesoClass}`;
+                previewAccesoIcon.className = `fas ${accesoIcon} me-2 ${accesoClass}`;
+            }
+
+            // Agregar event listeners para actualizar en tiempo real
+            inputNombre.addEventListener('input', actualizarPreview);
+            inputCorreo.addEventListener('input', actualizarPreview);
+            inputRol.addEventListener('change', actualizarPreview);
+            inputTelefono.addEventListener('input', actualizarPreview);
+            inputUbicacion.addEventListener('input', actualizarPreview);
+            inputDocumento.addEventListener('input', actualizarPreview);
+            inputRut.addEventListener('input', actualizarPreview);
+            inputAcceso.addEventListener('change', actualizarPreview);
+
+            // Inicializar vista previa
+            actualizarPreview();
+
+            console.log('Vista previa de usuario inicializada ✅');
+        });
+    </script>
+}

@@ -1,0 +1,242 @@
+﻿@page
+@model ProyectoMSD.Pages.Configuraciones.IndexModel
+
+
+@{
+    ViewData["Title"] = "Configuraciones";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-blue: #4a90e2;
+        --primary-light: #b3d4fc;
+        --primary-dark: #2c5aa0;
+    }
+
+    .config-header {
+        background: var(--primary-blue);
+        color: white;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .config-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+            transform: translate(60px, -40px);
+        }
+
+    .table-container {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        border: 1px solid rgba(80, 144, 226, 0.07);
+    }
+
+    .table-header {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        padding: 1.5rem 2rem;
+        border-bottom: 2px solid var(--primary-blue);
+    }
+
+    .custom-table th {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        border: none;
+        padding: 1.1rem;
+    }
+
+    .custom-table td {
+        padding: 1.1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(80, 144, 226, 0.07);
+    }
+
+    .custom-table tbody tr:hover {
+        background: rgba(80, 144, 226, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .badge-config {
+        padding: 0.45rem 1rem;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+        .btn-edit:hover {
+            background: #ffc107;
+            color: white;
+        }
+
+    .btn-details {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+        .btn-details:hover {
+            background: #17a2b8;
+            color: white;
+        }
+
+    .btn-delete {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+        .btn-delete:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+    .create-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 20px rgba(80,144,226,.3);
+        transition: all .3s;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .create-button:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: scale(1.09);
+            box-shadow: 0 6px 25px rgba(80,144,226,.6);
+            text-decoration: none;
+        }
+</style>
+
+<div class="container-fluid px-4 py-4">
+
+    <div class="config-header text-center mb-4">
+        <h1 class="display-4 fw-bold mb-2">
+            <i class="fas fa-gear me-3"></i>Configuraciones del sistema
+        </h1>
+        <p class="lead mb-0">Administra las configuraciones principales en MySmartDevice</p>
+    </div>
+
+    <div class="table-container">
+        <div class="table-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0 fw-bold">
+                <i class="fas fa-list me-2"></i>Lista de Configuraciones
+            </h3>
+            <span class="badge bg-primary px-3 py-2">@Model.Configuracione.Count() configuraciones registradas</span>
+        </div>
+        @if (Model.Configuracione != null && Model.Configuracione.Any())
+        {
+            <table class="table custom-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag me-2"></i>ID</th>
+                        <th><i class="fas fa-language me-2"></i>Idioma</th>
+                        <th><i class="fas fa-bell me-2"></i>Alertas</th>
+                        <th><i class="fas fa-robot me-2"></i>Automatización</th>
+                        <th><i class="fas fa-plug me-2"></i>Adaptador</th>
+                        <th><i class="fas fa-microchip me-2"></i>ID_Dispositivo</th>
+                        <th><i class="fas fa-user me-2"></i>ID_Usuario</th>
+                        <th><i class="fas fa-cogs me-2"></i>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Configuracione)
+                    {
+                        <tr>
+                            <td><span class="badge bg-secondary fs-6">@item.Codigo</span></td>
+                            <td>@item.Idioma</td>
+                            <td>@item.Alertas</td>
+                            <td>
+                                <span class="badge-config @(item.Automatizacion ? "bg-success" : "bg-secondary")">
+                                    @(item.Automatizacion ? "General" : "Personalizada")
+                                </span>
+                            </td>
+                            <td>@item.Adaptador</td>
+                            <td>@item.IdDispositivos</td>
+                            <td>@item.IdUsuarios</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-page="./Details" asp-route-id="@item.Codigo"
+                                       class="btn-action btn-details" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a asp-page="./Edit" asp-route-id="@item.Codigo"
+                                       class="btn-action btn-edit" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-page="./Delete" asp-route-id="@item.Codigo"
+                                       class="btn-action btn-delete" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-cogs fa-4x mb-4 text-muted opacity-50"></i>
+                <h4 class="mb-3">No hay configuraciones registradas</h4>
+                <p class="mb-4 text-muted">Comienza agregando tu primera configuración del sistema.</p>
+                <a asp-page="Create" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>Agregar Configuración
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<a asp-page="Create" class="create-button" title="Agregar configuración">
+    <i class="fas fa-plus"></i>
+</a>

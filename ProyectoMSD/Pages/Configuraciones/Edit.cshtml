@@ -1,0 +1,66 @@
+﻿@page
+@model ProyectoMSD.Pages.Configuraciones.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Configuracione</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Configuracione.Codigo" />
+            <div class="form-group">
+                
+                <label asp-for="Configuracione.Idioma" class="control-label"></label>
+                <input asp-for="Configuracione.Idioma" class="form-control" />
+                <span asp-validation-for="Configuracione.Idioma" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Configuracione.Alertas" class="control-label"></label>
+                <input asp-for="Configuracione.Alertas" class="form-control" />
+                <span asp-validation-for="Configuracione.Alertas" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Configuracione.Automatizacion" /> @Html.DisplayNameFor(model => model.Configuracione.Automatizacion)
+                </label>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Configuracione.Adaptador" class="control-label"></label>
+                <input asp-for="Configuracione.Adaptador" class="form-control" />
+                <span asp-validation-for="Configuracione.Adaptador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Configuracione.IdDispositivos" class="control-label"></label>
+                <select asp-for="Configuracione.IdDispositivos" class="form-control" asp-items="ViewBag.IdDispositivos"></select>
+                <span asp-validation-for="Configuracione.IdDispositivos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Configuracione.IdUsuarios" class="control-label"></label>
+                <select asp-for="Configuracione.IdUsuarios" class="form-control" asp-items="ViewBag.IdUsuarios"></select>
+                <span asp-validation-for="Configuracione.IdUsuarios" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

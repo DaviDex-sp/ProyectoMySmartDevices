@@ -1,0 +1,412 @@
+﻿@page
+@model ProyectoMSD.Pages.Soportes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #D2EFFE 0%, #D2D9FE 100%);
+        --card-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        --hover-shadow: 0 12px 40px rgba(0,0,0,0.18);
+        --support-green: #7fb069;
+        --support-blue: #258cfb;
+    }
+
+    body {
+        background: var(--primary-gradient);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .support-header {
+        background: white;
+        padding: 3rem 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .support-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(37, 140, 251, 0.1) 0%, transparent 70%);
+        }
+
+    .faq-banner {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+        border-left: 5px solid var(--support-blue);
+    }
+
+    .faq-item {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+    .faq-question {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .faq-answer {
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+    }
+
+    .contact-section {
+        margin-bottom: 2rem;
+    }
+
+    .contact-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
+        }
+
+    .contact-icon {
+        width: 80px;
+        height: 80px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 2rem;
+        color: var(--support-blue);
+    }
+
+    .tickets-section {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+
+    .tickets-header {
+        background: #f8f9fa;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .ticket-item {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+        .ticket-item:hover {
+            background: rgba(37, 140, 251, 0.05);
+        }
+
+        .ticket-item:last-child {
+            border-bottom: none;
+        }
+
+    .support-table {
+        margin-bottom: 0;
+    }
+
+        .support-table th {
+            background: #f8f9fa;
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .support-table td {
+            border: none;
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        .support-table tbody tr:hover {
+            background: rgba(37, 140, 251, 0.05);
+        }
+
+    .btn-create {
+        background: var(--support-green);
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        box-shadow: 0 4px 20px rgba(127, 176, 105, 0.4);
+        z-index: 1000;
+    }
+
+        .btn-create:hover {
+            background: #6a9c56;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(127, 176, 105, 0.6);
+        }
+
+    .action-buttons .btn {
+        padding: 0.375rem 0.75rem;
+        margin-right: 0.25rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+    }
+
+        .action-buttons .btn:hover {
+            transform: translateY(-1px);
+        }
+</style>
+
+<div class="container-fluid px-4 py-4">
+
+    <!-- Header de Soporte -->
+    <div class="support-header text-center">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="fas fa-headset me-3 text-primary"></i>SOPORTE
+        </h1>
+        <p class="lead text-muted mb-0">Centro de ayuda y asistencia técnica para MySmartDevice</p>
+    </div>
+
+    <!-- Banner de Preguntas Frecuentes -->
+    <div class="faq-banner">
+        <div class="row align-items-center mb-3">
+            <div class="col">
+                <h3 class="fw-bold mb-0">
+                    <i class="fas fa-question-circle me-2 text-primary"></i>Preguntas Frecuentes
+                </h3>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-primary px-3 py-2">Las más consultadas</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-lightbulb me-2 text-warning"></i>
+                        ¿Cómo configurar las luces inteligentes?
+                    </div>
+                    <div class="faq-answer">
+                        Accede al panel de dispositivos y selecciona "Agregar dispositivo" para comenzar la configuración.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-wifi me-2 text-info"></i>
+                        ¿Por qué mi dispositivo no se conecta?
+                    </div>
+                    <div class="faq-answer">
+                        Verifica que tu red WiFi esté funcionando y que el dispositivo esté en modo de configuración.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-mobile-alt me-2 text-success"></i>
+                        ¿Cómo usar la aplicación móvil?
+                    </div>
+                    <div class="faq-answer">
+                        Descarga la app desde tu tienda favorita e inicia sesión con tus credenciales de MySmartDevice.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-shield-alt me-2 text-danger"></i>
+                        ¿Mis datos están seguros?
+                    </div>
+                    <div class="faq-answer">
+                        Sí, utilizamos encriptación de extremo a extremo y cumplimos con estándares internacionales de seguridad.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contacto de Soporte -->
+    <div class="contact-section">
+        <h3 class="mb-4 fw-bold">Contacto de Soporte</h3>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Chat en Vivo</h5>
+                    <p class="text-muted mb-3">Habla con un agente ahora mismo</p>
+                    <button class="btn btn-success">Iniciar Chat</button>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Teléfono</h5>
+                    <p class="text-muted mb-1">+57 1234567890</p>
+                    <button class="btn btn-success">Llamar Ahora</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Tickets/Soporte -->
+    <div class="tickets-section">
+        <div class="tickets-header d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-1 fw-bold">
+                    <i class="fas fa-ticket-alt me-2"></i>Tickets de Soporte
+                </h4>
+                <p class="text-muted mb-0">Historial de solicitudes y consultas</p>
+            </div>
+            <span class="badge bg-primary fs-6 px-3 py-2">@Model.Soporte.Count() tickets</span>
+        </div>
+
+        @if (Model.Soporte != null && Model.Soporte.Any())
+        {
+            <div class="table-responsive">
+                <table class="table support-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-calendar me-2"></i>Fecha</th>
+                            <th><i class="fas fa-file-alt me-2"></i>Descripción</th>
+                            <th><i class="fas fa-tag me-2"></i>Tipo</th>
+                            <th><i class="fas fa-reply me-2"></i>Respuesta</th>
+                            <th><i class="fas fa-user me-2"></i>Usuario</th>
+                            <th><i class="fas fa-cogs me-2"></i>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Soporte)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                                        <span>@Html.DisplayFor(modelItem => item.Fecha)</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@Html.DisplayFor(modelItem => item.Descripcion)</div>
+                                </td>
+                                <td>
+                                    @{
+                                        var tipoClass = item.Tipo?.ToLower() switch
+                                        {
+                                            "consulta" => "bg-info text-white",
+                                            "problema" => "bg-danger text-white",
+                                            "sugerencia" => "bg-success text-white",
+                                            _ => "bg-secondary text-white"
+                                        };
+                                    }
+                                    <span class="badge @tipoClass">@Html.DisplayFor(modelItem => item.Tipo)</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Respuesta))
+                                    {
+                                        <span class="badge bg-warning">Pendiente</span>
+                                        <div class="small text-muted mt-1">@Html.DisplayFor(modelItem => item.Respuesta)</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                            @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
+                                        </div>
+                                        <span class="fw-semibold">Usuario #@Html.DisplayFor(modelItem => item.IdUsuariosNavigation.Id)</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-page="./Details" asp-route-id="@item.Id"
+                                               class="btn-action btn-details"
+                                               title="Ver detalles del ticket"
+                                               data-bs-toggle="tooltip">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-ticket-alt fa-4x mb-4 text-muted opacity-50"></i>
+                <h4 class="mb-3">No hay tickets de soporte</h4>
+                <p class="mb-4 text-muted">Comienza creando tu primera solicitud de soporte.</p>
+                <a asp-page="Create" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>Crear Primer Ticket
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Botón flotante para crear -->
+<a asp-page="Create" class="btn btn-create">
+    <i class="fas fa-plus me-2"></i>Nuevo Ticket
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Página de soporte cargada correctamente');
+        console.log('Total de tickets:', @Model.Soporte.Count());
+    });
+</script>

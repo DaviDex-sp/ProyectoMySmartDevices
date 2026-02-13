@@ -1,0 +1,49 @@
+﻿@page
+@model ProyectoMSD.Pages.Espacios.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Espacio</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Espacio.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Espacio.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Espacio.Ubicacion)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Espacio.Ubicacion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Espacio.Señal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Espacio.Señal)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Espacio.Permisos)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Espacio.Permisos)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Espacio.IdPropiedadesNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Espacio.IdPropiedadesNavigation.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Espacio.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

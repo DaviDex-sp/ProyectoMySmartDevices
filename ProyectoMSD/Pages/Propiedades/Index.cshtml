@@ -1,0 +1,272 @@
+﻿@page
+@model ProyectoMSD.Pages.Propiedades.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+<link href="~/css/estiloNavBar.css" rel="stylesheet" />
+
+<div class="container-fluid py-4" style="background: #D2EFFE 0%, #D2D9FE 100%); min-height: 100vh;">
+
+    <!-- Header principal -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="display-5 fw-bold text-white mb-2">
+                        <i class="fas fa-building me-3"></i>Propiedades Registradas
+                    </h1>
+                    <p class="text-white-50 fs-5 mb-0">Gestiona todas las propiedades del sistema de hogar inteligente</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-light text-dark fs-6 px-3 py-2">
+                        <i class="fas fa-home me-2"></i>@Model.Propiedade.Count Propiedades Totales
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg" style="border-radius: 20px; background: rgba(255, 255, 255, 0.95);">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-2 fw-bold text-primary">
+                                <i class="fas fa-cogs me-2"></i>Gestión de Propiedades
+                            </h5>
+                            <p class="text-muted mb-0">Administra y controla todas las propiedades de hogar inteligente desde aquí</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="d-flex gap-2 justify-content-center justify-content-md-end">
+                                <!-- Botón para crear nueva propiedad -->
+                                <a asp-page="/Propiedades/Create" class="btn btn-success">
+                                    <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards de propiedades -->
+    <div class="row">
+        @if (Model.Propiedade != null && Model.Propiedade.Any())
+        {
+            @foreach (var item in Model.Propiedade)
+            {
+                <div class="col-xl-6 col-lg-6 col-md-12 mb-4">
+                    <div class="card border-0 shadow-lg h-100" style="border-radius: 20px; overflow: hidden; transition: all 0.4s ease;">
+                        <!-- Imagen de la propiedad -->
+                        <div class="position-relative" style="height: 300px;  background-image:url(https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500)">
+                            <div class="d-flex align-items-center justify-content-center h-100">
+                                <i class="fas fa-home fa-4x text-white opacity-75"></i>
+                            </div>
+                            <!-- Badge del tipo de propiedad -->
+                            <div class="position-absolute top-0 start-0 m-3">
+                                @{
+                                    var tipoClass = item.Tipo?.ToLower() switch
+                                    {
+                                        "casa" => "bg-success",
+                                        "apartamento" => "bg-primary",
+                                        "local" => "bg-warning text-dark",
+                                        "oficina" => "bg-info",
+                                        "finca" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @tipoClass fs-6 px-3 py-2" style="border-radius: 15px;">
+                                    <i class="fas fa-tag me-2"></i>@item.Tipo
+                                </span>
+                            </div>
+
+                            <!-- Badge del número de pisos -->
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-dark bg-opacity-75 fs-6 px-3 py-2" style="border-radius: 15px;">
+                                    <i class="fas fa-layer-group me-2"></i>@item.Pisos Piso@(item.Pisos > 1 ? "s" : "")
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Contenido de la tarjeta -->
+                        <div class="card-body p-4">
+                            <!-- Título de la dirección -->
+                            <h4 class="card-title fw-bold mb-3 text-primary">
+                                <i class="fas fa-map-marker-alt me-2"></i>@item.Direccion
+                            </h4>
+
+                            <!-- Información del usuario propietario -->
+                            <div class="d-flex align-items-center mb-3 p-3" style="background: rgba(52, 152, 219, 0.05); border-radius: 12px;">
+                                <div class="avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                     style="width: 45px; height: 45px; font-size: 18px;">
+                                    @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "U")
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1 fw-bold text-dark">
+                                        <i class="fas fa-user me-2 text-primary"></i>Propietario
+                                    </h6>
+                                    <p class="mb-0 text-muted">
+                                        @(item.IdUsuariosNavigation?.Nombre ?? "Usuario no disponible")
+                                    </p>
+                                    @if (!string.IsNullOrEmpty(item.IdUsuariosNavigation?.Correo))
+                                    {
+                                        <small class="text-muted">
+                                            <i class="fas fa-envelope me-1"></i>@item.IdUsuariosNavigation.Correo
+                                        </small>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Detalles adicionales -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <div class="text-center p-2" style="background: rgba(40, 167, 69, 0.1); border-radius: 10px;">
+                                        <i class="fas fa-building text-success fa-2x mb-2"></i>
+                                        <div class="fw-bold text-success">Tipo</div>
+                                        <small class="text-muted">@item.Tipo</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="text-center p-2" style="background: rgba(255, 193, 7, 0.1); border-radius: 10px;">
+                                        <i class="fas fa-layer-group text-warning fa-2x mb-2"></i>
+                                        <div class="fw-bold text-warning">Pisos</div>
+                                        <small class="text-muted">@item.Pisos nivel@(item.Pisos > 1 ? "es" : "")</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Estadísticas simuladas -->
+                            <div class="row text-center mb-4">
+                                <div class="col-4">
+                                    <div class="fw-bold text-primary fs-5">@Random.Shared.Next(18, 35).ToString("F1")kW</div>
+                                    <small class="text-muted">Consumo Energético</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-success fs-5">@Model.TotalDispositivos</div>
+                                    <small class="text-muted">Dispositivos</small>
+                                </div>
+                                <div class="col-4">
+                                    <div class="fw-bold text-info fs-5">@(item.Espacios?.Count ?? 0)</div> 
+                                    <small class="text-muted">Espacios</small>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-flex gap-2 justify-content-between">
+                                <div class="btn-group flex-fill" role="group">
+                                    <a asp-page="./Details" asp-route-id="@item.Id"
+                                       class="btn btn-outline-info" title="Ver detalles">
+                                        <i class="fas fa-eye me-1"></i>Ver
+                                    </a>
+                                    <a asp-page="./Edit" asp-route-id="@item.Id"
+                                       class="btn btn-outline-primary" title="Editar propiedad">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </a>
+                                    <a asp-page="./Delete" asp-route-id="@item.Id"
+                                       class="btn btn-outline-danger" title="Eliminar propiedad">
+                                        <i class="fas fa-trash me-1"></i>Eliminar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- Estado vacío -->
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <div class="card border-0 shadow-lg mx-auto" style="max-width: 600px; border-radius: 20px;">
+                        <div class="card-body p-5">
+                            <i class="fas fa-home fa-4x text-muted mb-4 opacity-50"></i>
+                            <h3 class="text-muted mb-3">No hay propiedades registradas</h3>
+                            <p class="text-muted mb-4">Comienza agregando la primera propiedad al sistema de hogar inteligente</p>
+                            <a asp-page="Create" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 15px;">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body py-4 text-center">
+                <i class="fas fa-home fa-4x text-danger mb-3"></i>
+                <h5 class="mb-3">¿Estás seguro de eliminar esta propiedad?</h5>
+                <p class="text-muted mb-2">
+                    Dirección: <span id="propertyAddress" class="fw-bold text-dark"></span>
+                </p>
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Esta acción no se puede deshacer.</strong> Se eliminarán todos los datos relacionados.
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+                <form method="post" id="deleteForm" style="display:inline">
+                    <input type="hidden" name="handler" value="Delete" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Sí, Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para funcionalidad -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configurar modal de eliminación
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteForm = document.getElementById('deleteForm');
+        const propertyAddress = document.getElementById('propertyAddress');
+
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const propertyId = button.getAttribute('data-property-id');
+            const address = button.getAttribute('data-property-address');
+
+            propertyAddress.textContent = address;
+            deleteForm.action = './Delete?id=' + propertyId;
+        });
+
+        // Animaciones de entrada
+        const cards = document.querySelectorAll('.card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    });
+</script>

@@ -1,0 +1,101 @@
+﻿@page
+@model ProyectoMSD.Pages.Espacios.CreateModel
+
+@{
+    ViewData["Title"] = "Crear Espacio";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-cube me-2"></i>Crear Nuevo Espacio</h3>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label asp-for="Espacio.Nombre" class="form-label fw-bold">
+                                <i class="fas fa-sign me-1"></i>Nombre del Espacio
+                            </label>
+                            <input asp-for="Espacio.Nombre" class="form-control" placeholder="Ej: Sala de reuniones">
+                            <span asp-validation-for="Espacio.Nombre" class="text-danger fw-bold"></span>
+                        </div>
+
+                        <!-- Ubicacion -->
+                        <div class="mb-3">
+                            <label asp-for="Espacio.Ubicacion" class="form-label fw-bold">
+                                <i class="fas fa-map-marker-alt me-1"></i>Ubicación
+                            </label>
+                            <input asp-for="Espacio.Ubicacion" class="form-control" placeholder="Ej: Segundo piso">
+                            <span asp-validation-for="Espacio.Ubicacion" class="text-danger fw-bold"></span>
+                        </div>
+
+                        <!-- Señal -->
+                        <div class="mb-3">
+                            <label asp-for="Espacio.Señal" class="form-label fw-bold">
+                                <i class="fas fa-wifi me-1"></i>Nivel de Señal
+                            </label>
+                            <input asp-for="Espacio.Señal" type="number" class="form-control" placeholder="Ej: 80">
+                            <span asp-validation-for="Espacio.Señal" class="text-danger fw-bold"></span>
+                        </div>
+
+                        <!-- Permisos -->
+                        <div class="mb-3">
+                            <label asp-for="Espacio.Permisos" class="form-label fw-bold">
+                                <i class="fas fa-key me-1"></i>Permisos
+                            </label>
+                            <input asp-for="Espacio.Permisos" class="form-control" placeholder="Ej: Acceso restringido">
+                            <span asp-validation-for="Espacio.Permisos" class="text-danger fw-bold"></span>
+                        </div>
+
+                        <!-- Dropdown Propiedad -->
+                        <div class="mb-4">
+                            <label asp-for="Espacio.IdPropiedades" class="form-label fw-bold">
+                                <i class="fas fa-home me-1"></i>Propiedad Asociada
+                            </label>
+                            <select asp-for="Espacio.IdPropiedades"
+                                    class="form-select"
+                                    asp-items="ViewBag.IdPropiedades">
+                                <option value="">-- Seleccione una propiedad --</option>
+                            </select>
+                            <span asp-validation-for="Espacio.IdPropiedades" class="text-danger fw-bold"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>Seleccione la propiedad donde estará este espacio
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i>Crear Espacio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.querySelector('select[name="Espacio.IdPropiedades"]');
+            console.log('Opciones en dropdown:', select.options.length);
+            for (let i = 0; i < select.options.length; i++) {
+                console.log(`Opción ${i}: Value="${select.options[i].value}", Text="${select.options[i].text}"`);
+            }
+        });
+    </script>
+}

@@ -1,0 +1,287 @@
+﻿@page
+@model ProyectoMSD.Pages.Soportes.CreateModel
+
+        @{
+        ViewData["Title"] = "Create";
+        }
+        
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #D2EFFE 0%, #D2D9FE 100%);
+        --card-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        --hover-shadow: 0 12px 40px rgba(0,0,0,0.18);
+        --support-blue: #258cfb;
+        --support-green: #28a745;
+    }
+
+    body {
+        background: var(--primary-gradient);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .create-container {
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .create-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 25px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid rgba(255,255,255,0.3);
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .create-card:hover {
+        box-shadow: var(--hover-shadow);
+        transform: translateY(-2px);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--support-blue) 0%, #1e7ce8 100%);
+        color: white;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        border-bottom: none;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .form-label {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--support-blue);
+        background: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(37, 140, 251, 0.2);
+    }
+
+    .form-control::placeholder {
+        color: #adb5bd;
+        font-style: italic;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, var(--support-green) 0%, #20c997 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        border-radius: 12px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        border-color: #6c757d;
+        transform: translateY(-2px);
+    }
+
+    .alert-danger {
+        background: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        color: #721c24;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        margin-bottom: 1.5rem;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .mb-4 {
+        margin-bottom: 2rem !important;
+    }
+
+    .priority-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .priority-alta { background: #f8d7da; color: #721c24; }
+    .priority-media { background: #fff3cd; color: #856404; }
+    .priority-baja { background: #d1ecf1; color: #0c5460; }
+</style>
+
+<div class="container create-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card create-card">
+                <div class="card-header">
+                    <h3 class="mb-2 fw-bold">
+                        <i class="fas fa-ticket-alt me-3"></i>Crear Nuevo Ticket de Soporte
+                    </h3>
+                    <p class="mb-0 opacity-90">Describe tu problema o consulta para recibir ayuda</p>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        <!-- MOSTRAR TODOS los errores -->
+                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+                        <!-- Fecha (automática, solo lectura) -->
+                        <div class="mb-3">
+                            <label asp-for="Soporte.Fecha" class="form-label">
+                                <i class="fas fa-calendar-alt me-2 text-primary"></i>Fecha del Ticket
+                            </label>
+                            <input asp-for="Soporte.Fecha" type="date" class="form-control" readonly 
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            <span asp-validation-for="Soporte.Fecha" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>La fecha se asigna automáticamente
+                            </div>
+                        </div>
+
+                        <!-- Tipo de Consulta -->
+                        <div class="mb-3">
+                            <label asp-for="Soporte.Tipo" class="form-label">
+                                <i class="fas fa-tags me-2 text-primary"></i>Tipo de Consulta
+                            </label>
+                            <select asp-for="Soporte.Tipo" class="form-select">
+                                <option value="">Seleccionar tipo de consulta...</option>
+                                <option value="consulta">❓ Consulta General</option>
+                                <option value="problema">⚠️ Problema Técnico</option>
+                                <option value="sugerencia">💡 Sugerencia</option>
+                                <option value="instalacion">🔧 Ayuda con Instalación</option>
+                                <option value="configuracion">⚙️ Configuración</option>
+                                <option value="facturacion">💳 Facturación</option>
+                            </select>
+                            <span asp-validation-for="Soporte.Tipo" class="text-danger"></span>
+                        </div>
+
+                        <!-- Descripción del Problema -->
+                        <div class="mb-4">
+                            <label asp-for="Soporte.Descripcion" class="form-label">
+                                <i class="fas fa-file-alt me-2 text-primary"></i>Descripción del Problema
+                            </label>
+                            <textarea asp-for="Soporte.Descripcion" class="form-control" rows="5" 
+                                      placeholder="Describe detalladamente tu problema o consulta. Incluye pasos que seguiste, mensajes de error, o cualquier información relevante..."></textarea>
+                            <span asp-validation-for="Soporte.Descripcion" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-lightbulb me-1"></i>Entre más detalles proporciones, mejor podremos ayudarte
+                            </div>
+                        </div>
+
+                        <!-- Usuario (dropdown mejorado) -->
+                        <div class="mb-4">
+                            <label asp-for="Soporte.IdUsuarios" class="form-label">
+                                <i class="fas fa-user me-2 text-primary"></i>Usuario que Reporta
+                            </label>
+                            <select asp-for="Soporte.IdUsuarios" class="form-select" asp-items="ViewBag.NombreUsuarios">
+                                <option value="">-- Seleccione el usuario --</option>
+                            </select>
+                            <span asp-validation-for="Soporte.IdUsuarios" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>Selecciona el usuario que está reportando este problema
+                            </div>
+                        </div>
+
+                        <!-- Método de Respuesta -->
+                        <div class="mb-4">
+                            <label asp-for="Soporte.Respuesta" class="form-label">
+                                <i class="fas fa-reply me-2 text-primary"></i>¿Cómo prefieres que llegue tu respuesta?
+                            </label>
+                            <select asp-for="Soporte.Respuesta" class="form-select">
+                                <option value="">-- Seleccione un método de respuesta --</option>
+                                <option value="Correo"> Correo</option>
+                                <option value="Sitio"> Sitio</option>
+                                <option value="Teléfono"> Teléfono</option>
+                            </select>
+                            <span asp-validation-for="Soporte.Respuesta" class="text-danger"></span>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>Elige el medio por el cual deseas recibir la respuesta
+                            </div>
+                        </div>
+
+
+
+                        <!-- Botones de Acción -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Volver al Soporte
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-2"></i>Crear Ticket
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

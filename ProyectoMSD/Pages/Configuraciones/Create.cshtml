@@ -1,0 +1,79 @@
+﻿@page
+@model ProyectoMSD.Pages.Configuraciones.CreateModel
+
+@{
+    ViewData["Title"] = "Crear Configuración";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow rounded-4 border-0 p-4">
+                <h3 class="mb-4 fw-bold text-primary">
+                    <i class="fas fa-gear me-2"></i>Crear Configuración
+                </h3>
+                <form method="post">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.Idioma" class="form-label fw-bold">
+                            <i class="fas fa-language me-1"></i>Idioma
+                        </label>
+                        <select asp-for="Configuracione.Idioma" class="form-select">
+                            <option> Español </option>
+                            <option> Ingles</option>
+                        </select>
+                        <span asp-validation-for="Configuracione.Idioma" class="text-danger fw-bold"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.Alertas" class="form-label fw-bold">
+                            <i class="fas fa-bell me-1"></i>Alertas
+                        </label>
+                        <input asp-for="Configuracione.Alertas" class="form-control" />
+                        <span asp-validation-for="Configuracione.Alertas" class="text-danger fw-bold"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.Automatizacion" class="form-label fw-bold">
+                            <i class="fas fa-robot me-1"></i>Automatización
+                        </label>
+                        <select asp-for="Configuracione.Automatizacion" class="form-select">
+                            <option value="true">General</option>
+                            <option value="false">Personalizada</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.Adaptador" class="form-label fw-bold">
+                            <i class="fas fa-plug me-1"></i>Adaptador
+                        </label>
+                        <input asp-for="Configuracione.Adaptador" class="form-control" />
+                        <span asp-validation-for="Configuracione.Adaptador" class="text-danger fw-bold"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.IdDispositivos" class="form-label fw-bold">
+                            <i class="fas fa-microchip me-1"></i>Dispositivo
+                        </label>
+                        <select asp-for="Configuracione.IdDispositivos" class="form-select" asp-items="Model.DispositivosList"></select>
+                        <span asp-validation-for="Configuracione.IdDispositivos" class="text-danger fw-bold"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Configuracione.IdUsuarios" class="form-label fw-bold">
+                            <i class="fas fa-user me-1"></i>Usuario
+                        </label>
+                        <select asp-for="Configuracione.IdUsuarios" class="form-select" asp-items="Model.UsuariosList"></select>
+                        <span asp-validation-for="Configuracione.IdUsuarios" class="text-danger fw-bold"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Crear
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
