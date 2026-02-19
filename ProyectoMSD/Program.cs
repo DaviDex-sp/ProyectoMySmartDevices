@@ -4,11 +4,10 @@ using ProyectoMSD.Modelos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar para escuchar en todas las interfaces de red en el puerto 5000
-//builder.WebHost.UseUrls("http://0.0.0.0:5000");
-
+// Configuración de las páginas Razor
 builder.Services.AddRazorPages();
 
+// Configuración de la Autenticación por Cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -20,25 +19,38 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "MySmartDeviceCookie";
     });
 
-// Configurar el DbContext con MySQL
+// Configurar el DbContext con MySQL usando la versión fija de XAMPP/MariaDB
 var connString = builder.Configuration.GetConnectionString("ConexionSQL");
-var serverVersion = ServerVersion.AutoDetect(connString);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        connString,
-        serverVersion)
+    options.UseMySql(connString, ServerVersion.Parse("10.4-mariadb"))
 );
 
 var app = builder.Build();
 
-// Configuración del pipeline HTTP
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
+// ------------------------------------------------------------------
+// BLINDAJE DE ARRANQUE: Forzamos la página de errores para depuración 
+// y protegemos la conexión inicial a la base de datos.
+// ------------------------------------------------------------------
+app.UseDeveloperExceptionPage();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        // Intenta conectar y crear las tablas si no existen
+        context.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        // Si Ngrok demora, atrapa el error pero permite que la web cargue
+        Console.WriteLine("Error de BD en el arranque: " + ex.Message);
+    }
+}
+// ------------------------------------------------------------------
+
+// Configuración del pipeline HTTP
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -48,7 +60,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();
