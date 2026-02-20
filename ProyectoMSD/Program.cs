@@ -20,20 +20,23 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "MySmartDeviceCookie";
     });
 
-// Configurar el DbContext usando la versión compatible con TiDB (MySQL 8.0) y tolerancia a fallos
-var connString = builder.Configuration.GetConnectionString("ConexionSQL");
+// 1. COMENTAMOS la línea que lee el archivo JSON para que no nos haga trampa
+// var connString = builder.Configuration.GetConnectionString("ConexionSQL");
 
+// 2. FORZAMOS la cadena exacta directamente en el código
+var connString = "Server=gateway01.us-east-1.prod.aws.tidbcloud.com;Port=4000;Database=test;Uid=mvrEn43J8gcsDi3.root;Pwd=8ZesKFBuEHHGcNgZ;SslMode=Required;";
+
+// 3. El DbContext queda igual, con sus reintentos
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         connString,
         ServerVersion.Parse("8.0-mysql"),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5, // Intentará conectarse 5 veces antes de rendirse
-            maxRetryDelay: TimeSpan.FromSeconds(10), // Esperará hasta 10 segundos entre intentos
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
             errorNumbersToAdd: null)
     )
 );
-
 var app = builder.Build();
 
 // Proteger la base de datos en el arranque para que la web no colapse si Ngrok o MySQL demoran
