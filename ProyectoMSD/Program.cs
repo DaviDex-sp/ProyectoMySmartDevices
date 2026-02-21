@@ -4,9 +4,7 @@ using ProyectoMSD.Modelos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ELIMINAMOS el UseUrls("http://0.0.0.0:5000") porque rompe Azure. 
-// En local, Visual Studio abrirá el puerto correcto automáticamente.
-
+// Servicios de Razor Pages y Autenticación
 builder.Services.AddRazorPages();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -15,38 +13,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Index";
         options.AccessDeniedPath = "/Denegada";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-
-        options.ClaimsIssuer = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Cookie.Name = "MySmartDeviceCookie";
     });
 
-// 1. COMENTAMOS la línea que lee el archivo JSON para que no nos haga trampa
-// var connString = builder.Configuration.GetConnectionString("ConexionSQL");
+// Configuración del DbContext: Ahora lee la cadena desde Azure y autodetecta la versión
+var connString = builder.Configuration.GetConnectionString("ConexionSQL");
 
-var connectionString = builder.Configuration.GetConnectionString("ConexionSQL");
-
-builder.Services.AddDbContext<TuDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connString, ServerVersion.AutoDetect(connString),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(10),
             errorNumbersToAdd: null))
 );
-var app = builder.Build();
 
-// Proteger la base de datos en el arranque para que la web no colapse si Ngrok o MySQL demoran
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    try
-    {
-        context.Database.EnsureCreated();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Error de DB en el arranque: " + ex.Message);
-    }
-}
+var app = builder.Build();
 
 // Configuración del pipeline HTTP
 if (!app.Environment.IsDevelopment())
@@ -56,20 +37,17 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    // Muestra errores detallados solo cuando estás desarrollando en tu PC
     app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();
