@@ -39,12 +39,14 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.IdDispositivos).HasColumnType("int(11)").HasColumnName("ID_Dispositivos");
             entity.Property(e => e.IdEspacios).HasColumnType("int(11)").HasColumnName("ID_Espacios");
+<<<<<<< HEAD
 
+=======
+>>>>>>> b1580d9aeed806651ac03c50aa3af5cc96101938
             entity.HasOne(d => d.IdDispositivosNavigation).WithMany(p => p.Almacenans)
                 .HasForeignKey(d => d.IdDispositivos)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("almacenan_ibfk_2");
-
             entity.HasOne(d => d.IdEspaciosNavigation).WithMany(p => p.Almacenans)
                 .HasForeignKey(d => d.IdEspacios)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -63,12 +65,10 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdDispositivos).HasColumnType("int(11)").HasColumnName("ID_Dispositivos");
             entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_Usuarios");
             entity.Property(e => e.Idioma).HasMaxLength(250);
-
             entity.HasOne(d => d.IdDispositivosNavigation).WithMany(p => p.Configuraciones)
                 .HasForeignKey(d => d.IdDispositivos)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("configuraciones_ibfk_1");
-
             entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Configuraciones)
                 .HasForeignKey(d => d.IdUsuarios)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -98,7 +98,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Permisos).HasMaxLength(250);
             entity.Property(e => e.Señal).HasColumnType("int(11)");
             entity.Property(e => e.Ubicacion).HasMaxLength(250);
-
             entity.HasOne(d => d.IdPropiedadesNavigation).WithMany(p => p.Espacios)
                 .HasForeignKey(d => d.IdPropiedades)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -115,7 +114,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_USUARIOS");
             entity.Property(e => e.Pisos).HasColumnType("int(11)");
             entity.Property(e => e.Tipo).HasMaxLength(250);
-
             entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Propiedades)
                 .HasForeignKey(d => d.IdUsuarios)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -132,7 +130,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_USUARIOS");
             entity.Property(e => e.Respuesta).HasMaxLength(250);
             entity.Property(e => e.Tipo).HasMaxLength(250);
-
             entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Soportes)
                 .HasForeignKey(d => d.IdUsuarios)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -141,6 +138,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.Id).HasName("PRIMARY");
             entity.ToTable("usuarios");
             entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
@@ -161,3 +159,12 @@ public partial class AppDbContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+=======
+        entity.HasKey(e => e.Id).HasName("PRIMARY");
+        entity.ToTable("usuarios");
+        entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
+        entity.Property(e => e.Acesso).HasMaxLength(250);
+        entity.Property(e => e.Clave).HasMaxLength(250);
+        entity.Property(e => e.Correo).HasMaxLength(250);
+        entity.Property(e => e.
+>>>>>>> b1580d9aeed806651ac03c50aa3af5cc96101938

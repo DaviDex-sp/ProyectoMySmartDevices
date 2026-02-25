@@ -16,19 +16,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "MySmartDeviceCookie";
     });
 
+<<<<<<< HEAD
 // Configuración profesional: Leemos la cadena desde el JSON (local) o Variables de Entorno (Azure)
 var connString = builder.Configuration.GetConnectionString("ConexionSQL");
 
 // Conectamos a Aiven usando Pomelo configurado para MySQL 8.0
+=======
+// Configuración del DbContext: Ahora lee la cadena desde Azure y autodetecta la versión
+var connString = builder.Configuration.GetConnectionString("ConexionSQL");
+
+>>>>>>> b1580d9aeed806651ac03c50aa3af5cc96101938
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        connString,
-        ServerVersion.Parse("8.0-mysql"),
+    options.UseMySql(connString, ServerVersion.AutoDetect(connString),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(10),
-            errorNumbersToAdd: null)
-    )
+            errorNumbersToAdd: null))
 );
 
 var app = builder.Build();
@@ -46,7 +49,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseAuthentication();
