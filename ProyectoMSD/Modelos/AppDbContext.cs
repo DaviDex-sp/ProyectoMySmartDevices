@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoMSD.Modelos;
@@ -18,25 +17,12 @@ public partial class AppDbContext : DbContext
     }
 
     public virtual DbSet<Almacenan> Almacenans { get; set; }
-
     public virtual DbSet<Configuracione> Configuraciones { get; set; }
-
     public virtual DbSet<Dispositivo> Dispositivos { get; set; }
-
     public virtual DbSet<Espacio> Espacios { get; set; }
-
     public virtual DbSet<Propiedade> Propiedades { get; set; }
-
     public virtual DbSet<Soporte> Soportes { get; set; }
-
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
-
-    //no mames bro respeta
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-// #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=127.0.0.1;port=3306;database=ProjectMySD;uid=root", Microsoft.EntityFrameworkCore.ServerVersion.Parse("10.4.32-mariadb"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,22 +33,12 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Almacenan>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("almacenan");
-
             entity.HasIndex(e => e.IdDispositivos, "ID_Dispositivos");
-
             entity.HasIndex(e => e.IdEspacios, "ID_Espacios");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
-            entity.Property(e => e.IdDispositivos)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Dispositivos");
-            entity.Property(e => e.IdEspacios)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Espacios");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
+            entity.Property(e => e.IdDispositivos).HasColumnType("int(11)").HasColumnName("ID_Dispositivos");
+            entity.Property(e => e.IdEspacios).HasColumnType("int(11)").HasColumnName("ID_Espacios");
 
             entity.HasOne(d => d.IdDispositivosNavigation).WithMany(p => p.Almacenans)
                 .HasForeignKey(d => d.IdDispositivos)
@@ -78,22 +54,14 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Configuracione>(entity =>
         {
             entity.HasKey(e => e.Codigo).HasName("PRIMARY");
-
             entity.ToTable("configuraciones");
-
             entity.HasIndex(e => e.IdDispositivos, "ID_Dispositivos");
-
             entity.HasIndex(e => e.IdUsuarios, "ID_Usuarios");
-
             entity.Property(e => e.Codigo).HasColumnType("int(11)");
             entity.Property(e => e.Adaptador).HasMaxLength(250);
             entity.Property(e => e.Alertas).HasMaxLength(250);
-            entity.Property(e => e.IdDispositivos)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Dispositivos");
-            entity.Property(e => e.IdUsuarios)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Usuarios");
+            entity.Property(e => e.IdDispositivos).HasColumnType("int(11)").HasColumnName("ID_Dispositivos");
+            entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_Usuarios");
             entity.Property(e => e.Idioma).HasMaxLength(250);
 
             entity.HasOne(d => d.IdDispositivosNavigation).WithMany(p => p.Configuraciones)
@@ -110,12 +78,8 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Dispositivo>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("dispositivos");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.Estado).HasMaxLength(250);
             entity.Property(e => e.Marca).HasMaxLength(250);
             entity.Property(e => e.Nombre).HasMaxLength(250);
@@ -126,17 +90,10 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Espacio>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("espacios");
-
             entity.HasIndex(e => e.IdPropiedades, "ID_Propiedades");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
-            entity.Property(e => e.IdPropiedades)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_Propiedades");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
+            entity.Property(e => e.IdPropiedades).HasColumnType("int(11)").HasColumnName("ID_Propiedades");
             entity.Property(e => e.Nombre).HasMaxLength(250);
             entity.Property(e => e.Permisos).HasMaxLength(250);
             entity.Property(e => e.Señal).HasColumnType("int(11)");
@@ -151,18 +108,11 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Propiedade>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("propiedades");
-
             entity.HasIndex(e => e.IdUsuarios, "ID_USUARIOS");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.Direccion).HasMaxLength(250);
-            entity.Property(e => e.IdUsuarios)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_USUARIOS");
+            entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_USUARIOS");
             entity.Property(e => e.Pisos).HasColumnType("int(11)");
             entity.Property(e => e.Tipo).HasMaxLength(250);
 
@@ -175,18 +125,11 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Soporte>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("soportes");
-
             entity.HasIndex(e => e.IdUsuarios, "ID_USUARIOS");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.Descripcion).HasMaxLength(250);
-            entity.Property(e => e.IdUsuarios)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID_USUARIOS");
+            entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_USUARIOS");
             entity.Property(e => e.Respuesta).HasMaxLength(250);
             entity.Property(e => e.Tipo).HasMaxLength(250);
 
@@ -199,12 +142,8 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Usuario>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
             entity.ToTable("usuarios");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.Acesso).HasMaxLength(250);
             entity.Property(e => e.Clave).HasMaxLength(250);
             entity.Property(e => e.Correo).HasMaxLength(250);
