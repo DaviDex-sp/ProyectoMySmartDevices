@@ -1,0 +1,155 @@
+@page "{id:int}"
+@model ProyectoMSD.Pages.Soportes.ResponderModel
+
+@{
+    ViewData["Title"] = $"Responder Ticket #{Model.Soporte?.Id}";
+}
+
+@section Styles {
+    <link href="~/css/pages/soportes.css" rel="stylesheet" />
+}
+
+<div class="main-container">
+    <!-- Header -->
+    <div class="profile-header" style="background: linear-gradient(135deg, #10b981, #059669);">
+        <div class="d-flex align-items-center">
+            <div class="avatar-container me-4">
+                <div style="width:100px; height:100px; background:rgba(255,255,255,0.2); border:4px solid rgba(255,255,255,0.3); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:white;">
+                    <i class="fas fa-reply-all"></i>
+                </div>
+            </div>
+            <div class="profile-info flex-grow-1">
+                <h2 class="mb-2 text-white">Responder Ticket #@(Model.Soporte?.Id ?? 0)</h2>
+                <div class="profile-status">
+                    <i class="fas fa-user me-1"></i>
+                    Enviado por: @(Model.Soporte?.IdUsuariosNavigation?.Nombre ?? "Usuario desconocido")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards">
+        <div class="info-card">
+            <div class="info-card-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="info-card-value">@(Model.Soporte?.Fecha.ToString("dd/MM/yyyy") ?? "N/A")</div>
+            <div class="info-card-label">Fecha</div>
+        </div>
+        <div class="info-card">
+            <div class="info-card-icon"><i class="fas fa-list-alt"></i></div>
+            <div class="info-card-value">@(Model.Soporte?.Tipo ?? "N/A")</div>
+            <div class="info-card-label">Tipo</div>
+        </div>
+        <div class="info-card">
+            <div class="info-card-icon"><i class="fas fa-user"></i></div>
+            <div class="info-card-value">@(Model.Soporte?.IdUsuariosNavigation?.Nombre ?? "N/A")</div>
+            <div class="info-card-label">Usuario</div>
+        </div>
+        <div class="info-card">
+            <div class="info-card-icon"><i class="fas fa-info-circle"></i></div>
+            <div class="info-card-value" id="estadoCard">
+                @(Model.Soporte?.Respuesta == "Pendiente" || string.IsNullOrWhiteSpace(Model.Soporte?.Respuesta) ? "Pendiente" : "Resuelto")
+            </div>
+            <div class="info-card-label">Estado</div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="content-wrapper">
+        <!-- Formulario de respuesta -->
+        <div class="form-container">
+            <div class="form-header">
+                <h3>
+                    <i class="fas fa-ticket-alt"></i>
+                    Descripción del Ticket
+                </h3>
+                <p>Revisa el detalle del problema antes de responder</p>
+            </div>
+
+            <!-- Descripción (solo lectura) -->
+            <div class="form-group mb-4">
+                <label class="form-label fw-semibold">
+                    <i class="fas fa-file-alt me-1 text-primary"></i>Descripción del problema
+                </label>
+                <div class="p-3 rounded" style="background: var(--bg-card, #f8f9fa); border: 1px solid #dee2e6; min-height: 100px;">
+                    @(Model.Soporte?.Descripcion ?? "Sin descripción")
+                </div>
+            </div>
+
+            <!-- Formulario para responder -->
+            <div class="form-header mt-4">
+                <h3>
+                    <i class="fas fa-reply"></i>
+                    Tu Respuesta
+                </h3>
+                <p>Esta respuesta quedará registrada y cambiará el estado a "Resuelto"</p>
+            </div>
+
+            <form method="post" asp-route-id="@Model.Soporte!.Id">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="form-group form-grid-full">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-reply me-1 text-success"></i>Respuesta del Soporte Técnico
+                    </label>
+                    <textarea asp-for="Respuesta"
+                              id="respuestaTextarea"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Escribe aquí la solución o respuesta para este ticket..."></textarea>
+                    <span asp-validation-for="Respuesta" class="text-danger"></span>
+                    <div class="form-text mt-1">
+                        <i class="fas fa-info-circle me-1"></i>Al guardar, el ticket cambiará automáticamente a estado <strong>Resuelto</strong>.
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a asp-page="./Index" class="btn-secondary-custom">
+                        <i class="fas fa-arrow-left me-2"></i>Volver a la lista
+                    </a>
+                    <button type="submit" class="btn-primary-custom" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-paper-plane me-2"></i>Guardar Respuesta
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sidebar de info -->
+        <div class="activity-sidebar">
+            <div class="activity-header">Detalle del Ticket</div>
+            <div class="activity-item">
+                <div class="activity-status">Usuario</div>
+                <div class="activity-title">@(Model.Soporte?.IdUsuariosNavigation?.Nombre ?? "N/A")</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-status">Correo</div>
+                <div class="activity-title">@(Model.Soporte?.IdUsuariosNavigation?.Correo ?? "N/A")</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-status">Fecha del ticket</div>
+                <div class="activity-title">@(Model.Soporte?.Fecha.ToString("dd/MM/yyyy") ?? "N/A")</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-status">Tipo</div>
+                <div class="activity-title">@(Model.Soporte?.Tipo ?? "N/A")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Actualizar el card de Estado en tiempo real mientras el Admin escribe
+    document.getElementById('respuestaTextarea')?.addEventListener('input', function () {
+        const estadoCard = document.getElementById('estadoCard');
+        if (estadoCard) {
+            estadoCard.textContent = this.value.trim() ? 'Resuelto' : 'Pendiente';
+            estadoCard.style.color = this.value.trim() ? '#10b981' : '#f59e0b';
+        }
+    });
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -2,7 +2,7 @@
 @model ProyectoMSD.Pages.Soportes.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Nuevo Ticket de Soporte";
 }
 
 @section Styles {
@@ -12,18 +12,39 @@
 <div class="container" style="padding: 2rem 0;">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card" style="border-radius: 25px; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 1px solid rgba(255,255,255,0.3); overflow: hidden;">
-                <div class="card-header" style="background: linear-gradient(135deg, #258cfb, #1e7ce8); color: white; padding: 2rem; border-bottom: none; position: relative; overflow: hidden;">
-                    <h3 class="mb-2 fw-bold">
-                        <i class="fas fa-ticket-alt me-3"></i>Crear Nuevo Ticket de Soporte
+
+            <!-- Banner: Usuario que envía el ticket (fuera del formulario) -->
+            <div class="alert d-flex align-items-center mb-4"
+                 style="background: linear-gradient(135deg, #1e40af15, #3b82f615); border: 1.5px solid #3b82f6; border-radius: 14px; padding: 1rem 1.5rem;">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3 flex-shrink-0"
+                     style="width:46px; height:46px; font-size:1.2rem; font-weight:700;">
+                    @(Model.UsuarioSesion?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
+                </div>
+                <div>
+                    <div class="fw-bold" style="color: #1e40af;">
+                        <i class="fas fa-user-check me-2"></i>Enviando como: @(Model.UsuarioSesion?.Nombre ?? "Desconocido")
+                    </div>
+                    <div class="small text-muted">
+                        @(Model.UsuarioSesion?.Correo ?? "") &nbsp;·&nbsp; Sesión activa
+                    </div>
+                </div>
+                <span class="badge bg-primary ms-auto px-3 py-2" style="font-size:0.75rem;">
+                    <i class="fas fa-lock me-1"></i>Asignado automáticamente
+                </span>
+            </div>
+
+            <!-- Tarjeta del formulario -->
+            <div class="card shadow-sm rounded-4 border-0">
+                <div class="card-header bg-primary text-white p-4 border-0">
+                    <h3 class="mb-1 fw-bold">
+                        <i class="fas fa-ticket-alt me-2"></i>Crear Nuevo Ticket
                     </h3>
-                    <p class="mb-0 opacity-90">Describe tu problema o consulta para recibir ayuda</p>
+                    <p class="mb-0 text-white-50">Describe tu problema o consulta para recibir ayuda</p>
                 </div>
 
-                <div class="card-body" style="padding: 2.5rem;">
+                <div class="card-body p-4 p-md-5">
                     <form method="post">
-                        <!-- MOSTRAR TODOS los errores -->
-                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
                         <!-- Fecha (automática, solo lectura) -->
                         <div class="mb-3">
@@ -32,7 +53,6 @@
                             </label>
                             <input asp-for="Soporte.Fecha" type="date" class="form-control" readonly
                                    value="@DateTime.Now.ToString("yyyy-MM-dd")">
-                            <span asp-validation-for="Soporte.Fecha" class="text-danger"></span>
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>La fecha se asigna automáticamente
                             </div>
@@ -68,37 +88,6 @@
                             </div>
                         </div>
 
-                        <!-- Usuario (dropdown mejorado) -->
-                        <div class="mb-4">
-                            <label asp-for="Soporte.IdUsuarios" class="form-label">
-                                <i class="fas fa-user me-2 text-primary"></i>Usuario que Reporta
-                            </label>
-                            <select asp-for="Soporte.IdUsuarios" class="form-select" asp-items="ViewBag.NombreUsuarios">
-                                <option value="">-- Seleccione el usuario --</option>
-                            </select>
-                            <span asp-validation-for="Soporte.IdUsuarios" class="text-danger"></span>
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>Selecciona el usuario que está reportando este problema
-                            </div>
-                        </div>
-
-                        <!-- Método de Respuesta -->
-                        <div class="mb-4">
-                            <label asp-for="Soporte.Respuesta" class="form-label">
-                                <i class="fas fa-reply me-2 text-primary"></i>¿Cómo prefieres que llegue tu respuesta?
-                            </label>
-                            <select asp-for="Soporte.Respuesta" class="form-select">
-                                <option value="">-- Seleccione un método de respuesta --</option>
-                                <option value="Correo"> Correo</option>
-                                <option value="Sitio"> Sitio</option>
-                                <option value="Teléfono"> Teléfono</option>
-                            </select>
-                            <span asp-validation-for="Soporte.Respuesta" class="text-danger"></span>
-                            <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>Elige el medio por el cual deseas recibir la respuesta
-                            </div>
-                        </div>
-
                         <!-- Botones de Acción -->
                         <div class="d-flex justify-content-between">
                             <a asp-page="Index" class="btn btn-outline-secondary">
@@ -111,6 +100,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
