@@ -2,7 +2,8 @@
 @model ProyectoMSD.Pages.Soportes.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Soporte";
+    bool esAdmin = User.IsInRole("Admin");
 }
 
 @section Styles {
@@ -14,107 +15,120 @@
     <!-- Header de Soporte -->
     <div class="support-header text-center">
         <h1 class="display-4 fw-bold mb-3">
-            <i class="fas fa-headset me-3 text-primary"></i>SOPORTE
+            <i class="fas fa-headset me-3 text-primary"></i>Gestión de Soporte
         </h1>
-        <p class="lead text-muted mb-0">Centro de ayuda y asistencia técnica para MySmartDevice</p>
+        @if (esAdmin)
+        {
+            <p class="lead text-muted mb-0">Panel de administración · Gestión de tickets de soporte</p>
+        }
+        else
+        {
+            <p class="lead text-muted mb-0">Centro de ayuda y asistencia técnica para MySmartDevice</p>
+        }
     </div>
 
-    <!-- Banner de Preguntas Frecuentes -->
-    <div class="faq-banner">
-        <div class="row align-items-center mb-3">
-            <div class="col">
-                <h3 class="fw-bold mb-0">
-                    <i class="fas fa-question-circle me-2 text-primary"></i>Preguntas Frecuentes
-                </h3>
+    @if (!esAdmin)
+    {
+        <!-- Banner de Preguntas Frecuentes (solo para usuarios normales) -->
+        <div class="faq-banner">
+            <div class="row align-items-center mb-3">
+                <div class="col">
+                    <h3 class="fw-bold mb-0">
+                        <i class="fas fa-question-circle me-2 text-primary"></i>Preguntas Frecuentes
+                    </h3>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-primary px-3 py-2">Las más consultadas</span>
+                </div>
             </div>
-            <div class="col-auto">
-                <span class="badge bg-primary px-3 py-2">Las más consultadas</span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-lightbulb me-2 text-warning"></i>
+                            ¿Cómo configurar las luces inteligentes?
+                        </div>
+                        <div class="faq-answer">
+                            Accede al panel de dispositivos y selecciona "Agregar dispositivo" para comenzar la configuración.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-wifi me-2 text-info"></i>
+                            ¿Por qué mi dispositivo no se conecta?
+                        </div>
+                        <div class="faq-answer">
+                            Verifica que tu red WiFi esté funcionando y que el dispositivo esté en modo de configuración.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-mobile-alt me-2 text-success"></i>
+                            ¿Cómo usar la aplicación móvil?
+                        </div>
+                        <div class="faq-answer">
+                            Descarga la app desde tu tienda favorita e inicia sesión con tus credenciales de MySmartDevice.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-shield-alt me-2 text-danger"></i>
+                            ¿Mis datos están seguros?
+                        </div>
+                        <div class="faq-answer">
+                            Sí, utilizamos encriptación de extremo a extremo y cumplimos con estándares internacionales de seguridad.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="fas fa-lightbulb me-2 text-warning"></i>
-                        ¿Cómo configurar las luces inteligentes?
-                    </div>
-                    <div class="faq-answer">
-                        Accede al panel de dispositivos y selecciona "Agregar dispositivo" para comenzar la configuración.
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="fas fa-wifi me-2 text-info"></i>
-                        ¿Por qué mi dispositivo no se conecta?
-                    </div>
-                    <div class="faq-answer">
-                        Verifica que tu red WiFi esté funcionando y que el dispositivo esté en modo de configuración.
+        <!-- Contacto de Soporte (solo usuarios normales) -->
+        <div class="contact-section">
+            <h3 class="mb-4 fw-bold">Contacto de Soporte</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Chat en Vivo</h5>
+                        <p class="text-muted mb-3">Habla con un agente ahora mismo</p>
+                        <button class="btn btn-success">Iniciar Chat</button>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="fas fa-mobile-alt me-2 text-success"></i>
-                        ¿Cómo usar la aplicación móvil?
-                    </div>
-                    <div class="faq-answer">
-                        Descarga la app desde tu tienda favorita e inicia sesión con tus credenciales de MySmartDevice.
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="fas fa-shield-alt me-2 text-danger"></i>
-                        ¿Mis datos están seguros?
-                    </div>
-                    <div class="faq-answer">
-                        Sí, utilizamos encriptación de extremo a extremo y cumplimos con estándares internacionales de seguridad.
+                <div class="col-md-6 mb-3">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">Teléfono</h5>
+                        <p class="text-muted mb-1">+57 1234567890</p>
+                        <button class="btn btn-success">Llamar Ahora</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 
-    <!-- Contacto de Soporte -->
-    <div class="contact-section">
-        <h3 class="mb-4 fw-bold">Contacto de Soporte</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Chat en Vivo</h5>
-                    <p class="text-muted mb-3">Habla con un agente ahora mismo</p>
-                    <button class="btn btn-success">Iniciar Chat</button>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <h5 class="fw-bold mb-2">Teléfono</h5>
-                    <p class="text-muted mb-1">+57 1234567890</p>
-                    <button class="btn btn-success">Llamar Ahora</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Lista de Tickets/Soporte -->
+    <!-- Lista de Tickets -->
     <div class="tickets-section">
         <div class="tickets-header d-flex justify-content-between align-items-center">
             <div>
                 <h4 class="mb-1 fw-bold">
-                    <i class="fas fa-ticket-alt me-2"></i>Tickets de Soporte
+                    <i class="fas fa-ticket-alt me-2"></i>
+                    @(esAdmin ? "Todos los Tickets de Soporte" : "Mis Tickets de Soporte")
                 </h4>
-                <p class="text-muted mb-0">Historial de solicitudes y consultas</p>
+                <p class="text-muted mb-0">
+                    @(esAdmin ? "Gestiona y responde los tickets de todos los usuarios" : "Historial de tus solicitudes y consultas")
+                </p>
             </div>
             <span class="badge bg-primary fs-6 px-3 py-2">@Model.Soporte.Count() tickets</span>
         </div>
@@ -128,14 +142,19 @@
                             <th><i class="fas fa-calendar me-2"></i>Fecha</th>
                             <th><i class="fas fa-file-alt me-2"></i>Descripción</th>
                             <th><i class="fas fa-tag me-2"></i>Tipo</th>
-                            <th><i class="fas fa-reply me-2"></i>Respuesta</th>
-                            <th><i class="fas fa-user me-2"></i>Usuario</th>
+                            <th><i class="fas fa-circle me-2"></i>Estado</th>
+                            @if (esAdmin)
+                            {
+                                <th><i class="fas fa-user me-2"></i>Usuario</th>
+                            }
                             <th><i class="fas fa-cogs me-2"></i>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Soporte)
                         {
+                            bool esPendiente = string.IsNullOrWhiteSpace(item.Respuesta)
+                                               || item.Respuesta == "Pendiente";
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -159,34 +178,60 @@
                                     <span class="badge @tipoClass">@Html.DisplayFor(modelItem => item.Tipo)</span>
                                 </td>
                                 <td>
-                                    @if (!string.IsNullOrEmpty(item.Respuesta))
+                                    @if (esPendiente)
                                     {
-                                        <span class="badge bg-warning">Pendiente</span>
-                                        <div class="small text-muted mt-1">@Html.DisplayFor(modelItem => item.Respuesta)</div>
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fas fa-clock me-1"></i>Pendiente
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>Resuelto
+                                        </span>
+                                        @if (esAdmin)
+                                        {
+                                            <div class="small text-muted mt-1" style="max-width:200px; white-space:normal;">
+                                                @item.Respuesta
+                                            </div>
+                                        }
                                     }
                                 </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 0.8rem;">
-                                            @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
+                                @if (esAdmin)
+                                {
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
+                                                 style="width:32px;height:32px;font-size:0.8rem;flex-shrink:0;">
+                                                @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
+                                            </div>
+                                            <span class="fw-semibold">@(item.IdUsuariosNavigation?.Nombre ?? "Desconocido")</span>
                                         </div>
-                                        <span class="fw-semibold">Usuario #@Html.DisplayFor(modelItem => item.IdUsuariosNavigation.Id)</span>
-                                    </div>
-                                </td>
+                                    </td>
+                                }
                                 <td>
                                     <div class="action-buttons">
-                                        <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        @if (User.IsInRole("Admin"))
+                                        @if (esAdmin)
                                         {
+                                            <a asp-page="./Responder" asp-route-id="@item.Id"
+                                               class="btn btn-outline-success btn-sm"
+                                               title="@(esPendiente ? "Responder ticket" : "Editar respuesta")"
+                                               data-bs-toggle="tooltip">
+                                                <i class="fas fa-reply me-1"></i>
+                                                @(esPendiente ? "Responder" : "Re-responder")
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-page="./Edit" asp-route-id="@item.Id"
+                                               class="btn btn-outline-warning btn-sm"
+                                               title="Editar ticket"
+                                               data-bs-toggle="tooltip">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
                                             <a asp-page="./Details" asp-route-id="@item.Id"
-                                               class="btn-action btn-details"
-                                               title="Ver detalles del ticket"
+                                               class="btn-action btn-details ms-1"
+                                               title="Ver detalles"
                                                data-bs-toggle="tooltip">
                                                 <i class="fas fa-eye"></i>
                                             </a>
@@ -203,24 +248,39 @@
         {
             <div class="text-center py-5">
                 <i class="fas fa-ticket-alt fa-4x mb-4 text-muted opacity-50"></i>
-                <h4 class="mb-3">No hay tickets de soporte</h4>
-                <p class="mb-4 text-muted">Comienza creando tu primera solicitud de soporte.</p>
-                <a asp-page="Create" class="btn btn-success btn-lg">
-                    <i class="fas fa-plus me-2"></i>Crear Primer Ticket
-                </a>
+                @if (esAdmin)
+                {
+                    <h4 class="mb-3">No hay tickets de soporte</h4>
+                    <p class="mb-0 text-muted">Aún no hay tickets registrados en el sistema.</p>
+                }
+                else
+                {
+                    <h4 class="mb-3">No tienes tickets de soporte</h4>
+                    <p class="mb-4 text-muted">Comienza creando tu primera solicitud de soporte.</p>
+                    <a asp-page="Create" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus me-2"></i>Crear Primer Ticket
+                    </a>
+                }
             </div>
         }
     </div>
 </div>
 
-<!-- Botón flotante para crear -->
-<a asp-page="Create" class="btn btn-create">
-    <i class="fas fa-plus me-2"></i>Nuevo Ticket
-</a>
+<!-- Botón flotante "Nuevo Ticket" — Solo para usuarios normales -->
+@if (!esAdmin)
+{
+    <a asp-page="Create" class="btn btn-create">
+        <i class="fas fa-plus me-2"></i>Nuevo Ticket
+    </a>
+}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Página de soporte cargada correctamente');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Activar tooltips de Bootstrap
+        const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+        console.log('Página de soporte cargada — Rol: @(esAdmin ? "Admin" : "Usuario")');
         console.log('Total de tickets:', @Model.Soporte.Count());
     });
 </script>

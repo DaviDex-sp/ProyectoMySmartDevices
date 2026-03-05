@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoMSD.Modelos;
 
 namespace ProyectoMSD.Pages.Soportes
 {
-    [Authorize]
+    [Authorize(Roles = "Usuario")]
     public class CreateModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -17,43 +16,62 @@ namespace ProyectoMSD.Pages.Soportes
             _context = context;
         }
 
+        [BindProperty]
+        public Soporte Soporte { get; set; } = default!;
+
+        // Datos del usuario en sesión (para mostrarlo en la vista)
+        public Usuario UsuarioSesion { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync()
         {
-            await CargarUsuarios();
+            var usuarioId = ObtenerIdUsuarioSesion();
+            if (usuarioId == null)
+                return RedirectToPage("/Index");
+
+            var usuario = await _context.Usuarios.FindAsync(usuarioId.Value);
+            if (usuario == null)
+                return RedirectToPage("/Index");
+
+            UsuarioSesion = usuario;
 
             Soporte = new Soporte
             {
                 Fecha = DateOnly.FromDateTime(DateTime.Now),
+                IdUsuarios = usuarioId.Value,
                 Respuesta = "Pendiente"
             };
 
             return Page();
         }
 
-        [BindProperty]
-        public Soporte Soporte { get; set; } = default!;
-
         public async Task<IActionResult> OnPostAsync()
         {
-            // Siempre asignar fecha actual
-            Soporte.Fecha = DateOnly.FromDateTime(DateTime.Now);
+            var usuarioId = ObtenerIdUsuarioSesion();
+            if (usuarioId == null)
+                return RedirectToPage("/Index");
 
-            // Validaciones
+            // Forzar siempre los valores que el usuario NO debe poder cambiar
+            Soporte.Fecha = DateOnly.FromDateTime(DateTime.Now);
+            Soporte.IdUsuarios = usuarioId.Value;
+            Soporte.Respuesta = "Pendiente";
+
+            // Limpiar errores previos de Model Binding para campos que asignamos manualmente o no vienen del form
+            ModelState.Remove("Soporte.Fecha");
+            ModelState.Remove("Soporte.IdUsuarios");
+            ModelState.Remove("Soporte.Respuesta");
+            ModelState.Remove("Soporte.IdUsuariosNavigation");
+
+            // Validaciones solo de los campos que el usuario sí rellena
             if (string.IsNullOrWhiteSpace(Soporte.Descripcion))
                 ModelState.AddModelError("Soporte.Descripcion", "La descripción es obligatoria.");
 
             if (string.IsNullOrWhiteSpace(Soporte.Tipo))
                 ModelState.AddModelError("Soporte.Tipo", "Debe seleccionar un tipo de consulta.");
 
-            if (string.IsNullOrWhiteSpace(Soporte.Respuesta))
-                ModelState.AddModelError("Soporte.Respuesta", "Debe seleccionar un método de respuesta.");
-
-            if (Soporte.IdUsuarios <= 0)
-                ModelState.AddModelError("Soporte.IdUsuarios", "Debe seleccionar un usuario.");
-
             if (!ModelState.IsValid)
             {
-                await CargarUsuarios();
+                // Recargar usuario para la vista
+                UsuarioSesion = (await _context.Usuarios.FindAsync(usuarioId.Value))!;
                 return Page();
             }
 
@@ -68,19 +86,17 @@ namespace ProyectoMSD.Pages.Soportes
             catch
             {
                 ModelState.AddModelError(string.Empty, "Error al crear el ticket.");
-                await CargarUsuarios();
+                UsuarioSesion = (await _context.Usuarios.FindAsync(usuarioId.Value))!;
                 return Page();
             }
         }
 
-        private async Task CargarUsuarios()
+        private int? ObtenerIdUsuarioSesion()
         {
-            var usuarios = await _context.Usuarios
-                .OrderBy(u => u.Nombre)
-                .Select(u => new { u.Id, Display = $"{u.Nombre} ({u.Correo})" })
-                .ToListAsync();
-
-            ViewData["NombreUsuarios"] = new SelectList(usuarios, "Id", "Display");
+            var claim = User.FindFirst("UserId");
+            if (claim != null && int.TryParse(claim.Value, out int id))
+                return id;
+            return null;
         }
     }
 }
