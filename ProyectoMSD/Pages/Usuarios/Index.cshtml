@@ -12,6 +12,22 @@
 <!-- Contenido Principal -->
 <div class="container-fluid px-4" style="padding-top: 20px;">
 
+    @if (Model.RequiereInformacionBasica)
+    {
+        <div class="alert shadow-sm mb-4" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 15px; border-left: 5px solid #258cfb; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <h5 class="alert-heading text-primary fw-bold mb-1"><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
+                <p class="mb-0 text-muted">Alguna información básica es requerida, es necesario completar la información para el correcto funcionamiento.</p>
+            </div>
+            <div>
+                <a asp-page="/Perfil/Index" class="btn btn-outline-primary" style="border-radius: 20px;" title="Mi Perfil">
+                    <i class="fas fa-user-circle me-1"></i>
+                    <span>Ir a Mi Perfil</span>
+                </a>
+            </div>
+        </div>
+    }
+
     <div class="hero-section text-center hero-background">
         <h1 class="display-4 fw-bold mb-4">BIENVENIDO A TU HOGAR INTELIGENTE</h1>
         <h3 class="mb-0">

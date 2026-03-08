@@ -66,7 +66,7 @@
                     
                     @if (!string.IsNullOrEmpty(notif.RutaRedireccion))
                     {
-                        <a href="@notif.RutaRedireccion" class="notif-content text-decoration-none" style="display: block; color: inherit;">
+                        <a href="/Notificaciones/Index?handler=Ir&id=@notif.Id" class="notif-content text-decoration-none" style="display: block; color: inherit;">
                             <div class="notif-title">
                                 @notif.Titulo
                                 <i class="fas fa-external-link-alt ms-2 text-muted" style="font-size: 0.75rem;"></i>

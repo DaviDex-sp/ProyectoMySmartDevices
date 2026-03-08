@@ -22,8 +22,10 @@ namespace ProyectoMSD.Pages.Usuarios
         }
 
         public IList<Usuario> Usuario { get;set; } = default!;
-        public IList<Espacio> Espacios { get; set; } = default!;  // ← FALTA ESTO
+        public IList<Espacio> Espacios { get; set; } = default!;
         public IList<Dispositivo> Dispositivos { get; set; } = default!;
+
+        public bool RequiereInformacionBasica { get; set; }
 
         // Propiedades calculadas para las estadísticas
         public int TotalUsuarios => Usuario?.Count ?? 0;
@@ -45,6 +47,21 @@ namespace ProyectoMSD.Pages.Usuarios
             // Si tienes modelo Dispositivo
             Dispositivos = await _context.Dispositivos
                 .ToListAsync();
+
+            // Lógica para Alerta de Información Básica
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            if (int.TryParse(userIdClaim, out int userId))
+            {
+                var currentUser = Usuario.FirstOrDefault(u => u.Id == userId);
+                if (currentUser != null)
+                {
+                    // Determinar si falta información que generalmente no se obtiene de Google
+                    if (currentUser.Documento == 0 || currentUser.Telefono == 0)
+                    {
+                        RequiereInformacionBasica = true;
+                    }
+                }
+            }
 
           
         }

@@ -60,6 +60,31 @@ namespace ProyectoMSD.Pages.Notificaciones
             return RedirectToPage();
         }
 
+        public async Task<IActionResult> OnGetIrAsync(int id)
+        {
+            var userId = ObtenerUsuarioId();
+            if (userId == null) return RedirectToPage("/Login");
+
+            var notificacion = await _context.Notificaciones
+                .FirstOrDefaultAsync(n => n.Id == id && n.IdUsuarios == userId.Value);
+
+            if (notificacion != null)
+            {
+                if (!notificacion.Leida)
+                {
+                    notificacion.Leida = true;
+                    await _context.SaveChangesAsync();
+                }
+
+                if (!string.IsNullOrEmpty(notificacion.RutaRedireccion))
+                {
+                    return Redirect(notificacion.RutaRedireccion);
+                }
+            }
+
+            return RedirectToPage();
+        }
+
         public async Task<IActionResult> OnPostMarcarTodasAsync()
         {
             var userId = ObtenerUsuarioId();
