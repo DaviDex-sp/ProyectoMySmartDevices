@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google; // Agregado para Google
 using Microsoft.EntityFrameworkCore;
 using ProyectoMSD.Modelos;
 using ProyectoMSD.Filters;
@@ -12,8 +13,12 @@ builder.Services.AddRazorPages(options =>
 });
 builder.Services.AddScoped<NotificacionNavbarFilter>();
 
-// Configuraci�n de Autenticaci�n
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+// Configuración de Autenticación Múltiple (Cookies locales + Google)
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
     .AddCookie(options =>
     {
         options.LoginPath = "/Login";
@@ -22,13 +27,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
         options.ClaimsIssuer = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Cookie.Name = "MySmartDeviceCookie";
+    })
+    .AddCookie("ExternalCookie") // Cookie temporal para el inicio de sesión con Google
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.SignInScheme = "ExternalCookie"; // Asignar al esquema temporal
+        
+        // Leemos las llaves de forma segura desde Azure (o appsettings local)
+        googleOptions.ClientId = builder.Configuration["GoogleClientId"] ?? throw new InvalidOperationException("Falta GoogleClientId");
+        googleOptions.ClientSecret = builder.Configuration["GoogleClientSecret"] ?? throw new InvalidOperationException("Falta GoogleClientSecret");
+        
+        // La ruta estándar donde Google nos devolverá al usuario
+        googleOptions.CallbackPath = "/signin-google";
     });
 
-// 1. LEEMOS LA CADENA DESDE LA CONFIGURACI�N (Seguridad Profesional)
-// En local leer� el appsettings.json. En la nube leer� la variable de Azure.
+// 1. LEEMOS LA CADENA DESDE LA CONFIGURACIÓN
 var connString = builder.Configuration.GetConnectionString("ConexionSQL");
 
-// 2. CONFIGURACI�N DEL DBCONTEXT PARA MYSQL 8.0 (Aiven/Azure)
+// 2. CONFIGURACIÓN DEL DBCONTEXT PARA MYSQL 8.0 (Aiven/Azure)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         connString,
@@ -42,7 +58,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-// Configuraci�n del pipeline HTTP
+// Configuración del pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -50,7 +66,6 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    // Muestra errores detallados solo cuando est�s desarrollando en tu PC
     app.UseDeveloperExceptionPage();
 }
 
