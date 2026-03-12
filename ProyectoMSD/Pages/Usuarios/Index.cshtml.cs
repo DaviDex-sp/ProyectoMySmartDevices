@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,8 +40,15 @@ namespace ProyectoMSD.Pages.Usuarios
 
         public async Task OnGetAsync()
         {
-            // Cargar TODOS los datos que necesitas
-            Usuario = await _usuarioService.GetAllUsuariosAsync();
+            // Cargar datos de usuarios SOLAMENTE si es Admin
+            if (User.IsInRole("Admin"))
+            {
+                Usuario = await _usuarioService.GetAllUsuariosAsync();
+            }
+            else
+            {
+                Usuario = new List<Usuario>(); // Lista vacía para prevenir NullReferenceException en la vista
+            }
 
             // Si tienes modelo Espacio
             Espacios = await _context.Espacios  // ← Incluye dispositivos relacionados
