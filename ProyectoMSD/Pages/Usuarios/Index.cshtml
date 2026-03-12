@@ -28,199 +28,257 @@
         </div>
     }
 
-    <div class="hero-section text-center hero-background">
-        <h1 class="display-4 fw-bold mb-4">BIENVENIDO A TU HOGAR INTELIGENTE</h1>
-        <h3 class="mb-0">
-            Tu hogar Gestiona actualmente
-            <span class="fw-bold text-warning">@Model.TotalUsuarios Usuarios</span> en
-            <span class="fw-bold text-warning">@Model.TotalEspacios Espacios</span> Diferentes
-        </h3>
+    <div class="row align-items-center mb-4" style="background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.6);">
+        <div class="col-12 text-center">
+            <h1 class="fw-bold mb-2" style="color: #6a4cd5; font-size: 2.5rem; letter-spacing: -0.5px;">Bienvenido a tu hogar inteligente</h1>
+            <p class="text-secondary fs-5 mb-0">Controla y monitorea todos tus dispositivos desde un solo lugar</p>
+        </div>
+    </div>
+    
+    <div class="hero-section text-center position-relative mb-5" style="border-radius: 24px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1);">
+        <div style="background: linear-gradient(135deg, rgba(94, 53, 177, 0.8) 0%, rgba(156, 39, 176, 0.6) 100%), url('https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;">
+            <h2 class="display-5 fw-bold mb-2 text-white" style="text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Tu hogar conectado</h2>
+            <h4 class="mb-0 text-white-50" style="text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                Gestiona @Model.TotalDispositivos dispositivos en @Model.TotalEspacios espacios diferentes
+            </h4>
+        </div>
     </div>
 
     @if (User.IsInRole("Admin"))
     {
-        <!-- Cards de Estadísticas -->
-        <div class="row mb-5">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="stats-card text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-users fa-4x text-primary"></i>
+        <!-- 4 Cards Row (Estilo UI Screenshot) -->
+        <div class="row g-4 mb-5">
+            <!-- Card 1: Total Usuarios -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                    <div class="card-body p-4 text-center">
+                        <p class="text-secondary mb-3 fs-6">Total Usuarios</p>
+                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.TotalUsuarios</h2>
+                        <span class="text-muted small">Registrados en el sistema</span>
                     </div>
-                    <h2 class="fw-bold text-primary mb-2">@Model.TotalUsuarios USUARIOS</h2>
-                    <p class="text-success mb-1">
-                        <i class="fas fa-arrow-up me-1"></i>
-                        <strong>@Model.UsuariosActivos activos</strong> esta semana
-                    </p>
-                    <small class="text-muted">Usuarios registrados en el sistema</small>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="stats-card text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-home fa-4x text-success"></i>
+            <!-- Card 2: Usuarios Activos -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                    <div class="card-body p-4 text-center">
+                        <p class="text-secondary mb-3 fs-6">Usuarios Activos</p>
+                        <h2 class="display-5 fw-bold mb-2" style="color: #a855f7;">@Model.UsuariosActivos</h2>
+                        <span class="text-muted small">Con acceso garantizado</span>
                     </div>
-                    <h2 class="fw-bold text-success mb-2">@Model.TotalEspacios ESPACIOS</h2>
-                    <p class="text-info mb-1">
-                        <i class="fas fa-map-marked-alt me-1"></i>
-                        <strong>Espacios configurados</strong> en hogar
-                    </p>
-                    <small class="text-muted">Áreas de control disponibles</small>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="stats-card text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-mobile-alt fa-4x text-warning"></i>
+            <!-- Card 3: Espacios Conectados -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                    <div class="card-body p-4 text-center">
+                        <p class="text-secondary mb-3 fs-6">Espacios Conectados</p>
+                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.TotalEspacios</h2>
+                        <span class="text-muted small">Zonas configuradas</span>
                     </div>
-                    <h2 class="fw-bold text-warning mb-2">@Model.TotalDispositivos DISPOSITIVOS</h2>
-                    <p class="text-info mb-1">
-                        <i class="fas fa-map-marked-alt me-1"></i>
-                        <strong>@Model.DispositivosActivos Activos</strong> en hogar
-                    </p>
-                    <small class="text-muted">Total de dispositivos conectados</small>
+                </div>
+            </div>
+
+            <!-- Card 4: Dispositivos Offline -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                    <div class="card-body p-4 text-center">
+                        <p class="text-secondary mb-3 fs-6">Dispositivos Inactivos</p>
+                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.BateriaDispositivosOffline</h2>
+                        <span class="text-muted small">Requieren atención</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Acciones Rápidas -->
-        <div class="mb-5">
-            <h4 class="text-white mb-4 d-flex align-items-center">
-                <i class="fas fa-bolt me-3 fa-lg"></i>
-                <span class="fw-bold">ACCIONES RÁPIDAS</span>
-            </h4>
-
-        <div class="table-container">
-            <div class="table-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h3 class="mb-2 fw-bold">
-                            <i class="fas fa-users me-3"></i>Gestión de Usuarios del Sistema
-                        </h3>
-                        <p class="mb-0 opacity-90 fs-5">Administra todos los usuarios registrados en tu hogar inteligente</p>
-                    </div>
-                    <div>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-page="Create" class="btn btn-light btn-lg">
-                                <i class="fas fa-plus me-2"></i>Crear Nuevo Usuario
-                            </a>
-                        }
+        <!-- 2 Column Grid: Actividad Reciente y Estado del Sistema -->
+        <div class="row g-4 mb-5">
+            <!-- Actividad Reciente (Registro de accesos) -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 24px; background: white;">
+                    <div class="card-body p-4 p-lg-5">
+                        <h4 class="mb-4 text-secondary" style="font-weight: 500;">Actividad Reciente en el Sistema</h4>
+                        
+                        <div class="activity-feed">
+                            @if (Model.UltimosAccesos != null && Model.UltimosAccesos.Any())
+                            {
+                                @foreach (var acceso in Model.UltimosAccesos)
+                                {
+                                    <div class="activity-item d-flex mb-4 align-items-center p-3 rounded-3" style="background: rgba(248, 249, 250, 0.7); border-left: 4px solid #8b5cf6;">
+                                        <div class="activity-icon me-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 12px; height: 12px; background: #8b5cf6; box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);"></div>
+                                        </div>
+                                        <div class="activity-content flex-grow-1">
+                                            <div class="d-flex justify-content-between">
+                                                <p class="mb-1" style="color: #4b5563;">@acceso.TipoAccion detectada</p>
+                                                <small class="text-muted">
+                                                    @{
+                                                        var timeSpan = DateTime.Now - acceso.FechaAcceso;
+                                                        string timeAgo = timeSpan.TotalMinutes < 60 ? $"Hace {(int)timeSpan.TotalMinutes} min" : $"Hace {(int)timeSpan.TotalHours} horas";
+                                                    }
+                                                    @timeAgo
+                                                </small>
+                                            </div>
+                                            <div class="d-inline-block px-3 py-1 rounded-pill bg-white border small text-muted" style="border-color: #e5e7eb !important;">
+                                                Usuario: @acceso.IdUsuariosNavigation?.Nombre
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center py-4 text-muted">No hay actividad reciente registrada.</div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="p-4">
-                @if (Model.Usuario != null && Model.Usuario.Any())
-                {
-                    <div class="row g-3">
-                        @foreach (var item in Model.Usuario)
-                        {
-                            <div class="col-12">
-                                <div class="card shadow-sm rounded-3">
-                                    <div class="card-body d-flex align-items-center">
-                                        <!-- Avatar -->
-                                        <div class="avatar bg-primary text-white me-3 fs-4 d-flex justify-content-center align-items-center rounded-circle" style="width:50px; height:50px;">
-                                            @(item.Nombre?.Substring(0, 1).ToUpper())
-                                        </div>
+            <!-- Estado del Sistema -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 24px; background: white;">
+                    <div class="card-body p-4 p-lg-5">
+                        <h4 class="mb-4 text-secondary" style="font-weight: 500;">Estado del Sistema</h4>
 
-                                        <!-- Info del usuario -->
-                                        <div class="flex-grow-1">
-                                            <h5 class="fw-bold mb-1">@Html.DisplayFor(modelItem => item.Nombre)</h5>
-                                            <p class="mb-1 text-muted">
-                                                <i class="fas fa-envelope me-2"></i>@Html.DisplayFor(modelItem => item.Correo)
-                                            </p>
-                                            <p class="mb-1">
-                                                @{
-                                                    var rolClass = item.Rol?.ToLower() switch
-                                                    {
-                                                        "admin" => "bg-danger text-white",
-                                                        "administrador" => "bg-danger text-white",
-                                                        "usuario" => "bg-success text-white",
-                                                        "moderador" => "bg-warning text-dark",
-                                                        _ => "bg-secondary text-white"
-                                                    };
-                                                }
-                                                <span class="badge @rolClass">@Html.DisplayFor(modelItem => item.Rol)</span>
-                                            </p>
-                                            <p class="mb-1 text-muted">
-                                                <i class="fas fa-phone me-2"></i>@(ProyectoMSD.Helpers.TelefonoHelper.ObtenerPrefijoConBandera(item.PrefijoTelefono)) @Html.DisplayFor(modelItem => item.Telefono)
-                                            </p>
-                                            <p class="mb-1 text-muted">
-                                                <i class="fas fa-map-marker-alt me-2"></i>@Html.DisplayFor(modelItem => item.Ubicacion)
-                                            </p>
-                                            <p class="mb-1 text-muted">
-                                                <i class="fas fa-id-card me-2"></i>@Html.DisplayFor(modelItem => item.Documento)
-                                            </p>
-                                            <p class="mb-1 text-muted">
-                                                <i class="fas fa-building me-2"></i>@Html.DisplayFor(modelItem => item.Rut)
-                                            </p>
-                                            <p class="mb-0 fw-bold">
-                                                @{
-                                                    var accesoClass = item.Acesso?.ToLower() switch
-                                                    {
-                                                        "activo" => "text-success",
-                                                        "active" => "text-success",
-                                                        "biencaballo" => "text-success",
-                                                        "yes" => "text-success",
-                                                        "habilitado" => "text-success",
-                                                        _ => "text-danger"
-                                                    };
-
-                                                    var accesoIcon = item.Acesso?.ToLower() switch
-                                                    {
-                                                        "activo" => "fa-check-circle",
-                                                        "active" => "fa-check-circle",
-                                                        "biencaballo" => "fa-check-circle",
-                                                        "yes" => "fa-check-circle",
-                                                        "habilitado" => "fa-check-circle",
-                                                        _ => "fa-times-circle"
-                                                    };
-                                                }
-                                                <i class="fas @accesoIcon me-2 @accesoClass"></i>@Html.DisplayFor(modelItem => item.Acesso)
-                                            </p>
-                                        </div>
-
-                                        <!-- Botones de acción -->
-                                        @if (User.IsInRole("Admin"))
-                                        {
-                                            <div class="ms-3">
-                                                <div class="btn-group" role="group">
-                                                    <a asp-page="./Edit" asp-route-id="@item.Id"
-                                                       class="btn btn-outline-primary btn-sm"
-                                                       title="Editar usuario" data-bs-toggle="tooltip">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a asp-page="./Delete" asp-route-id="@item.Id"
-                                                       class="btn btn-outline-danger btn-sm"
-                                                       title="Eliminar usuario" data-bs-toggle="tooltip">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: #10b981; color: white;">
+                                    <i class="fas fa-server"></i>
                                 </div>
+                                <span style="color: #4b5563; font-size: 1.1rem;">Servidor Core</span>
+                            </div>
+                            <span class="badge rounded-pill bg-white border text-success px-3 py-2">En línea</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: #10b981; color: white;">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <span style="color: #4b5563; font-size: 1.1rem;">Base de Datos</span>
+                            </div>
+                            <span class="badge rounded-pill bg-white border text-success px-3 py-2">Excelente</span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: @(Model.BateriaDispositivosOffline > 0 ? "#f59e0b" : "#10b981"); color: white;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <span style="color: #4b5563; font-size: 1.1rem;">Dispositivos con alertas</span>
+                            </div>
+                            <span class="badge rounded-pill bg-white border px-3 py-2" style="color: @(Model.BateriaDispositivosOffline > 0 ? "#d97706" : "#059669"); border-color: @(Model.BateriaDispositivosOffline > 0 ? "#fcd34d" : "#a7f3d0") !important;">
+                                @Model.BateriaDispositivosOffline alertas
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Usuarios Heredada (Estilizada para integrarse al nuevo diseño) -->
+        <div class="card border-0 shadow-sm" style="border-radius: 24px; background: white;">
+            <div class="card-header bg-white border-0 pt-5 px-5 pb-0 d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 text-secondary" style="font-weight: 500;">Gestión de Usuarios</h4>
+                <a asp-page="Create" class="btn btn-primary" style="background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%); border: none; border-radius: 20px; padding: 10px 25px;">
+                    <i class="fas fa-plus me-2"></i>Crear Nuevo
+                </a>
+            </div>
+            <div class="card-body p-4 p-lg-5">
+                <div class="table-container p-0">
+                    <div class="p-0">
+                        @if (Model.Usuario != null && Model.Usuario.Any())
+                        {
+                            <div class="row g-3">
+                                @foreach (var item in Model.Usuario)
+                                {
+                                    <div class="col-12">
+                                        <div class="card border shadow-none rounded-3" style="background: #fdfdfd;">
+                                            <div class="card-body d-flex align-items-center flex-wrap gap-3">
+                                                <!-- Avatar púrpura -->
+                                                <div class="avatar text-white fs-4 d-flex justify-content-center align-items-center rounded-circle" style="width:50px; height:50px; background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%); flex-shrink: 0;">
+                                                    @(item.Nombre?.Substring(0, 1).ToUpper())
+                                                </div>
+
+                                                <!-- Info del usuario -->
+                                                <div class="flex-grow-1" style="min-width: 250px;">
+                                                    <h5 class="fw-bold mb-1" style="color: #4b5563;">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                                                    <p class="mb-1 text-muted small">
+                                                        <i class="fas fa-envelope me-2"></i>@Html.DisplayFor(modelItem => item.Correo)
+                                                    </p>
+                                                    <p class="mb-0 text-muted small">
+                                                        <i class="fas fa-tag me-2"></i>@Html.DisplayFor(modelItem => item.Rol)
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="flex-grow-1" style="min-width: 200px;">
+                                                    <p class="mb-1 text-muted small">
+                                                        <i class="fas fa-phone me-2"></i>@(ProyectoMSD.Helpers.TelefonoHelper.ObtenerPrefijoConBandera(item.PrefijoTelefono)) @Html.DisplayFor(modelItem => item.Telefono)
+                                                    </p>
+                                                    <p class="mb-0 text-muted small">
+                                                        <i class="fas fa-map-marker-alt me-2"></i>@Html.DisplayFor(modelItem => item.Ubicacion)
+                                                    </p>
+                                                </div>
+
+                                                <!-- Status -->
+                                                <div style="min-width: 120px;">
+                                                    @{
+                                                        var accesoClass = item.Acesso?.ToLower() switch
+                                                        {
+                                                            "activo" => "text-success bg-success",
+                                                            "active" => "text-success bg-success",
+                                                            "yes" => "text-success bg-success",
+                                                            "habilitado" => "text-success bg-success",
+                                                            _ => "text-danger bg-danger"
+                                                        };
+                                                    }
+                                                    <span class="badge rounded-pill bg-opacity-10 py-2 px-3 @accesoClass" style="border: 1px solid currentColor;">
+                                                        @Html.DisplayFor(modelItem => item.Acesso)
+                                                    </span>
+                                                </div>
+
+                                                <!-- Botones de acción -->
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group" role="group">
+                                                            <a asp-page="./Edit" asp-route-id="@item.Id"
+                                                               class="btn btn-outline-secondary btn-sm"
+                                                               title="Editar usuario" data-bs-toggle="tooltip">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                            <a asp-page="./Delete" asp-route-id="@item.Id"
+                                                               class="btn btn-outline-danger btn-sm"
+                                                               title="Eliminar usuario" data-bs-toggle="tooltip">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-5">
+                                <i class="fas fa-users fa-4x mb-4 opacity-25" style="color: #8b5cf6;"></i>
+                                <h4 class="mb-3 text-secondary">No hay usuarios registrados</h4>
+                                <a asp-page="Create" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);">
+                                    <i class="fas fa-plus me-2"></i>Crear Primer Usuario
+                                </a>
                             </div>
                         }
                     </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="text-center py-5">
-                        <i class="fas fa-users fa-4x mb-4 opacity-25"></i>
-                        <h4 class="mb-3">No hay usuarios registrados</h4>
-                        <p class="mb-4">Comienza agregando el primer usuario al sistema.</p>
-                        <a asp-page="Create" class="btn btn-primary btn-lg">
-                            <i class="fas fa-plus me-2"></i>Crear Primer Usuario
-                        </a>
-                    </div>
-                }
+                </div>
             </div>
         </div>
+
     }
     else
     {

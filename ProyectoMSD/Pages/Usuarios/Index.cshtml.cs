@@ -17,8 +17,13 @@ namespace ProyectoMSD.Pages.Usuarios
     {
         private readonly ProyectoMSD.Modelos.AppDbContext _context;
         private readonly IUsuarioService _usuarioService;
+        public string FilterId { get; set; } = string.Empty;
 
-        public IndexModel(ProyectoMSD.Modelos.AppDbContext context, IUsuarioService usuarioService) 
+        // Nuevas propiedades para la UI del Dashboard (Opción B)
+        public IList<RegistroAcceso> UltimosAccesos { get; set; } = new List<RegistroAcceso>();
+        public int BateriaDispositivosOffline => Dispositivos.Count(d => d.Estado != null && d.Estado.ToLower() != "activo" && d.Estado.ToLower() != "conectado");
+        
+        public IndexModel(AppDbContext context, IUsuarioService usuarioService) 
         {
             _context = context;
             _usuarioService = usuarioService;
@@ -40,10 +45,17 @@ namespace ProyectoMSD.Pages.Usuarios
 
         public async Task OnGetAsync()
         {
-            // Cargar datos de usuarios SOLAMENTE si es Admin
+            // Cargar datos principales para Admin
             if (User.IsInRole("Admin"))
             {
                 Usuario = await _usuarioService.GetAllUsuariosAsync();
+                
+                // Cargar registros de acceso para simular "Actividad Reciente" (Logins)
+                UltimosAccesos = await _context.RegistroAccesos
+                    .Include(r => r.IdUsuariosNavigation)
+                    .OrderByDescending(r => r.FechaAcceso)
+                    .Take(5)
+                    .ToListAsync();
             }
             else
             {
