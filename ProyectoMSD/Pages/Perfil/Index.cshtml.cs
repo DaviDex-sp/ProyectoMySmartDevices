@@ -31,7 +31,10 @@ namespace ProyectoMSD.Pages.Perfil
             var userId = ObtenerUsuarioId();
             if (userId == null) return RedirectToPage("/Index");
 
-            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Id == userId);
+            var usuario = await _context.Usuarios
+                .Include(u => u.Propiedades) // Agregado para "Dispositivos Conectados" alternativo
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
             if (usuario == null) return NotFound();
 
             Usuario = usuario;
