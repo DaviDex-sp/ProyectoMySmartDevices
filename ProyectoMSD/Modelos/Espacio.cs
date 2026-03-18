@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,9 +14,6 @@ public partial class Espacio
     public string Nombre { get; set; } = null!;
 
     [Required(ErrorMessage = "Obligatorio")]
-    public string Ubicacion { get; set; } = null!;
-
-    [Required(ErrorMessage = "Obligatorio")]
     public int Señal { get; set; }
 
     [Required(ErrorMessage = "Obligatorio")]
@@ -25,7 +22,7 @@ public partial class Espacio
     [Required(ErrorMessage = "Ingresa la propiedad")]
     public int IdPropiedades { get; set; }
 
-    public virtual ICollection<Almacenan> Almacenans { get; set; } = new List<Almacenan>();
+    public virtual ICollection<Dispositivo> Dispositivos { get; set; } = new List<Dispositivo>();
     [ValidateNever]
     public virtual Propiedade IdPropiedadesNavigation { get; set; } = null!;
 }

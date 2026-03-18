@@ -1,0 +1,110 @@
+@page
+@model ProyectoMSD.Pages.Ubicaciones.DetailsModel
+
+@{
+    ViewData["Title"] = "Detalles de la Ubicación";
+}
+
+@section Styles {
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        #staticMap {
+            height: 300px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .details-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+}
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary me-3" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="mb-0">
+            <i class="fas fa-info-circle text-info me-2"></i>Detalles de Ubicación
+        </h2>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-5 mb-4">
+            <div class="details-card h-100">
+                <h4 class="mb-4 border-bottom pb-2">Información Resumen</h4>
+                
+                <dl class="row">
+                    <dt class="col-sm-4 text-muted mt-2">ID Sistema</dt>
+                    <dd class="col-sm-8 mt-2 fw-bold">@Model.Ubicacione.Id</dd>
+
+                    <dt class="col-sm-4 text-muted mt-2">Latitud</dt>
+                    <dd class="col-sm-8 mt-2">@Math.Round(Model.Ubicacione.Latitud, 6)</dd>
+
+                    <dt class="col-sm-4 text-muted mt-2">Longitud</dt>
+                    <dd class="col-sm-8 mt-2">@Math.Round(Model.Ubicacione.Longitud, 6)</dd>
+
+                    <dt class="col-sm-4 text-muted mt-2">Dirección</dt>
+                    <dd class="col-sm-8 mt-2">
+                        @(string.IsNullOrEmpty(Model.Ubicacione.DireccionFormateada) ? "Sin especificar" : Model.Ubicacione.DireccionFormateada)
+                    </dd>
+
+                    <dt class="col-sm-4 text-muted mt-2">Fecha</dt>
+                    <dd class="col-sm-8 mt-2">
+                        @Model.Ubicacione.FechaCreacion?.ToString("dd/MM/yyyy HH:mm")
+                    </dd>
+                </dl>
+
+                <div class="mt-4 pt-3 border-top d-flex gap-2">
+                    <a asp-page="./Edit" asp-route-id="@Model.Ubicacione?.Id" class="btn btn-primary w-50">
+                        <i class="fas fa-edit me-2"></i>Editar
+                    </a>
+                    <a asp-page="./Index" class="btn btn-light w-50 border">Volver</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-7 mb-4">
+            <div class="details-card h-100 p-2">
+                <div id="staticMap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const lat = "@Html.Raw(Model.Ubicacione?.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture))";
+            const lng = "@Html.Raw(Model.Ubicacione?.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture))";
+            
+            const map = L.map('staticMap', {
+                center: [parseFloat(lat), parseFloat(lng)],
+                zoom: 16,
+                zoomControl: true,
+                dragging: false,      // Read-only impression
+                scrollWheelZoom: false
+            });
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            L.marker([parseFloat(lat), parseFloat(lng)]).addTo(map)
+                .bindPopup("<b>Ubicación del Dispositivo/Espacio</b><br/>" + "@Html.Raw(Model.Ubicacione?.DireccionFormateada?.Replace("\"", ""))")
+                .openPopup();
+
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        });
+    </script>
+}

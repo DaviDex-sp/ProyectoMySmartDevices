@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,10 +19,7 @@ public partial class Propiedade
     [Required(ErrorMessage = "Ingresa los pisos")]
     public int Pisos { get; set; }
 
-    [Required(ErrorMessage = "Ingrese el usuario")]
-    public int IdUsuarios { get; set; }
-
     public virtual ICollection<Espacio> Espacios { get; set; } = new List<Espacio>();
-    [ValidateNever]
-    public virtual Usuario IdUsuariosNavigation { get; set; } = null!;
+
+    public virtual ICollection<UsuariosPropiedade> UsuariosPropiedades { get; set; } = new List<UsuariosPropiedade>();
 }

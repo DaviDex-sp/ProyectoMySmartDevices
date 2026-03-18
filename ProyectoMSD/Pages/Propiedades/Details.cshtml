@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Propiedades.DetailsModel
 
 @{
@@ -30,10 +30,10 @@
             @Html.DisplayFor(model => model.Propiedade.Pisos)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Propiedade.IdUsuariosNavigation)
+            Propietario ID
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Propiedade.IdUsuariosNavigation.Id)
+            @Model.Propiedade.UsuariosPropiedades?.FirstOrDefault()?.IdUsuario
         </dd>
     </dl>
 </div>

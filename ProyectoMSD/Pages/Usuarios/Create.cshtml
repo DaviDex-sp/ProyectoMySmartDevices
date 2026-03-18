@@ -88,28 +88,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Usuario.Ubicacion" class="form-label fw-bold">
-                                    <i class="fas fa-map-marker-alt me-1"></i>Ubicación
-                                </label>
-                                <select asp-for="Usuario.Ubicacion" class="form-select" id="inputUbicacion">
-                                    <option value="">Seleccionar ciudad...</option>
-                                    <option value="Bogotá">Bogotá</option>
-                                    <option value="Medellín">Medellín</option>
-                                    <option value="Cali">Cali</option>
-                                    <option value="Barranquilla">Barranquilla</option>
-                                    <option value="Cartagena">Cartagena</option>
-                                    <option value="Bucaramanga">Bucaramanga</option>
-                                    <option value="Pereira">Pereira</option>
-                                    <option value="Manizales">Manizales</option>
-                                    <option value="Santa Marta">Santa Marta</option>
-                                    <option value="Cúcuta">Cúcuta</option>
-                                    <option value="Ibagué">Ibagué</option>
-                                    <option value="Villavicencio">Villavicencio</option>
-                                    <option value="Pasto">Pasto</option>
-                                    <option value="Neiva">Neiva</option>
-                                    <option value="Armenia">Armenia</option>
-                                </select>
-                                <span asp-validation-for="Usuario.Ubicacion" class="text-danger fw-bold"></span>
+                                <!-- Ubicación input was removed as it now requires a Leaflet map flow -->
                             </div>
                         </div>
 
@@ -231,7 +210,6 @@
             const inputRol = document.getElementById('inputRol');
             const inputPrefijoTelefono = document.getElementById('inputPrefijoTelefono');
             const inputTelefono = document.getElementById('inputTelefono');
-            const inputUbicacion = document.getElementById('inputUbicacion');
             const inputDocumento = document.getElementById('inputDocumento');
             const inputRut = document.getElementById('inputRut');
             const inputAcceso = document.getElementById('inputAcceso');
@@ -242,7 +220,6 @@
             const previewCorreo = document.getElementById('previewCorreo');
             const previewRol = document.getElementById('previewRol');
             const previewTelefono = document.getElementById('previewTelefono');
-            const previewUbicacion = document.getElementById('previewUbicacion');
             const previewDocumento = document.getElementById('previewDocumento');
             const previewRut = document.getElementById('previewRut');
             const previewAcceso = document.getElementById('previewAcceso');
@@ -277,8 +254,6 @@
                 const prefijo = inputPrefijoTelefono.options[inputPrefijoTelefono.selectedIndex]?.text || '+57';
                 previewTelefono.textContent = inputTelefono.value ? `${prefijo} ${inputTelefono.value}` : '000000000';
 
-                // Actualizar ubicación
-                previewUbicacion.textContent = inputUbicacion.value || 'Sin ubicación';
 
                 // Actualizar documento
                 previewDocumento.textContent = inputDocumento.value || 'Sin documento';
@@ -304,7 +279,6 @@
             inputRol.addEventListener('change', actualizarPreview);
             inputPrefijoTelefono.addEventListener('change', actualizarPreview);
             inputTelefono.addEventListener('input', actualizarPreview);
-            inputUbicacion.addEventListener('change', actualizarPreview);
             inputDocumento.addEventListener('input', actualizarPreview);
             inputRut.addEventListener('input', actualizarPreview);
             inputAcceso.addEventListener('change', actualizarPreview);

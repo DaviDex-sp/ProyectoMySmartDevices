@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +16,7 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Almacenan> Almacenans { get; set; }
+    // --- NUESTRA ARQUITECTURA LIMPIA ---
     public virtual DbSet<Configuracione> Configuraciones { get; set; }
     public virtual DbSet<Dispositivo> Dispositivos { get; set; }
     public virtual DbSet<Espacio> Espacios { get; set; }
@@ -25,9 +25,13 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Usuario> Usuarios { get; set; }
     public virtual DbSet<RegistroAcceso> RegistroAccesos { get; set; }
     public virtual DbSet<Notificacion> Notificaciones { get; set; }
+    public virtual DbSet<UsuariosPropiedade> UsuariosPropiedades { get; set; }
+    
+    // LA NUEVA TABLA DE GOOGLE MAPS
+    public virtual DbSet<Ubicacione> Ubicaciones { get; set; } 
 
-    // NOTA PROFESIONAL: El m�todo OnConfiguring se elimin� por completo 
-    // para evitar que fuerce la conexi�n local a 127.0.0.1.
+    // NOTA PROFESIONAL: El método OnConfiguring se eliminó por completo 
+    // para evitar que fuerce la conexión local a 127.0.0.1.
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,26 +39,7 @@ public partial class AppDbContext : DbContext
             .UseCollation("utf8mb4_general_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<Almacenan>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-            entity.ToTable("almacenan");
-            entity.HasIndex(e => e.IdDispositivos, "ID_Dispositivos");
-            entity.HasIndex(e => e.IdEspacios, "ID_Espacios");
-            entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
-            entity.Property(e => e.IdDispositivos).HasColumnType("int(11)").HasColumnName("ID_Dispositivos");
-            entity.Property(e => e.IdEspacios).HasColumnType("int(11)").HasColumnName("ID_Espacios");
-
-            entity.HasOne(d => d.IdDispositivosNavigation).WithMany(p => p.Almacenans)
-                .HasForeignKey(d => d.IdDispositivos)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("almacenan_ibfk_2");
-
-            entity.HasOne(d => d.IdEspaciosNavigation).WithMany(p => p.Almacenans)
-                .HasForeignKey(d => d.IdEspacios)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("almacenan_ibfk_1");
-        });
+        // ELIMINAMOS EL BLOQUE DE 'Almacenan' POR COMPLETO
 
         modelBuilder.Entity<Configuracione>(entity =>
         {
@@ -76,7 +61,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Configuraciones)
                 .HasForeignKey(d => d.IdUsuarios)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("configuraciones_ibfk_2");
         });
 
@@ -85,24 +70,28 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
             entity.ToTable("dispositivos");
             entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
-            entity.Property(e => e.Estado).HasMaxLength(250);
-            entity.Property(e => e.Marca).HasMaxLength(250);
-            entity.Property(e => e.Nombre).HasMaxLength(250);
-            entity.Property(e => e.Tipo).HasMaxLength(250);
-            entity.Property(e => e.Usos).HasMaxLength(250);
+            
+            // Actualizado para reflejar la nueva estructura y longitudes
+            entity.Property(e => e.IdEspacio).HasColumnType("int(11)").HasColumnName("ID_Espacio");
+            entity.Property(e => e.Estado).HasMaxLength(30);
+            entity.Property(e => e.Marca).HasMaxLength(50);
+            entity.Property(e => e.Nombre).HasMaxLength(100);
+            entity.Property(e => e.Tipo).HasMaxLength(50);
+            entity.Property(e => e.Usos).HasMaxLength(255);
+            entity.Property(e => e.MAC_Address).HasMaxLength(50);
+            entity.Property(e => e.Protocolo).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Espacio>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
             entity.ToTable("espacios");
-            entity.HasIndex(e => e.IdPropiedades, "ID_Propiedades");
+            entity.HasIndex(e => e.IdPropiedades, "ID_Propiedad");
             entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
-            entity.Property(e => e.IdPropiedades).HasColumnType("int(11)").HasColumnName("ID_Propiedades");
+            entity.Property(e => e.IdPropiedades).HasColumnType("int(11)").HasColumnName("ID_Propiedad");
             entity.Property(e => e.Nombre).HasMaxLength(250);
             entity.Property(e => e.Permisos).HasMaxLength(250);
-            entity.Property(e => e.Señal).HasColumnType("int(11)");
-            entity.Property(e => e.Ubicacion).HasMaxLength(250);
+            entity.Property(e => e.Señal).HasColumnType("int(11)").HasColumnName("Senal");
 
             entity.HasOne(d => d.IdPropiedadesNavigation).WithMany(p => p.Espacios)
                 .HasForeignKey(d => d.IdPropiedades)
@@ -114,17 +103,10 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
             entity.ToTable("propiedades");
-            entity.HasIndex(e => e.IdUsuarios, "ID_USUARIOS");
             entity.Property(e => e.Id).HasColumnType("int(11)").HasColumnName("ID");
             entity.Property(e => e.Direccion).HasMaxLength(250);
-            entity.Property(e => e.IdUsuarios).HasColumnType("int(11)").HasColumnName("ID_USUARIOS");
             entity.Property(e => e.Pisos).HasColumnType("int(11)");
             entity.Property(e => e.Tipo).HasMaxLength(250);
-
-            entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Propiedades)
-                .HasForeignKey(d => d.IdUsuarios)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("propiedades_ibfk_1");
         });
 
         modelBuilder.Entity<Soporte>(entity =>
@@ -140,7 +122,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.IdUsuariosNavigation).WithMany(p => p.Soportes)
                 .HasForeignKey(d => d.IdUsuarios)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("soportes_ibfk_1");
         });
 
@@ -152,16 +134,21 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Acesso).HasMaxLength(250);
             entity.Property(e => e.Clave).HasMaxLength(250);
             entity.Property(e => e.Correo).HasMaxLength(250);
-            entity.Property(e => e.Documento).HasColumnType("bigint(20)");
+            entity.Property(e => e.Documento).HasMaxLength(20);
             entity.Property(e => e.Nombre).HasMaxLength(250);
             entity.Property(e => e.Permisos).HasMaxLength(250);
             entity.Property(e => e.PrefijoTelefono).HasMaxLength(10);
             entity.Property(e => e.Rol).HasMaxLength(250);
             entity.Property(e => e.Rut).HasMaxLength(250);
             entity.Property(e => e.Telefono).HasMaxLength(20);
-            entity.Property(e => e.Ubicacion).HasMaxLength(250);
-        });
+            entity.Property(e => e.IdUbicacion).HasColumnType("int(11)").HasColumnName("ID_Ubicacion");
 
+            entity.HasOne(d => d.UbicacionNavigation)
+                .WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.IdUbicacion)
+                .OnDelete(DeleteBehavior.SetNull) // Si se borra la ubicación, el usuario queda con null
+                .HasConstraintName("FK_usuarios_ubicaciones");
+        });
         modelBuilder.Entity<Notificacion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -181,7 +168,6 @@ public partial class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_notificaciones_usuarios");
         });
-
 
         modelBuilder.Entity<RegistroAcceso>(entity =>
         {
@@ -203,6 +189,69 @@ public partial class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("registro_accesos_ibfk_1");
         });
+
+            modelBuilder.Entity<UsuariosPropiedade>(entity =>
+        {
+            // 1. Forzamos el nombre de la tabla (asegúrate que sea el de tu BD)
+            entity.ToTable("usuarios_propiedades"); 
+
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            // 2. FORZAMOS el nombre de la columna en SINGULAR
+            // Esto mata el error "e.ID_Propiedades"
+            entity.Property(e => e.IdPropiedad)
+                .HasColumnName("ID_Propiedad"); 
+
+            entity.Property(e => e.IdUsuario)
+                .HasColumnName("ID_Usuario");
+
+            // EL PROBLEMA: Tu BD tiene "Rol_En_Propiedad" (snake_case modificado)
+            // Agregamos el mapeo explícito para evitar el error de columna desconocida
+            entity.Property(e => e.RolEnPropiedad)
+                .HasColumnName("Rol_En_Propiedad");
+
+            // 3. Definimos las relaciones explícitamente
+            entity.HasOne(d => d.IdPropiedadNavigation)
+                .WithMany(p => p.UsuariosPropiedades)
+                .HasForeignKey(d => d.IdPropiedad)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_usuarios_propiedades_propiedad");
+
+            entity.HasOne(d => d.IdUsuarioNavigation)
+                .WithMany(p => p.UsuariosPropiedades)
+                .HasForeignKey(d => d.IdUsuario)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_usuarios_propiedades_usuario");
+        });
+
+       modelBuilder.Entity<Ubicacione>(entity =>
+        {
+            // 1. Nombre de la tabla tal cual está en MySQL
+            entity.ToTable("ubicaciones"); 
+
+            // 2. Mapeo de Clave Primaria
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.Property(e => e.Id).HasColumnName("ID");
+
+            // 3. Mapeo de Columnas con Guiones Bajos (Snake Case)
+            entity.Property(e => e.DireccionFormateada)
+                .HasColumnName("Direccion_Formateada")
+                .HasColumnType("varchar(255)"); // O "text" según tu BD
+
+            entity.Property(e => e.FechaCreacion)
+                .HasColumnName("FechaCreacion")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // 4. Mapeo de Coordenadas (Precisión para GPS)
+            entity.Property(e => e.Latitud)
+                .HasColumnName("Latitud")
+                .HasPrecision(18, 12);
+
+            entity.Property(e => e.Longitud)
+                .HasColumnName("Longitud")
+                .HasPrecision(18, 12);
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 

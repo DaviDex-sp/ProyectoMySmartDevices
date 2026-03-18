@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        @if (ViewData["ShowNavbar"] == null || (bool)ViewData["ShowNavbar"])
+        @if (ViewData["ShowNavbar"] == null || (ViewData["ShowNavbar"] as bool? == true))
         {
             <nav class="navbar navbar-expand-lg navbar-custom">
                 <div class="container-fluid px-4">
@@ -141,12 +141,12 @@
                             <!-- Notificaciones -->
                             <a asp-page="/Notificaciones/Index" class="btn btn-nav-notification position-relative" title="Notificaciones">
                                 <i class="fas fa-bell"></i>
-                                @if (ViewData["NotifCount"] != null && (int)ViewData["NotifCount"] > 0)
+                                @if (ViewData["NotifCount"] != null && (int?)ViewData["NotifCount"] > 0)
                                 {
                                     <span class="notif-badge-count">@ViewData["NotifCount"]</span>
                                 }
                             </a>
-                            @if (!User.IsInRole("Admin"))
+                            @if (User?.IsInRole("Admin") == false)
                             {
                                 <!-- Mi Perfil (solo usuarios) -->
                                 <a asp-page="/Perfil/Index" class="btn btn-nav-profile" title="Mi Perfil">

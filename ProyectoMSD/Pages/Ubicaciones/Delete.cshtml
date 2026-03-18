@@ -1,0 +1,53 @@
+@page
+@model ProyectoMSD.Pages.Ubicaciones.DeleteModel
+
+@{
+    ViewData["Title"] = "Eliminar Ubicación";
+}
+
+<div class="container mt-4">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-outline-secondary me-3" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="mb-0 text-danger">
+            <i class="fas fa-trash-alt me-2"></i>Eliminar Ubicación
+        </h2>
+    </div>
+
+    <div class="alert alert-danger shadow-sm mb-4" style="border-radius: 15px; border-left: 5px solid #dc3545;">
+        <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>¿Estás seguro que deseas eliminar esta ubicación?</h5>
+        <p class="mb-0">Esta acción no se puede deshacer. Se requiere que ninguna propiedad o espacio dependa de esta ubicación antes de eliminarla.</p>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-radius: 15px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+        <div class="card-body p-4">
+            <h5 class="card-title text-muted mb-4 border-bottom pb-2">Datos de la Ubicación</h5>
+            <dl class="row">
+                <dt class="col-sm-3 text-muted">ID Sistema</dt>
+                <dd class="col-sm-9 fw-bold">@Model.Ubicacione.Id</dd>
+
+                <dt class="col-sm-3 text-muted">Latitud</dt>
+                <dd class="col-sm-9">@Math.Round(Model.Ubicacione.Latitud, 6)</dd>
+
+                <dt class="col-sm-3 text-muted">Longitud</dt>
+                <dd class="col-sm-9">@Math.Round(Model.Ubicacione.Longitud, 6)</dd>
+
+                <dt class="col-sm-3 text-muted">Dirección Validada</dt>
+                <dd class="col-sm-9">
+                    @(string.IsNullOrEmpty(Model.Ubicacione.DireccionFormateada) ? "Sin especificar" : Model.Ubicacione.DireccionFormateada)
+                </dd>
+            </dl>
+            
+            <div class="mt-4 pt-3 border-top">
+                <form method="post">
+                    <input type="hidden" asp-for="Ubicacione.Id" />
+                    <button type="submit" class="btn btn-danger shadow-sm">
+                        <i class="fas fa-trash-alt me-2"></i>Confirmar Eliminación
+                    </button>
+                    <a asp-page="./Index" class="btn btn-light border ms-2">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

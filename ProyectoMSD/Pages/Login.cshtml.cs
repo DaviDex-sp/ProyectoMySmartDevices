@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +25,9 @@ namespace ProyectoMSD.Pages
         }
 
         [BindProperty]
-        public string Correo { get; set; }
+        public string Correo { get; set; } = string.Empty;
         [BindProperty]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         public void OnGet()
         {
@@ -107,7 +107,7 @@ namespace ProyectoMSD.Pages
             }
 
             // Buscar/Crear usuario en DB mediante servicio
-            var usuario = await _usuarioService.AuthenticateGoogleAsync(email, name);
+            var usuario = await _usuarioService.AuthenticateGoogleAsync(email, name ?? "Usuario Google");
 
             // Crear claims y hacer SignIn local
             var claims = new List<Claim>

@@ -23,6 +23,6 @@ namespace ProyectoMSD.Interfaces
         bool EsEmailValido(string email);
         string HashPassword(string password);
         Task<bool> ExisteCorreoAsync(string correo);
-        Task<bool> ExisteDocumentoAsync(long documento);
+        Task<bool> ExisteDocumentoAsync(string documento);
     }
 }

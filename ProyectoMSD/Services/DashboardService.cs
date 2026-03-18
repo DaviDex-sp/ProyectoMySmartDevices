@@ -78,8 +78,9 @@ public class DashboardService : IDashboardService
 
         // 6. Demografía: Usuarios por Ubicación (Ciudades)
         dto.UsuariosPorUbicacion = await _db.Usuarios
-            .Where(u => !string.IsNullOrEmpty(u.Ubicacion))
-            .GroupBy(u => u.Ubicacion)
+            .Include(u => u.UbicacionNavigation)
+            .Where(u => u.UbicacionNavigation != null && !string.IsNullOrEmpty(u.UbicacionNavigation.DireccionFormateada))
+            .GroupBy(u => u.UbicacionNavigation!.DireccionFormateada)
             .Select(g => new ChartDataDto {
                 Label = g.Key,
                 Count = g.Count()

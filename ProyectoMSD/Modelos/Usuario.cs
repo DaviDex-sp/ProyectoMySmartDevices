@@ -1,50 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProyectoMSD.Modelos;
 
 public partial class Usuario
 {
+    [Key]
     public int Id { get; set; }
 
     [Required(ErrorMessage = "El nombre es obligatorio")]
+    [StringLength(100)]
     public string Nombre { get; set; } = null!;
 
-    [Required(ErrorMessage = "La Clave es nesesaria")]
-    public string Clave { get; set; } = null!;
-
     [Required(ErrorMessage = "Se necesita un correo")]
+    [StringLength(200)]
     public string Correo { get; set; } = null!;
+
+    [StringLength(50)]
+    public string? Clave { get; set; } // Opcional para logins externos
 
     [Required(ErrorMessage = "Especifica un Rol")]
     public string Rol { get; set; } = null!;
-    
+
     public string? PrefijoTelefono { get; set; }
 
     public string? Telefono { get; set; }
 
-    [Required(ErrorMessage = "Requiere una ubicacion")]
-    public string Ubicacion { get; set; } = null!;
+    // --- GEOLOCALIZACIÓN (EL PUENTE CRÍTICO) ---
+    [Display(Name = "Ubicación")]
+    public int? IdUbicacion { get; set; } // Debe llamarse exactamente así
 
-    [Required(ErrorMessage = "Los permisos son obligatorios")]
-    public string Permisos { get; set; } = null!;
+    [ForeignKey("IdUbicacion")]
+    public virtual Ubicacione? UbicacionNavigation { get; set; }
 
-    [Required(ErrorMessage = "El documento es Obligatorio")]
-    public long? Documento { get; set; }
-
+    // --- OTROS DATOS ---
+    public string? Permisos { get; set; }
+    public string? Documento { get; set; }
     public string? Rut { get; set; }
-
-    [Required(ErrorMessage = "El estado de acceso es obligatorio")]
     public string? Acesso { get; set; }
+    public string? FotoPerfil_URL { get; set; }
 
+    // --- COLECCIONES (Relaciones) ---
     public virtual ICollection<Configuracione> Configuraciones { get; set; } = new List<Configuracione>();
-
-    public virtual ICollection<Propiedade> Propiedades { get; set; } = new List<Propiedade>();
-
     public virtual ICollection<Soporte> Soportes { get; set; } = new List<Soporte>();
-
     public virtual ICollection<RegistroAcceso> RegistroAccesos { get; set; } = new List<RegistroAcceso>();
-
     public virtual ICollection<Notificacion> Notificaciones { get; set; } = new List<Notificacion>();
+    public virtual ICollection<UsuariosPropiedade> UsuariosPropiedades { get; set; } = new List<UsuariosPropiedade>();
 }

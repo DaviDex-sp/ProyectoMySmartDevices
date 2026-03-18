@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Propiedades.CreateModel
 
         @{
@@ -51,15 +51,15 @@
 
                         <!-- DROPDOWN MEJORADO -->
                         <div class="mb-4">
-                            <label asp-for="Propiedade.IdUsuarios" class="form-label fw-bold">
+                            <label asp-for="IdUsuarioSeleccionado" class="form-label fw-bold">
                                 <i class="fas fa-user me-1"></i>Usuario Propietario
                             </label>
-                            <select asp-for="Propiedade.IdUsuarios"
+                            <select asp-for="IdUsuarioSeleccionado"
                                     class="form-select"
                                     asp-items="ViewBag.IdUsuarios">
                                 <option value="">-- Seleccione un usuario --</option>
                             </select>
-                            <span asp-validation-for="Propiedade.IdUsuarios" class="text-danger fw-bold"></span>
+                            <span asp-validation-for="IdUsuarioSeleccionado" class="text-danger fw-bold"></span>
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>Seleccione el usuario responsable de esta propiedad
                             </div>
@@ -87,7 +87,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const select = document.querySelector('select[name="Propiedade.IdUsuarios"]');
+            const select = document.querySelector('select[name="IdUsuarioSeleccionado"]');
 
             console.log('=== DEBUGGING DROPDOWN ===');
             console.log('Opciones encontradas:', select.options.length);
