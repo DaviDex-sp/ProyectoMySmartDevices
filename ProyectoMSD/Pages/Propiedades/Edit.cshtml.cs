@@ -23,6 +23,15 @@ namespace ProyectoMSD.Pages.Propiedades
         [BindProperty]
         public Propiedade Propiedade { get; set; } = default!;
 
+        [BindProperty]
+        public decimal? Latitud { get; set; }
+
+        [BindProperty]
+        public decimal? Longitud { get; set; }
+
+        [BindProperty]
+        public string? DireccionFormateada { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -31,6 +40,7 @@ namespace ProyectoMSD.Pages.Propiedades
             }
 
             var propiedade =  await _context.Propiedades
+                .Include(p => p.IdUbicacionNavigation)
                 .Include(p => p.UsuariosPropiedades)
                     .ThenInclude(up => up.IdUsuarioNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -40,6 +50,13 @@ namespace ProyectoMSD.Pages.Propiedades
                 return NotFound();
             }
             Propiedade = propiedade;
+
+            if (propiedade.IdUbicacionNavigation != null)
+            {
+                Latitud = propiedade.IdUbicacionNavigation.Latitud;
+                Longitud = propiedade.IdUbicacionNavigation.Longitud;
+                DireccionFormateada = propiedade.IdUbicacionNavigation.DireccionFormateada;
+            }
 
             // Load all users to feed the initial select just in case
             ViewData["IdUsuarios"] = new SelectList(await _context.Usuarios.ToListAsync(), "Id", "Nombre");
@@ -64,7 +81,29 @@ namespace ProyectoMSD.Pages.Propiedades
                 return Page();
             }
 
-            _context.Attach(Propiedade).State = EntityState.Modified;
+            var propToUpdate = await _context.Propiedades
+                .Include(p => p.IdUbicacionNavigation)
+                .FirstOrDefaultAsync(p => p.Id == Propiedade.Id);
+
+            if (propToUpdate == null) return NotFound();
+
+            propToUpdate.Direccion = Propiedade.Direccion;
+            propToUpdate.Tipo = Propiedade.Tipo;
+            propToUpdate.Pisos = Propiedade.Pisos;
+
+            if (Latitud.HasValue && Longitud.HasValue && !string.IsNullOrEmpty(DireccionFormateada))
+            {
+                if (propToUpdate.IdUbicacionNavigation == null)
+                {
+                    propToUpdate.IdUbicacionNavigation = new Ubicacione
+                    {
+                        FechaCreacion = DateTime.Now
+                    };
+                }
+                propToUpdate.IdUbicacionNavigation.Latitud = Latitud.Value;
+                propToUpdate.IdUbicacionNavigation.Longitud = Longitud.Value;
+                propToUpdate.IdUbicacionNavigation.DireccionFormateada = DireccionFormateada;
+            }
 
             try
             {

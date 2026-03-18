@@ -13,17 +13,39 @@
                     <h3 class="mb-0"><i class="fas fa-home me-2"></i>Crear Nueva Propiedad</h3>
                 </div>
 
+                <!-- Leaflet CSS -->
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
                 <div class="card-body">
                     <form method="post">
                         <!-- MOSTRAR TODOS los errores -->
                         <div asp-validation-summary="All" class="alert alert-danger"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="Propiedade.Direccion" class="form-label fw-bold">
-                                <i class="fas fa-map-marker-alt me-1"></i>Dirección
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-map-marked-alt me-1 text-primary"></i>Datos de Ubicación
                             </label>
-                            <input asp-for="Propiedade.Direccion" class="form-control" placeholder="Ej: Calle 123 #45-67">
+                            <div class="alert alert-light border border-primary-subtle text-muted small mb-3">
+                                <i class="fas fa-info-circle me-1 text-primary"></i> Haz clic en el mapa interactivo para seleccionar la ubicación de esta propiedad.
+                            </div>
+                            <div id="map" style="height: 300px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1;"></div>
+                            
+                            <input type="hidden" asp-for="Latitud" id="latInput" />
+                            <input type="hidden" asp-for="Longitud" id="lngInput" />
+
+                            <div class="input-group mb-2 shadow-sm" style="border-radius: 12px; z-index: 0;">
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" asp-for="Propiedade.Direccion" class="form-control bg-light" id="direccionInput" placeholder="Dirección" style="border-right: 0; border-top-left-radius: 12px; border-bottom-left-radius: 12px; box-shadow: none;" />
+                                    <label asp-for="Propiedade.Direccion"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección Exacta (con número)</label>
+                                </div>
+                                <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                                    <i class="fas fa-search me-2"></i> Buscar
+                                </button>
+                            </div>
                             <span asp-validation-for="Propiedade.Direccion" class="text-danger fw-bold"></span>
+                            <div id="loadingAddress" class="form-text text-primary d-none mt-2">
+                                <i class="fas fa-spinner fa-spin me-1"></i> Buscando dirección exacta...
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -85,20 +107,134 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // -- Inicialización del Dropdown --
             const select = document.querySelector('select[name="IdUsuarioSeleccionado"]');
-
             console.log('=== DEBUGGING DROPDOWN ===');
-            console.log('Opciones encontradas:', select.options.length);
+            console.log('Opciones encontradas:', select?.options?.length || 0);
 
-            for (let i = 0; i < select.options.length; i++) {
-                console.log(`Opción ${i}: Value="${select.options[i].value}", Text="${select.options[i].text}"`);
+            if (select) {
+                select.addEventListener('change', function() {
+                    console.log('Usuario seleccionado:', this.value, this.options[this.selectedIndex].text);
+                });
             }
 
-            select.addEventListener('change', function() {
-                console.log('Usuario seleccionado:', this.value, this.options[this.selectedIndex].text);
+            // -- Inicialización del Mapa --
+            const defaultLat = 4.6097;
+            const defaultLng = -74.0817;
+            const map = L.map('map').setView([defaultLat, defaultLng], 12);
+            let currentMarker = null;
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            map.locate({setView: true, maxZoom: 14});
+
+            const latInput = document.getElementById('latInput');
+            const lngInput = document.getElementById('lngInput');
+            const direccionInput = document.getElementById('direccionInput');
+            const loadingAddress = document.getElementById('loadingAddress');
+            const btnSearch = document.getElementById('btnSearchUbicacion');
+
+            // --- Geocoding de Búsqueda de Texto ---
+            btnSearch.addEventListener('click', async function() {
+                const query = direccionInput.value.trim();
+                if (!query) return;
+
+                loadingAddress.classList.remove('d-none');
+                try {
+                    let cleanQuery = query.replace(/#/g, '');
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&countrycodes=co`;
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        const lat = parseFloat(result.lat);
+                        const lng = parseFloat(result.lon);
+                        
+                        map.setView([lat, lng], 16);
+                        
+                        if (currentMarker) {
+                            currentMarker.setLatLng([lat, lng]);
+                        } else {
+                            currentMarker = L.marker([lat, lng]).addTo(map);
+                        }
+                        
+                        latInput.value = lat.toFixed(8).replace(',', '.');
+                        lngInput.value = lng.toFixed(8).replace(',', '.');
+                        direccionInput.value = result.display_name;
+                    } else {
+                        alert("No se encontró la dirección. Intente ser más específico.");
+                    }
+                } catch (error) {
+                    console.error("Geocoding err:", error);
+                } finally {
+                    loadingAddress.classList.add('d-none');
+                }
             });
+
+            direccionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnSearch.click();
+                }
+            });
+
+            // --- Evento Click Normal ---
+            map.on('click', function(e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+
+                if (currentMarker) {
+                    currentMarker.setLatLng(e.latlng);
+                } else {
+                    currentMarker = L.marker(e.latlng).addTo(map);
+                }
+
+                latInput.value = lat.toFixed(8).replace(',', '.');
+                lngInput.value = lng.toFixed(8).replace(',', '.');
+
+                obtenerDireccion(lat, lng);
+            });
+
+            async function obtenerDireccion(lat, lng) {
+                loadingAddress.classList.remove('d-none');
+                
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+                    
+                    if (data && data.address) {
+                        let calle = data.address.road || '';
+                        let barrio = data.address.neighbourhood || data.address.suburb || '';
+                        let ciudad = data.address.city || data.address.town || '';
+                        
+                        let direccionLimpia = [calle, barrio, ciudad].filter(Boolean).join(', ');
+                        if (!calle && data.display_name) {
+                            direccionLimpia = data.display_name.split(',').slice(0, 3).join(', ');
+                        }
+
+                        direccionInput.value = direccionLimpia;
+                        direccionInput.focus();
+                    } else {
+                        direccionInput.value = "";
+                    }
+                } catch (error) {
+                    console.error("Geocoding err:", error);
+                    direccionInput.value = "";
+                } finally {
+                    loadingAddress.classList.add('d-none');
+                }
+            }
+            
+            setTimeout(() => { map.invalidateSize(); }, 300);
         });
     </script>
 }

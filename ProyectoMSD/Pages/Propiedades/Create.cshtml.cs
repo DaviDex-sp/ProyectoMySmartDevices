@@ -33,6 +33,12 @@ namespace ProyectoMSD.Pages.Propiedades
         [BindProperty]
         public int IdUsuarioSeleccionado { get; set; }
 
+        [BindProperty]
+        public decimal? Latitud { get; set; }
+
+        [BindProperty]
+        public decimal? Longitud { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             // DEBUGGING - Verificar qué datos llegan
@@ -81,7 +87,19 @@ namespace ProyectoMSD.Pages.Propiedades
             {
                 Console.WriteLine("===== INTENTANDO GUARDAR =====");
                 
-                Propiedade.UsuariosPropiedades.Add(new UsuariosPropiedade 
+                // Si el usuario usó el mapa, creamos el registro de Ubicacione
+                if (Latitud.HasValue && Longitud.HasValue && !string.IsNullOrEmpty(Propiedade.Direccion))
+                {
+                    Propiedade.IdUbicacionNavigation = new Ubicacione
+                    {
+                        Latitud = Latitud.Value,
+                        Longitud = Longitud.Value,
+                        DireccionFormateada = Propiedade.Direccion,
+                        FechaCreacion = DateTime.Now
+                    };
+                }
+
+                Propiedade.UsuariosPropiedades.Add(new UsuariosPropiedade
                 { 
                     IdUsuario = IdUsuarioSeleccionado, 
                     RolEnPropiedad = "Propietario" 

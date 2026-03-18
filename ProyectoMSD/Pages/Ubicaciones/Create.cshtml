@@ -77,10 +77,15 @@
 
                     <div class="mb-4">
                         <label asp-for="Ubicacione.DireccionFormateada" class="form-label text-muted fw-bold">Dirección (Autocompletada)</label>
-                        <textarea asp-for="Ubicacione.DireccionFormateada" class="form-control" id="direccionInput" rows="3" placeholder="Haz clic en el mapa o escribe manualmente..."></textarea>
+                        <div class="input-group shadow-sm" style="border-radius: 12px;">
+                            <textarea asp-for="Ubicacione.DireccionFormateada" class="form-control" id="direccionInput" rows="2" placeholder="Haz clic en el mapa o busca..."></textarea>
+                            <button class="btn btn-primary px-3 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                         <span asp-validation-for="Ubicacione.DireccionFormateada" class="text-danger"></span>
-                        <div id="loadingAddress" class="form-text text-primary d-none">
-                            <i class="fas fa-spinner fa-spin me-1"></i> Buscando dirección...
+                        <div id="loadingAddress" class="form-text text-primary d-none mt-1">
+                            <i class="fas fa-spinner fa-spin me-1"></i> Buscando dirección exacta...
                         </div>
                     </div>
 
@@ -128,6 +133,54 @@
             const direccionInput = document.getElementById('direccionInput');
             const loadingAddress = document.getElementById('loadingAddress');
             const btnGuardar = document.getElementById('btnGuardar');
+            const btnSearch = document.getElementById('btnSearchUbicacion');
+
+            // --- Geocoding de Búsqueda de Texto ---
+            btnSearch.addEventListener('click', async function() {
+                const query = direccionInput.value.trim();
+                if (!query) return;
+
+                loadingAddress.classList.remove('d-none');
+                try {
+                    let cleanQuery = query.replace(/#/g, '');
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&countrycodes=co`;
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        const lat = parseFloat(result.lat);
+                        const lng = parseFloat(result.lon);
+                        
+                        map.setView([lat, lng], 16);
+                        
+                        if (currentMarker) {
+                            currentMarker.setLatLng([lat, lng]);
+                        } else {
+                            currentMarker = L.marker([lat, lng]).addTo(map);
+                        }
+                        
+                        latInput.value = lat.toFixed(8).replace(',', '.');
+                        lngInput.value = lng.toFixed(8).replace(',', '.');
+                        direccionInput.value = result.display_name;
+                        btnGuardar.disabled = false;
+                    } else {
+                        alert("No se encontró la dirección exacta. Intente ser más específico (ej. agregando la ciudad).");
+                    }
+                } catch (error) {
+                    console.error("Geocoding err:", error);
+                } finally {
+                    loadingAddress.classList.add('d-none');
+                }
+            });
+
+            direccionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnSearch.click();
+                }
+            });
 
             // Evento Click en el Mapa
             map.on('click', function(e) {
