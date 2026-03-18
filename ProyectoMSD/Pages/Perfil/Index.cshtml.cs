@@ -32,7 +32,9 @@ namespace ProyectoMSD.Pages.Perfil
             if (userId == null) return RedirectToPage("/Index");
 
             var usuario = await _context.Usuarios
-                .Include(u => u.Propiedades) // Agregado para "Dispositivos Conectados" alternativo
+                .Include(u => u.UsuariosPropiedades)
+                    .ThenInclude(up => up.IdPropiedadNavigation)
+                .Include(u => u.UbicacionNavigation)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (usuario == null) return NotFound();
@@ -54,7 +56,6 @@ namespace ProyectoMSD.Pages.Perfil
             usuarioDb.Correo = Usuario.Correo;
             usuarioDb.PrefijoTelefono = Usuario.PrefijoTelefono;
             usuarioDb.Telefono = Usuario.Telefono;
-            usuarioDb.Ubicacion = Usuario.Ubicacion;
 
             // Si se proporcionó una nueva contraseña, hashearla
             bool contrasenaCambiada = false;

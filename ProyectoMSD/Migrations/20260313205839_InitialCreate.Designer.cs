@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProyectoMSD.Modelos;
 
@@ -11,9 +12,11 @@ using ProyectoMSD.Modelos;
 namespace ProyectoMSD.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260313205839_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +31,8 @@ namespace ProyectoMSD.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(11)")
+                        .HasColumnName("ID");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
@@ -36,24 +40,21 @@ namespace ProyectoMSD.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<int>("IdDispositivos")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdDispositivosNavigationId")
-                        .HasColumnType("int(11)");
+                        .HasColumnType("int(11)")
+                        .HasColumnName("ID_Dispositivos");
 
                     b.Property<int>("IdEspacios")
-                        .HasColumnType("int");
+                        .HasColumnType("int(11)")
+                        .HasColumnName("ID_Espacios");
 
-                    b.Property<int>("IdEspaciosNavigationId")
-                        .HasColumnType("int(11)");
+                    b.HasKey("Id")
+                        .HasName("PRIMARY");
 
-                    b.HasKey("Id");
+                    b.HasIndex(new[] { "IdDispositivos" }, "ID_Dispositivos");
 
-                    b.HasIndex("IdDispositivosNavigationId");
+                    b.HasIndex(new[] { "IdEspacios" }, "ID_Espacios");
 
-                    b.HasIndex("IdEspaciosNavigationId");
-
-                    b.ToTable("Almacenan");
+                    b.ToTable("almacenan", (string)null);
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Configuracione", b =>
@@ -85,9 +86,6 @@ namespace ProyectoMSD.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("ID_Usuarios");
 
-                    b.Property<int>("IdUsuariosNavigationId")
-                        .HasColumnType("int(11)");
-
                     b.Property<string>("Idioma")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -96,9 +94,8 @@ namespace ProyectoMSD.Migrations
                     b.HasKey("Codigo")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("IdUsuariosNavigationId");
-
-                    b.HasIndex(new[] { "IdDispositivos" }, "ID_Dispositivos");
+                    b.HasIndex(new[] { "IdDispositivos" }, "ID_Dispositivos")
+                        .HasDatabaseName("ID_Dispositivos1");
 
                     b.HasIndex(new[] { "IdUsuarios" }, "ID_Usuarios");
 
@@ -116,46 +113,31 @@ namespace ProyectoMSD.Migrations
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<int>("IdEspacio")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("ID_Espacio");
-
-                    b.Property<string>("MAC_Address")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Protocolo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("Usos")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.HasKey("Id")
                         .HasName("PRIMARY");
-
-                    b.HasIndex("IdEspacio");
 
                     b.ToTable("dispositivos", (string)null);
                 });
@@ -191,13 +173,8 @@ namespace ProyectoMSD.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
-                    b.Property<int?>("UbicacioneId")
-                        .HasColumnType("int(11)");
-
                     b.HasKey("Id")
                         .HasName("PRIMARY");
-
-                    b.HasIndex("UbicacioneId");
 
                     b.HasIndex(new[] { "IdPropiedades" }, "ID_Propiedades");
 
@@ -269,9 +246,6 @@ namespace ProyectoMSD.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("ID_USUARIOS");
 
-                    b.Property<int>("IdUsuariosNavigationId")
-                        .HasColumnType("int(11)");
-
                     b.Property<int>("Pisos")
                         .HasColumnType("int(11)");
 
@@ -280,15 +254,8 @@ namespace ProyectoMSD.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
-                    b.Property<int?>("UbicacioneId")
-                        .HasColumnType("int(11)");
-
                     b.HasKey("Id")
                         .HasName("PRIMARY");
-
-                    b.HasIndex("IdUsuariosNavigationId");
-
-                    b.HasIndex("UbicacioneId");
 
                     b.HasIndex(new[] { "IdUsuarios" }, "ID_USUARIOS");
 
@@ -366,9 +333,6 @@ namespace ProyectoMSD.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("ID_USUARIOS");
 
-                    b.Property<int>("IdUsuariosNavigationId")
-                        .HasColumnType("int(11)");
-
                     b.Property<string>("Respuesta")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -382,42 +346,10 @@ namespace ProyectoMSD.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("IdUsuariosNavigationId");
-
                     b.HasIndex(new[] { "IdUsuarios" }, "ID_USUARIOS")
                         .HasDatabaseName("ID_USUARIOS1");
 
                     b.ToTable("soportes", (string)null);
-                });
-
-            modelBuilder.Entity("ProyectoMSD.Modelos.Ubicacione", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
-                        .HasColumnName("ID");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DireccionFormateada")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime?>("FechaCreacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<decimal>("Latitud")
-                        .HasColumnType("decimal(10,8)");
-
-                    b.Property<decimal>("Longitud")
-                        .HasColumnType("decimal(11,8)");
-
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
-
-                    b.ToTable("ubicaciones", (string)null);
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Usuario", b =>
@@ -446,10 +378,6 @@ namespace ProyectoMSD.Migrations
 
                     b.Property<long>("Documento")
                         .HasColumnType("bigint(20)");
-
-                    b.Property<int?>("IdUbicacion")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("ID_Ubicacion");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -486,62 +414,22 @@ namespace ProyectoMSD.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.HasIndex("IdUbicacion");
-
                     b.ToTable("usuarios", (string)null);
-                });
-
-            modelBuilder.Entity("ProyectoMSD.Modelos.UsuariosPropiedade", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
-                        .HasColumnName("Id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdPropiedad")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("ID_Propiedad");
-
-                    b.Property<int>("IdPropiedadNavigationId")
-                        .HasColumnType("int(11)");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("ID_Usuario");
-
-                    b.Property<int>("IdUsuarioNavigationId")
-                        .HasColumnType("int(11)");
-
-                    b.Property<string>("RolEnPropiedad")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("RolEnPropiedad");
-
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
-
-                    b.HasIndex("IdPropiedadNavigationId");
-
-                    b.HasIndex("IdUsuarioNavigationId");
-
-                    b.ToTable("usuarios_propiedades", (string)null);
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Almacenan", b =>
                 {
                     b.HasOne("ProyectoMSD.Modelos.Dispositivo", "IdDispositivosNavigation")
-                        .WithMany()
-                        .HasForeignKey("IdDispositivosNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Almacenans")
+                        .HasForeignKey("IdDispositivos")
+                        .IsRequired()
+                        .HasConstraintName("almacenan_ibfk_2");
 
                     b.HasOne("ProyectoMSD.Modelos.Espacio", "IdEspaciosNavigation")
                         .WithMany("Almacenans")
-                        .HasForeignKey("IdEspaciosNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdEspacios")
+                        .IsRequired()
+                        .HasConstraintName("almacenan_ibfk_1");
 
                     b.Navigation("IdDispositivosNavigation");
 
@@ -558,24 +446,13 @@ namespace ProyectoMSD.Migrations
 
                     b.HasOne("ProyectoMSD.Modelos.Usuario", "IdUsuariosNavigation")
                         .WithMany("Configuraciones")
-                        .HasForeignKey("IdUsuariosNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdUsuarios")
+                        .IsRequired()
+                        .HasConstraintName("configuraciones_ibfk_2");
 
                     b.Navigation("IdDispositivosNavigation");
 
                     b.Navigation("IdUsuariosNavigation");
-                });
-
-            modelBuilder.Entity("ProyectoMSD.Modelos.Dispositivo", b =>
-                {
-                    b.HasOne("ProyectoMSD.Modelos.Espacio", "Espacio")
-                        .WithMany()
-                        .HasForeignKey("IdEspacio")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Espacio");
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Espacio", b =>
@@ -585,10 +462,6 @@ namespace ProyectoMSD.Migrations
                         .HasForeignKey("IdPropiedades")
                         .IsRequired()
                         .HasConstraintName("espacios_ibfk_1");
-
-                    b.HasOne("ProyectoMSD.Modelos.Ubicacione", null)
-                        .WithMany("Espacios")
-                        .HasForeignKey("UbicacioneId");
 
                     b.Navigation("IdPropiedadesNavigation");
                 });
@@ -609,13 +482,9 @@ namespace ProyectoMSD.Migrations
                 {
                     b.HasOne("ProyectoMSD.Modelos.Usuario", "IdUsuariosNavigation")
                         .WithMany("Propiedades")
-                        .HasForeignKey("IdUsuariosNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoMSD.Modelos.Ubicacione", null)
-                        .WithMany("Propiedades")
-                        .HasForeignKey("UbicacioneId");
+                        .HasForeignKey("IdUsuarios")
+                        .IsRequired()
+                        .HasConstraintName("propiedades_ibfk_1");
 
                     b.Navigation("IdUsuariosNavigation");
                 });
@@ -635,45 +504,17 @@ namespace ProyectoMSD.Migrations
                 {
                     b.HasOne("ProyectoMSD.Modelos.Usuario", "IdUsuariosNavigation")
                         .WithMany("Soportes")
-                        .HasForeignKey("IdUsuariosNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdUsuarios")
+                        .IsRequired()
+                        .HasConstraintName("soportes_ibfk_1");
 
                     b.Navigation("IdUsuariosNavigation");
                 });
 
-            modelBuilder.Entity("ProyectoMSD.Modelos.Usuario", b =>
-                {
-                    b.HasOne("ProyectoMSD.Modelos.Ubicacione", "IdUbicacionNavigation")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("IdUbicacion")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .HasConstraintName("FK_usuarios_ubicaciones");
-
-                    b.Navigation("IdUbicacionNavigation");
-                });
-
-            modelBuilder.Entity("ProyectoMSD.Modelos.UsuariosPropiedade", b =>
-                {
-                    b.HasOne("ProyectoMSD.Modelos.Propiedade", "IdPropiedadNavigation")
-                        .WithMany("UsuariosPropiedades")
-                        .HasForeignKey("IdPropiedadNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProyectoMSD.Modelos.Usuario", "IdUsuarioNavigation")
-                        .WithMany("UsuariosPropiedades")
-                        .HasForeignKey("IdUsuarioNavigationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdPropiedadNavigation");
-
-                    b.Navigation("IdUsuarioNavigation");
-                });
-
             modelBuilder.Entity("ProyectoMSD.Modelos.Dispositivo", b =>
                 {
+                    b.Navigation("Almacenans");
+
                     b.Navigation("Configuraciones");
                 });
 
@@ -685,17 +526,6 @@ namespace ProyectoMSD.Migrations
             modelBuilder.Entity("ProyectoMSD.Modelos.Propiedade", b =>
                 {
                     b.Navigation("Espacios");
-
-                    b.Navigation("UsuariosPropiedades");
-                });
-
-            modelBuilder.Entity("ProyectoMSD.Modelos.Ubicacione", b =>
-                {
-                    b.Navigation("Espacios");
-
-                    b.Navigation("Propiedades");
-
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Usuario", b =>
@@ -709,8 +539,6 @@ namespace ProyectoMSD.Migrations
                     b.Navigation("RegistroAccesos");
 
                     b.Navigation("Soportes");
-
-                    b.Navigation("UsuariosPropiedades");
                 });
 #pragma warning restore 612, 618
         }

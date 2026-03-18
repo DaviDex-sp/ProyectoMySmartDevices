@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Espacios.EditModel
 
 @{
@@ -23,10 +23,7 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <h2 class="mb-2">@(Model.Espacio?.Nombre ?? "Espacio")</h2>
-                        <div class="space-status">
-                            <i class="fas fa-map-marker-alt me-2"></i>
-                            @(Model.Espacio?.Ubicacion ?? "Ubicación")
-                        </div>
+                            <!-- Ubicacion reference removed -->
                     </div>
                     <div class="signal-indicator">
                         <span>Señal: @(Model.Espacio?.Señal ?? 0)%</span>
@@ -65,14 +62,6 @@
                         </label>
                         <input asp-for="Espacio.Nombre" class="form-control" placeholder="Ej: Sala, Cocina, Dormitorio..." />
                         <span asp-validation-for="Espacio.Nombre" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">
-                            <i class="fas fa-map-marker-alt me-1 text-primary"></i>Ubicación
-                        </label>
-                        <input asp-for="Espacio.Ubicacion" class="form-control" placeholder="Ej: Primer piso, Segundo piso..." />
-                        <span asp-validation-for="Espacio.Ubicacion" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">

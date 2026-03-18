@@ -90,7 +90,7 @@
                             <p class="text-secondary fw-bold mb-2 small">Dirección / Ubicación</p>
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-map-marker-alt text-muted me-3"></i>
-                                <span style="color: #4b5563;">@(Model.Usuario?.Ubicacion ?? "No registrada")</span>
+                                <span style="color: #4b5563;">@(Model.Usuario?.UbicacionNavigation?.DireccionFormateada ?? "No registrada")</span>
                             </div>
                         </div>
                         <div class="col-md-6 mt-4">
@@ -104,7 +104,7 @@
                             <p class="text-secondary fw-bold mb-2 small">Documento Identidad</p>
                             <div class="d-flex align-items-center">
                                 <i class="fas fa-id-card text-muted me-3"></i>
-                                <span style="color: #4b5563;">@(Model.Usuario?.Documento?.ToString("N0") ?? "No registrado")</span>
+                                <span style="color: #4b5563;">@(Model.Usuario?.Documento ?? "No registrado")</span>
                             </div>
                         </div>
                     </div>
@@ -119,10 +119,11 @@
                     <h5 class="text-secondary mb-4" style="font-weight: 500;">Propiedades Conectadas</h5>
                     
                     <div class="activity-feed">
-                        @if (Model.Usuario?.Propiedades != null && Model.Usuario.Propiedades.Any())
+                        @if (Model.Usuario?.UsuariosPropiedades != null && Model.Usuario.UsuariosPropiedades.Any())
                         {
-                            @foreach (var propiedad in Model.Usuario.Propiedades.Take(4))
+                            @foreach (var up in Model.Usuario.UsuariosPropiedades.Take(4))
                             {
+                                var propiedad = up.IdPropiedadNavigation;
                                 <div class="d-flex align-items-center p-3 mb-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
                                         <i class="fas fa-home"></i>
@@ -201,18 +202,7 @@
                                 </div>
                             </div>
 
-                            <!-- Ubicación -->
-                            <div class="col-md-6">
-                                <label class="form-label text-secondary small fw-bold">Ciudad / Ubicación</label>
-                                <select asp-for="Usuario.Ubicacion" class="form-select px-4 py-2 bg-light border-0" style="border-radius: 12px;">
-                                    <option value="">Seleccionar ciudad...</option>
-                                    <option value="Bogotá">Bogotá</option>
-                                    <option value="Medellín">Medellín</option>
-                                    <option value="Cali">Cali</option>
-                                    <option value="Barranquilla">Barranquilla</option>
-                                </select>
-                                <span asp-validation-for="Usuario.Ubicacion" class="text-danger small"></span>
-                            </div>
+
 
                             <!-- Cambio de Contraseña -->
                             <div class="col-12 mt-4">

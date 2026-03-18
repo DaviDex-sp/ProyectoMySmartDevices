@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +33,9 @@ namespace ProyectoMSD.Pages.Propiedades
         public async Task OnGetAsync()
         {
             Propiedade = await _context.Propiedades
-                .Include(p => p.IdUsuariosNavigation).ToListAsync();
+                .Include(p => p.UsuariosPropiedades)
+                    .ThenInclude(up => up.IdUsuarioNavigation)
+                .ToListAsync();
             // Cargar TODOS los datos que necesitas
             Usuario = await _context.Usuarios.ToListAsync();
 

@@ -307,7 +307,7 @@
         tooltips.forEach(el => new bootstrap.Tooltip(el));
 
         console.log('Página de soporte cargada — Rol: @(esAdmin ? "Admin" : "Usuario")');
-        console.log('Total de tickets:', @Model.Soporte.Count());
+        console.log('Total de tickets:', @(Model.Soporte?.Count() ?? 0));
     });
 
     function filterTickets() {

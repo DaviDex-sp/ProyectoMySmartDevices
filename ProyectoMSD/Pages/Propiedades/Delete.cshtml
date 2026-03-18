@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Propiedades.DeleteModel
 
 @{
@@ -87,13 +87,14 @@
                         <small class="text-muted text-uppercase fw-bold">Propietario</small>
                     </div>
                     <div class="fw-bold">
-                        @if (Model.Propiedade?.IdUsuariosNavigation != null)
+                        @{ var propietario = Model.Propiedade?.UsuariosPropiedades?.FirstOrDefault()?.IdUsuarioNavigation; }
+                        @if (propietario != null)
                         {
-                            @Model.Propiedade.IdUsuariosNavigation.Nombre
+                            @propietario.Nombre
                         }
                         else
                         {
-                            <span class="text-muted">Usuario ID: @Model.Propiedade?.IdUsuarios</span>
+                            <span class="text-muted">Desconocido</span>
                         }
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,8 +27,7 @@ namespace ProyectoMSD.Pages.Espacios
             // Cargar espacios con propiedades y dispositivos
             Espacio = await _context.Espacios
                 .Include(e => e.IdPropiedadesNavigation)
-                .Include(e => e.Almacenans)
-                    .ThenInclude(a => a.IdDispositivosNavigation)
+                .Include(e => e.Dispositivos)
                 .ToListAsync();
 
             // Total de dispositivos en el sistema
@@ -37,10 +36,7 @@ namespace ProyectoMSD.Pages.Espacios
             // Crear diccionario de dispositivos por espacio
             foreach (var espacio in Espacio)
             {
-                var dispositivos = espacio.Almacenans
-                    .Where(a => a.IdDispositivosNavigation != null)
-                    .Select(a => a.IdDispositivosNavigation!)
-                    .ToList();
+                var dispositivos = espacio.Dispositivos.ToList();
 
                 DispositivosPorEspacio[espacio.Id] = dispositivos;
             }

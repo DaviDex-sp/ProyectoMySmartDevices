@@ -219,7 +219,7 @@
                                                         <i class="fas fa-phone me-2"></i>@(ProyectoMSD.Helpers.TelefonoHelper.ObtenerPrefijoConBandera(item.PrefijoTelefono)) @Html.DisplayFor(modelItem => item.Telefono)
                                                     </p>
                                                     <p class="mb-0 text-muted small">
-                                                        <i class="fas fa-map-marker-alt me-2"></i>@Html.DisplayFor(modelItem => item.Ubicacion)
+                                                        <i class="fas fa-map-marker-alt me-2"></i>@Html.DisplayFor(modelItem => item.UbicacionNavigation.DireccionFormateada)
                                                     </p>
                                                 </div>
 

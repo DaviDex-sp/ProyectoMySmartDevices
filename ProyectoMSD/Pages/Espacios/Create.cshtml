@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Espacios.CreateModel
 
 @{
@@ -26,14 +26,6 @@
                             <span asp-validation-for="Espacio.Nombre" class="text-danger fw-bold"></span>
                         </div>
 
-                        <!-- Ubicacion -->
-                        <div class="mb-3">
-                            <label asp-for="Espacio.Ubicacion" class="form-label fw-bold">
-                                <i class="fas fa-map-marker-alt me-1"></i>Ubicación
-                            </label>
-                            <input asp-for="Espacio.Ubicacion" class="form-control" placeholder="Ej: Segundo piso">
-                            <span asp-validation-for="Espacio.Ubicacion" class="text-danger fw-bold"></span>
-                        </div>
 
                         <!-- Señal -->
                         <div class="mb-3">

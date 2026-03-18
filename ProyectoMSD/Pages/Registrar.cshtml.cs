@@ -1,27 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using ProyectoMSD.Modelos;
-using System.Security.Cryptography;
 using ProyectoMSD.Interfaces;
+using System;
+using System.Threading.Tasks;
 
 namespace ProyectoMSD.Pages
 {
     public class RegistrarModel : PageModel
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly AppDbContext _context;
 
-        public RegistrarModel(IUsuarioService usuarioService)
+        public RegistrarModel(IUsuarioService usuarioService, AppDbContext context)
         {
             _usuarioService = usuarioService;
+            _context = context;
         }
 
         [BindProperty]
         public Usuario Usuario { get; set; } = default!;
 
+        [BindProperty]
+        public decimal Latitud { get; set; }
+
+        [BindProperty]
+        public decimal Longitud { get; set; }
+
+        [BindProperty]
+        public string? DireccionFormateada { get; set; }
+
         public void OnGet()
         {
-            // Inicializar valores por defecto
             Usuario = new Usuario
             {
                 Permisos = "limitado",    
@@ -31,7 +41,6 @@ namespace ProyectoMSD.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Validaciones personalizadas
             await ValidarDatos();
 
             if (!ModelState.IsValid)
@@ -41,13 +50,29 @@ namespace ProyectoMSD.Pages
           
             try
             {
-                // Limpiar y formatear datos
                 LimpiarDatos();
 
-                // FORZAR valores seguros para registro público (SIEMPRE)
-                Usuario.Permisos = "limitado";      // SIEMPRE limitado
-                Usuario.Acesso = "pendiente";       // SIEMPRE pendiente 
+                // 1. CREAR Y GUARDAR LA UBICACIÓN PRIMERO EN MYSQL
+                // Aplicamos Math.Round para que los decimales coincidan con decimal(10,8) y decimal(11,8) de tu BD
+                var nuevaUbicacion = new Ubicacione
+                {
+                    Latitud = Math.Round(this.Latitud, 8),
+                    Longitud = Math.Round(this.Longitud, 8),
+                    DireccionFormateada = this.DireccionFormateada,
+                    FechaCreacion = DateTime.UtcNow
+                };
                 
+                _context.Ubicaciones.Add(nuevaUbicacion);
+                await _context.SaveChangesAsync();
+
+                // 2. FORZAR VALORES DE SEGURIDAD DEL USUARIO
+                Usuario.Permisos = "limitado";      
+                Usuario.Acesso = "pendiente";       
+                
+                // 3. ENLAZAR LA LLAVE FORÁNEA
+                Usuario.IdUbicacion = nuevaUbicacion.Id; 
+                
+                // 4. GUARDAR EL USUARIO COMPLETO
                 await _usuarioService.CreateUsuarioAsync(Usuario);
 
                 TempData["SuccessMessage"] = "¡Cuenta creada exitosamente! Tu cuenta está pendiente de activación por un administrador.";
@@ -55,14 +80,18 @@ namespace ProyectoMSD.Pages
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Error al crear la cuenta. Inténtalo de nuevo.");
+                Console.WriteLine($"\n--- ERROR CRÍTICO EN DB ---");
+                Console.WriteLine(ex.Message);
+                if(ex.InnerException != null) Console.WriteLine($"DETALLE: {ex.InnerException.Message}");
+                Console.WriteLine($"---------------------------\n");
+
+                ModelState.AddModelError(string.Empty, "Error en la base de datos al crear la cuenta. Revisa la consola de Visual Studio para más detalles.");
                 return Page();
             }
         }
 
         private async Task ValidarDatos()
         {
-            // Validar nombre
             if (string.IsNullOrWhiteSpace(Usuario.Nombre))
                 ModelState.AddModelError("Usuario.Nombre", "El nombre es obligatorio.");
             else if (Usuario.Nombre.Length < 2)
@@ -70,72 +99,56 @@ namespace ProyectoMSD.Pages
             else if (Usuario.Nombre.Length > 100)
                 ModelState.AddModelError("Usuario.Nombre", "El nombre no puede exceder 100 caracteres.");
 
-            // Validar correo
             if (string.IsNullOrWhiteSpace(Usuario.Correo))
                 ModelState.AddModelError("Usuario.Correo", "El correo es obligatorio.");
             else if (!EsEmailValido(Usuario.Correo))
-                ModelState.AddModelError("Usuario.Correo", "El formato del correo no es v�lido.");
+                ModelState.AddModelError("Usuario.Correo", "El formato del correo no es válido.");
             else if (Usuario.Correo.Length > 200)
                 ModelState.AddModelError("Usuario.Correo", "El correo no puede exceder 200 caracteres.");
             else
             {
-                // Verificar si el correo ya existe
                 var existeCorreo = await _usuarioService.ExisteCorreoAsync(Usuario.Correo);
-
                 if (existeCorreo)
                     ModelState.AddModelError("Usuario.Correo", "Ya existe un usuario con este correo.");
             }
 
-            // Validar contrase�a
             if (string.IsNullOrWhiteSpace(Usuario.Clave))
-                ModelState.AddModelError("Usuario.Clave", "La contrase�a es obligatoria.");
+                ModelState.AddModelError("Usuario.Clave", "La contraseña es obligatoria.");
             else if (Usuario.Clave.Length < 6)
-                ModelState.AddModelError("Usuario.Clave", "La contrase�a debe tener al menos 6 caracteres.");
+                ModelState.AddModelError("Usuario.Clave", "La contraseña debe tener al menos 6 caracteres.");
             else if (Usuario.Clave.Length > 50)
-                ModelState.AddModelError("Usuario.Clave", "La contrase�a no puede exceder 50 caracteres.");
+                ModelState.AddModelError("Usuario.Clave", "La contraseña no puede exceder 50 caracteres.");
 
-            // Validar tel�fono
             if (string.IsNullOrWhiteSpace(Usuario.Telefono))
-                ModelState.AddModelError("Usuario.Telefono", "El tel�fono debe ser un n�mero v�lido.");
+                ModelState.AddModelError("Usuario.Telefono", "El teléfono debe ser un número válido.");
             else if (Usuario.Telefono.Trim().Length < 7)
-                ModelState.AddModelError("Usuario.Telefono", "El tel�fono debe tener al menos 7 d�gitos.");
-            else if (Usuario.Telefono.Trim().Length > 15)
-                ModelState.AddModelError("Usuario.Telefono", "El tel�fono no puede exceder 15 d�gitos.");
+                ModelState.AddModelError("Usuario.Telefono", "El teléfono debe tener al menos 7 dígitos.");
 
-            // Validar ubicaci�n
-            if (string.IsNullOrWhiteSpace(Usuario.Ubicacion))
-                ModelState.AddModelError("Usuario.Ubicacion", "La ubicaci�n es obligatoria.");
-            else if (Usuario.Ubicacion.Length < 3)
-                ModelState.AddModelError("Usuario.Ubicacion", "La ubicaci�n debe tener al menos 3 caracteres.");
-            else if (Usuario.Ubicacion.Length > 150)
-                ModelState.AddModelError("Usuario.Ubicacion", "La ubicaci�n no puede exceder 150 caracteres.");
+            if (string.IsNullOrWhiteSpace(DireccionFormateada))
+                ModelState.AddModelError("DireccionFormateada", "Debes seleccionar tu ubicación en el mapa y completar la dirección.");
+            else if (DireccionFormateada.Length < 5)
+                ModelState.AddModelError("DireccionFormateada", "La dirección proporcionada es muy corta.");
 
-            // Validar documento si se proporciona
-            if (Usuario.Documento.HasValue)
+            if (!string.IsNullOrWhiteSpace(Usuario.Documento))
             {
-                if (Usuario.Documento <= 0)
-                    ModelState.AddModelError("Usuario.Documento", "El documento debe ser un n�mero v�lido.");
-                else if (Usuario.Documento.ToString().Length < 6)
-                    ModelState.AddModelError("Usuario.Documento", "El documento debe tener al menos 6 d�gitos.");
+                if (Usuario.Documento.Length < 6)
+                    ModelState.AddModelError("Usuario.Documento", "El documento debe tener al menos 6 dígitos.");
                 else
                 {
-                    var existeDocumento = await _usuarioService.ExisteDocumentoAsync(Usuario.Documento.Value);
-
+                    var existeDocumento = await _usuarioService.ExisteDocumentoAsync(Usuario.Documento);
                     if (existeDocumento)
                         ModelState.AddModelError("Usuario.Documento", "Ya existe un usuario con este documento.");
                 }
             }
 
-            // Validar RUT si se proporciona
             if (!string.IsNullOrWhiteSpace(Usuario.Rut))
             {
                 if (Usuario.Rut.Length < 8)
                     ModelState.AddModelError("Usuario.Rut", "El RUT debe tener al menos 8 caracteres.");
-                else if (Usuario.Rut.Length > 15)
-                    ModelState.AddModelError("Usuario.Rut", "El RUT no puede exceder 15 caracteres.");
+                else if (Usuario.Rut.Length > 50)
+                    ModelState.AddModelError("Usuario.Rut", "El RUT no puede exceder 50 caracteres.");
             }
 
-            // Validar rol (aunque sea forzado despu�s)
             if (string.IsNullOrWhiteSpace(Usuario.Rol))
                 ModelState.AddModelError("Usuario.Rol", "Debe seleccionar un rol.");
         }
@@ -144,9 +157,9 @@ namespace ProyectoMSD.Pages
         {
             Usuario.Nombre = Usuario.Nombre?.Trim();
             Usuario.Correo = Usuario.Correo?.Trim().ToLower();
-            Usuario.Ubicacion = Usuario.Ubicacion?.Trim();
             Usuario.Rut = string.IsNullOrWhiteSpace(Usuario.Rut) ? null : Usuario.Rut.Trim();
             Usuario.Clave = Usuario.Clave?.Trim();
+            DireccionFormateada = DireccionFormateada?.Trim();
         }
 
         private bool EsEmailValido(string email)

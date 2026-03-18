@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Propiedades.IndexModel
 
 @{
@@ -103,19 +103,22 @@
                             <div class="d-flex align-items-center mb-3 p-3" style="background: rgba(52, 152, 219, 0.05); border-radius: 12px;">
                                 <div class="avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center"
                                      style="width: 45px; height: 45px; font-size: 18px;">
-                                    @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "U")
+                                     @{
+                                         var propietario = item.UsuariosPropiedades.FirstOrDefault()?.IdUsuarioNavigation;
+                                     }
+                                    @(propietario?.Nombre?.Substring(0, 1).ToUpper() ?? "U")
                                 </div>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-1 fw-bold text-dark">
                                         <i class="fas fa-user me-2 text-primary"></i>Propietario
                                     </h6>
                                     <p class="mb-0 text-muted">
-                                        @(item.IdUsuariosNavigation?.Nombre ?? "Usuario no disponible")
+                                        @(propietario?.Nombre ?? "Usuario no disponible")
                                     </p>
-                                    @if (!string.IsNullOrEmpty(item.IdUsuariosNavigation?.Correo))
+                                    @if (!string.IsNullOrEmpty(propietario?.Correo))
                                     {
                                         <small class="text-muted">
-                                            <i class="fas fa-envelope me-1"></i>@item.IdUsuariosNavigation.Correo
+                                            <i class="fas fa-envelope me-1"></i>@propietario.Correo
                                         </small>
                                     }
                                 </div>

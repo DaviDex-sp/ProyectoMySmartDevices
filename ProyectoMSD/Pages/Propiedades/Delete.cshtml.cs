@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +28,10 @@ namespace ProyectoMSD.Pages.Propiedades
                 return NotFound();
             }
 
-            var propiedade = await _context.Propiedades.FirstOrDefaultAsync(m => m.Id == id);
+            var propiedade = await _context.Propiedades
+                .Include(p => p.UsuariosPropiedades)
+                .ThenInclude(up => up.IdUsuarioNavigation)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (propiedade is not null)
             {

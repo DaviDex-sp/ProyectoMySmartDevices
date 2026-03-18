@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Propiedades.EditModel
 
 @{
@@ -95,15 +95,7 @@
                         <span asp-validation-for="Propiedade.Pisos" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group form-grid-full">
-                        <label class="form-label">
-                            <i class="fas fa-user me-1 text-primary"></i>Propietario
-                        </label>
-                        <select asp-for="Propiedade.IdUsuarios" class="form-control" asp-items="ViewBag.IdUsuarios">
-                            <option value="">Seleccionar propietario...</option>
-                        </select>
-                        <span asp-validation-for="Propiedade.IdUsuarios" class="text-danger"></span>
-                    </div>
+                    <!-- Propietario gestionado en la seccion inferior -->
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
@@ -112,6 +104,81 @@
                     </a>
                     <button type="submit" class="btn-primary-custom">
                         <i class="fas fa-save me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Manage Users Section -->
+        <div class="form-container mt-4">
+            <div class="form-header">
+                <h3>
+                    <i class="fas fa-users"></i>
+                    Usuarios Asociados (Residentes/Invitados)
+                </h3>
+                <p>Administra quién tiene acceso a controlar o ver esta propiedad</p>
+            </div>
+
+            @if (Model.Propiedade?.UsuariosPropiedades != null && Model.Propiedade.UsuariosPropiedades.Any())
+            {
+                <div class="table-responsive mb-4">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var up in Model.Propiedade.UsuariosPropiedades)
+                            {
+                                <tr>
+                                    <td>@up.IdUsuarioNavigation?.Nombre</td>
+                                    <td>@up.IdUsuarioNavigation?.Correo</td>
+                                    <td><span class="badge bg-info text-dark">@up.RolEnPropiedad</span></td>
+                                    <td>
+                                        <form method="post" asp-page-handler="RemoveUser" class="d-inline">
+                                            <input type="hidden" name="propId" value="@Model.Propiedade.Id" />
+                                            <input type="hidden" name="userIdToRemove" value="@up.IdUsuario" />
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Seguro de remover este usuario de la propiedad?');">
+                                                <i class="fas fa-trash"></i> Remover
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">No hay usuarios asociados aún (además del propietario principal).</div>
+            }
+
+            <hr />
+            
+            <h5 class="mb-3">Añadir Nuevo Usuario</h5>
+            <form method="post" asp-page-handler="AddUser" class="row g-3 align-items-end">
+                <input type="hidden" name="propId" value="@Model.Propiedade.Id" />
+                
+                <div class="col-md-5">
+                    <label class="form-label">Correo del Usuario</label>
+                    <input type="email" name="emailUsuario" class="form-control" placeholder="usuario@correo.com" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Rol Asignado</label>
+                    <select name="rolEnPropiedad" class="form-select">
+                        <option value="Residente">Residente</option>
+                        <option value="Propietario">Co-Propietario</option>
+                        <option value="Invitado">Invitado</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-user-plus me-1"></i> Añadir
                     </button>
                 </div>
             </form>

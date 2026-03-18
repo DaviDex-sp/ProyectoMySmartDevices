@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,30 +30,33 @@ namespace ProyectoMSD.Pages.Propiedades
         [BindProperty]
         public Propiedade Propiedade { get; set; } = default!;
 
+        [BindProperty]
+        public int IdUsuarioSeleccionado { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             // DEBUGGING - Verificar qué datos llegan
             Console.WriteLine($"===== DEBUGGING DATOS =====");
-            Console.WriteLine($"IdUsuarios: {Propiedade.IdUsuarios}");
+            Console.WriteLine($"IdUsuarioSeleccionado: {IdUsuarioSeleccionado}");
             Console.WriteLine($"Direccion: {Propiedade.Direccion}");
             Console.WriteLine($"Tipo: {Propiedade.Tipo}");
             Console.WriteLine($"Pisos: {Propiedade.Pisos}");
             Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
 
             // VALIDACIÓN ADICIONAL para la llave foránea
-            if (Propiedade.IdUsuarios <= 0)
+            if (IdUsuarioSeleccionado <= 0)
             {
-                ModelState.AddModelError("Propiedade.IdUsuarios", "Debe seleccionar un usuario válido");
+                ModelState.AddModelError("IdUsuarioSeleccionado", "Debe seleccionar un usuario válido");
             }
             else
             {
                 // VERIFICAR que el usuario existe en la base de datos
                 var usuarioExists = await _context.Usuarios
-                    .AnyAsync(u => u.Id == Propiedade.IdUsuarios);
+                    .AnyAsync(u => u.Id == IdUsuarioSeleccionado);
 
                 if (!usuarioExists)
                 {
-                    ModelState.AddModelError("Propiedade.IdUsuarios", "El usuario seleccionado no existe");
+                    ModelState.AddModelError("IdUsuarioSeleccionado", "El usuario seleccionado no existe");
                 }
             }
 
@@ -77,12 +80,19 @@ namespace ProyectoMSD.Pages.Propiedades
             try
             {
                 Console.WriteLine("===== INTENTANDO GUARDAR =====");
+                
+                Propiedade.UsuariosPropiedades.Add(new UsuariosPropiedade 
+                { 
+                    IdUsuario = IdUsuarioSeleccionado, 
+                    RolEnPropiedad = "Propietario" 
+                });
+
                 _context.Propiedades.Add(Propiedade);
 
                 // NOTIFICACIÓN PARA EL USUARIO ASIGNADO
                 _context.Notificaciones.Add(new Notificacion
                 {
-                    IdUsuarios = Propiedade.IdUsuarios,
+                    IdUsuarios = IdUsuarioSeleccionado,
                     Titulo = "Nueva Propiedad Asignada",
                     Mensaje = $"Se te ha asignado una nueva propiedad: {Propiedade.Direccion}",
                     Tipo = "Informacion",
@@ -122,7 +132,7 @@ namespace ProyectoMSD.Pages.Propiedades
                 // MOSTRAR error específico de llave foránea
                 if (ex.InnerException?.Message?.Contains("FOREIGN KEY") == true)
                 {
-                    ModelState.AddModelError("Propiedade.IdUsuarios", "Error: El usuario seleccionado no es válido");
+                    ModelState.AddModelError("IdUsuarioSeleccionado", "Error: El usuario seleccionado no es válido");
                 }
                 else
                 {
@@ -138,7 +148,7 @@ namespace ProyectoMSD.Pages.Propiedades
         {
             // MÉTODO CORRECTO: Mostrar nombre y correo, valor = Id
             var usuarios = await _context.Usuarios
-                .Where(u => u.Id != null) // Solo usuarios activos
+                .Where(u => u.Id > 0) // Solo usuarios válidos
                 .OrderBy(u => u.Nombre)
                 .Select(u => new SelectListItem
                 {

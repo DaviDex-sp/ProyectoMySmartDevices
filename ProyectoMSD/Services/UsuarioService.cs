@@ -42,10 +42,9 @@ namespace ProyectoMSD.Services
                     Rol = "Usuario",
                     PrefijoTelefono = "+",
                     Telefono = "0",
-                    Ubicacion = "Por Defecto",
                     Permisos = "Basico",
                     Acesso = "Activo",
-                    Documento = 0
+                    Documento = "0"
                 };
 
                 _db.Usuarios.Add(usuario);
@@ -98,7 +97,7 @@ namespace ProyectoMSD.Services
 
         public async Task<List<Usuario>> GetAllUsuariosAsync()
         {
-            return await _db.Usuarios.ToListAsync();
+            return await _db.Usuarios.Include(u => u.UbicacionNavigation).ToListAsync();
         }
 
         public async Task<Usuario?> GetUsuarioByIdAsync(int id)
@@ -159,7 +158,7 @@ namespace ProyectoMSD.Services
             return await _db.Usuarios.AnyAsync(u => u.Correo.ToLower() == correo.ToLower());
         }
 
-        public async Task<bool> ExisteDocumentoAsync(long documento)
+        public async Task<bool> ExisteDocumentoAsync(string documento)
         {
             return await _db.Usuarios.AnyAsync(u => u.Documento == documento);
         }

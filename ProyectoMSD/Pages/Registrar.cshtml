@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.RegistrarModel
 
 @{
@@ -8,11 +8,11 @@
 
 @section Styles {
     <link href="~/css/pages/registrar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 }
 
 <div class="container-fluid px-4 py-4">
 
-    <!-- Header de Registro -->
     <div class="register-header text-center">
         <h1 class="display-4 fw-bold mb-3">
             <i class="fas fa-user-plus me-3 text-primary"></i>REGISTRO
@@ -20,7 +20,6 @@
         <p class="lead text-muted mb-0">Únete a la comunidad inteligente de MySmartDevice</p>
     </div>
 
-    <!-- Banner de Marca -->
     <div class="brand-section">
         <div class="brand-icon">
             <i class="fas fa-user-plus"></i>
@@ -29,7 +28,6 @@
         <p class="text-muted mt-2 mb-0">Crea tu cuenta y controla tu hogar inteligente</p>
     </div>
 
-    <!-- Formulario de Registro -->
     <div class="form-section">
         <div class="form-header d-flex justify-content-between align-items-center">
             <div>
@@ -42,7 +40,6 @@
         </div>
 
         <div class="form-body">
-            <!-- MOSTRAR ERRORES DE VALIDACIÓN -->
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="alert alert-danger">
@@ -54,9 +51,7 @@
                 </div>
             }
 
-            <!-- FORMULARIO -->
             <form method="post">
-                <!-- Información Personal -->
                 <div class="section-title">
                     <i class="fas fa-user me-2 text-primary"></i>Información Personal
                 </div>
@@ -100,33 +95,37 @@
                         <span asp-validation-for="Usuario.PrefijoTelefono" class="text-danger d-block"></span>
                         <span asp-validation-for="Usuario.Telefono" class="text-danger d-block"></span>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-floating">
-                            <select asp-for="Usuario.Ubicacion" class="form-select">
-                                <option value="">Seleccionar ciudad...</option>
-                                <option value="Bogotá">Bogotá</option>
-                                <option value="Medellín">Medellín</option>
-                                <option value="Cali">Cali</option>
-                                <option value="Barranquilla">Barranquilla</option>
-                                <option value="Cartagena">Cartagena</option>
-                                <option value="Bucaramanga">Bucaramanga</option>
-                                <option value="Pereira">Pereira</option>
-                                <option value="Manizales">Manizales</option>
-                                <option value="Santa Marta">Santa Marta</option>
-                                <option value="Cúcuta">Cúcuta</option>
-                                <option value="Ibagué">Ibagué</option>
-                                <option value="Villavicencio">Villavicencio</option>
-                                <option value="Pasto">Pasto</option>
-                                <option value="Neiva">Neiva</option>
-                                <option value="Armenia">Armenia</option>
-                            </select>
-                            <label asp-for="Usuario.Ubicacion"><i class="fas fa-map-marker-alt me-2"></i>Ubicación</label>
-                            <span asp-validation-for="Usuario.Ubicacion" class="text-danger"></span>
+                </div>
+
+                <div class="section-title">
+                    <i class="fas fa-map-marked-alt me-2 text-primary"></i>Datos de Ubicación
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="alert alert-light border border-primary-subtle text-muted small mb-3">
+                            <i class="fas fa-info-circle me-1 text-primary"></i> Haz clic en el mapa interactivo para seleccionar la dirección exacta de tu residencia.
+                        </div>
+                        <div id="map" style="height: 300px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1;"></div>
+                        
+                        <input type="hidden" asp-for="Latitud" id="latInput" />
+                        <input type="hidden" asp-for="Longitud" id="lngInput" />
+
+                        <div class="input-group mb-2 shadow-sm" style="border-radius: 12px; z-index: 0;">
+                            <div class="form-floating flex-grow-1">
+                                <input type="text" asp-for="DireccionFormateada" class="form-control bg-light" id="direccionInput" placeholder="Dirección" style="border-right: 0; border-top-left-radius: 12px; border-bottom-left-radius: 12px; box-shadow: none;" />
+                                <label asp-for="DireccionFormateada"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección (Por favor, agrega el número de tu casa)</label>
+                            </div>
+                            <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                                <i class="fas fa-search me-2"></i> Buscar
+                            </button>
+                        </div>
+                        <div id="loadingAddress" class="form-text text-primary d-none mt-2">
+                            <i class="fas fa-spinner fa-spin me-1"></i> Buscando dirección exacta...
                         </div>
                     </div>
                 </div>
 
-                <!-- Documentación -->
                 <div class="section-title">
                     <i class="fas fa-id-card me-2 text-primary"></i>Documentación (Opcional)
                 </div>
@@ -148,7 +147,6 @@
                     </div>
                 </div>
 
-                <!-- Seguridad y Acceso -->
                 <div class="section-title">
                     <i class="fas fa-shield-alt me-2 text-primary"></i>Seguridad y Acceso
                 </div>
@@ -174,19 +172,16 @@
                     </div>
                 </div>
 
-                <!-- Campos ocultos para valores automáticos -->
                 <input asp-for="Usuario.Permisos" type="hidden" value="limitado">
                 <input asp-for="Usuario.Acesso" type="hidden" value="pendiente">
 
-                <!-- Info sobre valores automáticos -->
-                <div class="alert alert-info d-flex align-items-center" style="background: rgba(13, 110, 253, 0.1); border: 1px solid rgba(13, 110, 253, 0.2); border-radius: 12px;">
+                <div class="alert alert-info d-flex align-items-center mt-4" style="background: rgba(13, 110, 253, 0.1); border: 1px solid rgba(13, 110, 253, 0.2); border-radius: 12px;">
                     <i class="fas fa-info-circle me-2"></i>
                     <div>
                         <strong>Configuración automática:</strong> Tu cuenta será creada con <span class="badge bg-warning text-dark">Acceso Limitado</span> y estado <span class="badge bg-secondary">Pendiente de Activación</span>
                     </div>
                 </div>
 
-                <!-- Botón de Registro -->
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <div>
                         <p class="text-muted mb-0">
@@ -194,7 +189,7 @@
                             <a href="/" class="login-link">Iniciar Sesión</a>
                         </p>
                     </div>
-                    <button type="submit" class="btn btn-purple-glow" style="width: auto; padding: 12px 3rem;">
+                    <button type="submit" class="btn btn-primary" style="width: auto; padding: 12px 3rem;">
                         <i class="fas fa-user-plus me-2"></i>Crear Cuenta
                     </button>
                 </div>
@@ -202,3 +197,135 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Default Bogota
+            const defaultLat = 4.6097;
+            const defaultLng = -74.0817;
+            const map = L.map('map').setView([defaultLat, defaultLng], 12);
+            let currentMarker = null;
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            map.locate({setView: true, maxZoom: 14});
+
+            const latInput = document.getElementById('latInput');
+            const lngInput = document.getElementById('lngInput');
+            const direccionInput = document.getElementById('direccionInput');
+            const loadingAddress = document.getElementById('loadingAddress');
+            const btnSearch = document.getElementById('btnSearchUbicacion');
+
+            // --- Geocoding con Input de Texto manual ---
+            btnSearch.addEventListener('click', async function() {
+                const query = direccionInput.value.trim();
+                if (!query) return;
+
+                loadingAddress.classList.remove('d-none');
+                try {
+                    // Limpiar la query de caracteres problemáticos para OSM en Latam (como el #)
+                    let cleanQuery = query.replace(/#/g, '');
+                    // Forzar búsqueda en Colombia para mayor exactitud
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&countrycodes=co`;
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    if (data && data.length > 0) {
+                        const result = data[0];
+                        const lat = parseFloat(result.lat);
+                        const lng = parseFloat(result.lon);
+                        
+                        map.setView([lat, lng], 16);
+                        
+                        if (currentMarker) {
+                            currentMarker.setLatLng([lat, lng]);
+                        } else {
+                            currentMarker = L.marker([lat, lng]).addTo(map);
+                        }
+                        
+                        latInput.value = lat.toFixed(8).replace(',', '.');
+                        lngInput.value = lng.toFixed(8).replace(',', '.');
+                        direccionInput.value = result.display_name;
+                    } else {
+                        // Si no lo encuentra, mostramos un aviso
+                        alert("No se encontró la dirección exacta. Intente ser más específico (ej. agregando la ciudad).");
+                    }
+                } catch (error) {
+                    console.error("Geocoding err:", error);
+                } finally {
+                    loadingAddress.classList.add('d-none');
+                }
+            });
+
+            // Buscar al presionar Enter en el input de dirección
+            direccionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btnSearch.click();
+                }
+            });
+
+            // --- Evento Click Normal ---
+            map.on('click', function(e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+
+                if (currentMarker) {
+                    currentMarker.setLatLng(e.latlng);
+                } else {
+                    currentMarker = L.marker(e.latlng).addTo(map);
+                }
+
+                latInput.value = lat.toFixed(8).replace(',', '.');
+                lngInput.value = lng.toFixed(8).replace(',', '.');
+
+                obtenerDireccion(lat, lng);
+            });
+
+            async function obtenerDireccion(lat, lng) {
+                loadingAddress.classList.remove('d-none');
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+                    
+                    if (data && data.address) {
+                        // Extraemos las partes útiles para direcciones en Colombia
+                        let calle = data.address.road || '';
+                        let barrio = data.address.neighbourhood || data.address.suburb || '';
+                        let ciudad = data.address.city || data.address.town || '';
+                        
+                        // Armamos un formato limpio: "Calle 6D, Tintalá, Bogotá"
+                        let direccionLimpia = [calle, barrio, ciudad].filter(Boolean).join(', ');
+                        
+                        // Si por algún motivo no hay calle, usamos el nombre general
+                        if (!calle && data.display_name) {
+                            direccionLimpia = data.display_name.split(',').slice(0, 3).join(', ');
+                        }
+
+                        direccionInput.value = direccionLimpia;
+                        
+                        // Hacemos que el input brille y tome el foco para que el usuario escriba su número
+                        direccionInput.focus();
+                        
+                    } else {
+                        direccionInput.value = "";
+                    }
+                } catch (error) {
+                    console.error("Error al obtener dirección:", error);
+                    direccionInput.value = "";
+                } finally {
+                    loadingAddress.classList.add('d-none');
+                }
+            }
+            
+            setTimeout(() => { map.invalidateSize(); }, 300);
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +6,7 @@ using ProyectoMSD.Modelos;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace ProyectoMSD.Pages.Espacios
 {
@@ -30,7 +31,7 @@ namespace ProyectoMSD.Pages.Espacios
         public async Task<IActionResult> OnPostAsync()
         {
             Console.WriteLine("===== DEBUG ESPACIOS =====");
-            Console.WriteLine($"Nombre: {Espacio.Nombre}, Ubicación: {Espacio.Ubicacion}, Señal: {Espacio.Señal}, Permisos: {Espacio.Permisos}, PropiedadID: {Espacio.IdPropiedades}");
+            Console.WriteLine($"Nombre: {Espacio.Nombre}, Señal: {Espacio.Señal}, Permisos: {Espacio.Permisos}, PropiedadID: {Espacio.IdPropiedades}");
 
             if (Espacio.IdPropiedades <= 0)
             {
@@ -75,7 +76,24 @@ namespace ProyectoMSD.Pages.Espacios
 
         private async Task LoadPropiedadesDropdown()
         {
-            var propiedades = await _context.Propiedades
+            var userIdClaim = User.FindFirst("UserId")?.Value;
+            int? currentUserId = null;
+            
+            if (int.TryParse(userIdClaim, out int parsedId))
+            {
+                currentUserId = parsedId;
+            }
+
+            IQueryable<Propiedade> query = _context.Propiedades;
+
+            // Si hay un usuario logueado, filtramos. (Si es Admin, se podría obviar el filtro, pero por ahora lo aplicamos)
+            if (currentUserId.HasValue)
+            {
+                query = query.Where(p => 
+                    p.UsuariosPropiedades.Any(up => up.IdUsuario == currentUserId.Value));
+            }
+
+            var propiedades = await query
                 .OrderBy(p => p.Direccion)
                 .Select(p => new SelectListItem
                 {
@@ -85,7 +103,7 @@ namespace ProyectoMSD.Pages.Espacios
                 .ToListAsync();
 
             ViewData["IdPropiedades"] = new SelectList(propiedades, "Value", "Text");
-            Console.WriteLine($"Propiedades cargadas: {propiedades.Count}");
+            Console.WriteLine($"Propiedades cargadas para usuario {currentUserId}: {propiedades.Count}");
         }
     }
 }
