@@ -91,7 +91,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.IdPropiedades).HasColumnType("int(11)").HasColumnName("ID_Propiedad");
             entity.Property(e => e.Nombre).HasMaxLength(250);
             entity.Property(e => e.Permisos).HasMaxLength(250);
-            entity.Property(e => e.Señal).HasColumnType("int(11)").HasColumnName("Senal");
+            entity.Property(e => e.Señal).HasMaxLength(11).HasColumnName("Senal");
 
             entity.HasOne(d => d.IdPropiedadesNavigation).WithMany(p => p.Espacios)
                 .HasForeignKey(d => d.IdPropiedades)

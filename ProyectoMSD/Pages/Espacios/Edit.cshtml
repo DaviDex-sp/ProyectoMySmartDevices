@@ -26,11 +26,11 @@
                             <!-- Ubicacion reference removed -->
                     </div>
                     <div class="signal-indicator">
-                        <span>Señal: @(Model.Espacio?.Señal ?? 0)%</span>
+                        <span>Señal: @(Model.Espacio?.Señal ?? "0")%</span>
                         <div class="d-flex gap-1">
                             @for (int i = 1; i <= 4; i++)
                             {
-                                <div class="signal-bar @(Model.Espacio?.Señal >= (i * 25) ? "active" : "")"></div>
+                                <div class="signal-bar @(int.Parse(Model.Espacio?.Señal ?? "0") >= (i * 25) ? "active" : "")"></div>
                             }
                         </div>
                     </div>
