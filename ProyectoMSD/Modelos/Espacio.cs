@@ -14,7 +14,7 @@ public partial class Espacio
     public string Nombre { get; set; } = null!;
 
     [Required(ErrorMessage = "Obligatorio")]
-    public int Señal { get; set; }
+    public string Señal { get; set; } = null!;
 
     [Required(ErrorMessage = "Obligatorio")]
     public string Permisos { get; set; } = null!;
