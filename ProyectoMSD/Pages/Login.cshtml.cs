@@ -144,7 +144,18 @@ namespace ProyectoMSD.Pages
                 _logger.LogWarning(ex, "No se pudo registrar el acceso de Google del usuario {UserId}", usuario.Id);
             }
 
+            // Detectar si el perfil está incompleto (usuario nuevo de Google)
+            bool perfilIncompleto = string.IsNullOrWhiteSpace(usuario.Telefono)
+                || usuario.Telefono == "0"
+                || string.IsNullOrWhiteSpace(usuario.Documento)
+                || usuario.Documento == "0"
+                || !usuario.IdUbicacion.HasValue;
+
+            if (perfilIncompleto)
+                return RedirectToPage("/Perfil/Index", new { completarPerfil = true });
+
             return RedirectToPage("/Usuarios/Index");
+
         }
     }
 }

@@ -42,9 +42,12 @@
                         <div class="col-md-4 text-md-end">
                             <div class="d-flex gap-2 justify-content-center justify-content-md-end">
                                 <!-- Botón para crear nueva propiedad -->
-                                <a asp-page="/Propiedades/Create" class="btn btn-success">
-                                    <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
-                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-page="/Propiedades/Create" class="btn btn-success">
+                                        <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -165,14 +168,17 @@
                                        class="btn btn-outline-info" title="Ver detalles">
                                         <i class="fas fa-eye me-1"></i>Ver
                                     </a>
-                                    <a asp-page="./Edit" asp-route-id="@item.Id"
-                                       class="btn btn-outline-primary" title="Editar propiedad">
-                                        <i class="fas fa-edit me-1"></i>Editar
-                                    </a>
-                                    <a asp-page="./Delete" asp-route-id="@item.Id"
-                                       class="btn btn-outline-danger" title="Eliminar propiedad">
-                                        <i class="fas fa-trash me-1"></i>Eliminar
-                                    </a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-page="./Edit" asp-route-id="@item.Id"
+                                           class="btn btn-outline-primary" title="Editar propiedad">
+                                            <i class="fas fa-edit me-1"></i>Editar
+                                        </a>
+                                        <a asp-page="./Delete" asp-route-id="@item.Id"
+                                           class="btn btn-outline-danger" title="Eliminar propiedad">
+                                            <i class="fas fa-trash me-1"></i>Eliminar
+                                        </a>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -190,9 +196,12 @@
                             <i class="fas fa-home fa-4x text-muted mb-4 opacity-50"></i>
                             <h3 class="text-muted mb-3">No hay propiedades registradas</h3>
                             <p class="text-muted mb-4">Comienza agregando la primera propiedad al sistema de hogar inteligente</p>
-                            <a asp-page="Create" class="btn btn-primary btn-lg">
-                                <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
-                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-page="Create" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-plus me-2"></i>Registrar Nueva Propiedad
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>

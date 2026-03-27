@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoMSD.Pages.Propiedades
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly ProyectoMSD.Modelos.AppDbContext _context;

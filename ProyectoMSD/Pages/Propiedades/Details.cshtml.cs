@@ -32,6 +32,22 @@ namespace ProyectoMSD.Pages.Propiedades
                 .ThenInclude(up => up.IdUsuarioNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            if (propiedade != null && !User.IsInRole("Admin"))
+            {
+                var userIdString = User.FindFirst("UserId")?.Value;
+                if (int.TryParse(userIdString, out int currentUserId))
+                {
+                    if (!propiedade.UsuariosPropiedades.Any(up => up.IdUsuario == currentUserId))
+                    {
+                        return Forbid();
+                    }
+                }
+                else
+                {
+                    return Forbid();
+                }
+            }
+
             if (propiedade is not null)
             {
                 Propiedade = propiedade;
