@@ -4,13 +4,39 @@
 @{
     Layout = "_Layout";
     ViewData["Title"] = "Mi Perfil";
+    var initLat = Model.Usuario?.UbicacionNavigation?.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "4.6097";
+    var initLng = Model.Usuario?.UbicacionNavigation?.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "-74.0817";
+    var initDir = Model.Usuario?.UbicacionNavigation?.DireccionFormateada ?? "";
 }
 
 @section Styles {
     <link href="~/css/pages/perfil.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        #perfilMap {
+            height: 320px;
+            width: 100%;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 16px;
+        }
+        .location-section {
+            background: rgba(139, 92, 246, 0.04);
+            border: 1px dashed rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .alert-completar-perfil {
+            background: linear-gradient(135deg, #f59e0b10, #ef444408);
+            border: 1.5px solid #f59e0b;
+            border-radius: 16px;
+            padding: 18px 24px;
+            color: #92400e;
+        }
+    </style>
 }
 
-<!-- Profile Header -->
 <!-- Profile Main Content -->
 <div class="container-fluid px-4" style="padding-top: 20px;">
     
@@ -24,6 +50,20 @@
         </button>
     </div>
 
+    @* --- Banner de aviso: datos incompletos (Google Login) --- *@
+    @if (Model.MostrarAvisoGoogle)
+    {
+        <div class="alert-completar-perfil mb-4">
+            <div class="d-flex align-items-start gap-3">
+                <i class="fas fa-exclamation-triangle fs-4 mt-1" style="color: #f59e0b;"></i>
+                <div>
+                    <strong class="d-block mb-1">¡Completa tu información básica!</strong>
+                    <span>Para utilizar todas las funciones de MySmartDevice necesitas completar tu teléfono, documento de identidad y ubicación. <a href="#editProfileForm" class="fw-bold" style="color: #92400e;" onclick="document.getElementById('editProfileForm').scrollIntoView({behavior:'smooth'}); return false;">Editar ahora →</a></span>
+                </div>
+            </div>
+        </div>
+    }
+
     <!-- Mensaje de éxito -->
     @if (!string.IsNullOrEmpty(Model.MensajeExito))
     {
@@ -32,7 +72,6 @@
         </div>
     }
 
-    <!-- Content Grid -->
     <!-- Content Grid -->
     <div class="row g-4 mt-2">
         <!-- Columna Izquierda: Información Personal -->
@@ -112,7 +151,7 @@
             </div>
         </div>
 
-        <!-- Columna Derecha: Dispositivos / Propiedades Conectadas -->
+        <!-- Columna Derecha: Propiedades Conectadas -->
         <div class="col-lg-5 col-xl-4">
             <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; background: white;">
                 <div class="card-body p-4 p-md-5">
@@ -152,7 +191,7 @@
         </div>
     </div>
 
-    <!-- Formulario de Edición (Heredado y Estilizado) -->
+    <!-- Formulario de Edición -->
     <div class="row mt-4 mb-5" id="editProfileForm">
         <div class="col-12">
             <div class="card border-0 shadow-sm" style="border-radius: 20px; background: white;">
@@ -161,7 +200,7 @@
                         <i class="fas fa-user-edit text-primary me-2"></i>Editar Información
                     </h5>
                     
-                    <form method="post">
+                    <form method="post" id="perfilForm">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3"></div>
 
                         <!-- Campos ocultos -->
@@ -202,8 +241,6 @@
                                 </div>
                             </div>
 
-
-
                             <!-- Cambio de Contraseña -->
                             <div class="col-12 mt-4">
                                 <div class="p-4 rounded-3" style="background: rgba(139, 92, 246, 0.05); border: 1px dashed rgba(139, 92, 246, 0.3);">
@@ -212,6 +249,61 @@
                                         <div class="col-md-6">
                                             <input type="password" name="NuevaClave" class="form-control px-4 py-2 bg-white border-0" style="border-radius: 12px;" placeholder="Nueva contraseña (opcional)" />
                                             <small class="text-muted mt-2 d-block">Déjalo en blanco para no cambiar tu clave actual.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sección de Ubicación con Mapa -->
+                            <div class="col-12">
+                                <div class="location-section">
+                                    <p class="fw-bold mb-1 small" style="color: #6a4cd5;">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Ubicación
+                                        @if (Model.Usuario?.UbicacionNavigation != null)
+                                        {
+                                            <span class="badge bg-success ms-2 fw-normal" style="font-size: 0.7rem;">Registrada</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark ms-2 fw-normal" style="font-size: 0.7rem;">Sin registrar</span>
+                                        }
+                                    </p>
+                                    <p class="text-muted small mb-3">
+                                        Haz clic en el mapa o escribe una dirección para actualizar tu ubicación.
+                                    </p>
+
+                                    <!-- Mapa -->
+                                    <div id="perfilMap"></div>
+
+                                    <!-- Dirección con buscador -->
+                                    <div class="input-group shadow-sm mb-3" style="border-radius: 12px;">
+                                        <textarea id="perfilDireccionInput" name="UbicacionDireccion" rows="2"
+                                            class="form-control border-0 bg-light"
+                                            style="border-radius: 12px 0 0 12px; resize: none;"
+                                            placeholder="Busca una dirección o haz clic en el mapa...">@initDir</textarea>
+                                        <button class="btn btn-primary px-3 d-flex align-items-center" type="button" id="btnBuscarUbicacionPerfil"
+                                            style="border-radius: 0 12px 12px 0;">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                    <div id="perfilLoadingAddr" class="form-text text-primary d-none mb-2">
+                                        <i class="fas fa-spinner fa-spin me-1"></i> Actualizando dirección...
+                                    </div>
+
+                                    <!-- Campos ocultos lat/lng -->
+                                    <input type="hidden" id="perfilLatInput" name="UbicacionLatitud" value="@Html.Raw(initLat)" />
+                                    <input type="hidden" id="perfilLngInput" name="UbicacionLongitud" value="@Html.Raw(initLng)" />
+
+                                    <div class="row mt-2 g-2">
+                                        <div class="col-md-6">
+                                            <label class="form-label text-muted small mb-1">Latitud</label>
+                                            <input id="perfilLatDisplay" class="form-control form-control-sm bg-light border-0" readonly
+                                                   value="@Html.Raw(initLat)" style="border-radius: 10px;" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label text-muted small mb-1">Longitud</label>
+                                            <input id="perfilLngDisplay" class="form-control form-control-sm bg-light border-0" readonly
+                                                   value="@Html.Raw(initLng)" style="border-radius: 10px;" />
                                         </div>
                                     </div>
                                 </div>
@@ -231,23 +323,92 @@
     </div>
 </div>
 
-<script>
-    // Toggle password visibility
-    function togglePassword() {
-        const input = document.getElementById('nuevaClave');
-        const icon = document.querySelector('.fa-eye, .fa-eye-slash');
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    }
-</script>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const initLat = parseFloat('@Html.Raw(initLat)') || 4.6097;
+            const initLng = parseFloat('@Html.Raw(initLng)') || -74.0817;
+
+            const map = L.map('perfilMap').setView([initLat, initLng], 13);
+            let marker = L.marker([initLat, initLng]).addTo(map);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            const latHidden   = document.getElementById('perfilLatInput');
+            const lngHidden   = document.getElementById('perfilLngInput');
+            const latDisplay  = document.getElementById('perfilLatDisplay');
+            const lngDisplay  = document.getElementById('perfilLngDisplay');
+            const dirInput    = document.getElementById('perfilDireccionInput');
+            const loading     = document.getElementById('perfilLoadingAddr');
+            const btnBuscar   = document.getElementById('btnBuscarUbicacionPerfil');
+
+            function updateCoords(lat, lng) {
+                const latStr = lat.toFixed(8);
+                const lngStr = lng.toFixed(8);
+                latHidden.value  = latStr;
+                lngHidden.value  = lngStr;
+                latDisplay.value = latStr;
+                lngDisplay.value = lngStr;
+            }
+
+            // Click en mapa
+            map.on('click', async function (e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+                marker.setLatLng(e.latlng);
+                updateCoords(lat, lng);
+                await reverseGeocode(lat, lng);
+            });
+
+            // Buscar por dirección
+            btnBuscar.addEventListener('click', async function () {
+                const query = dirInput.value.trim();
+                if (!query) return;
+                loading.classList.remove('d-none');
+                try {
+                    const clean = query.replace(/#/g, '');
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(clean)}&limit=1&countrycodes=co`;
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lng = parseFloat(data[0].lon);
+                        map.setView([lat, lng], 16);
+                        marker.setLatLng([lat, lng]);
+                        updateCoords(lat, lng);
+                        dirInput.value = data[0].display_name;
+                    } else {
+                        alert('No se encontró la dirección. Intente ser más específico.');
+                    }
+                } catch (err) { console.error(err); }
+                finally { loading.classList.add('d-none'); }
+            });
+
+            dirInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') { e.preventDefault(); btnBuscar.click(); }
+            });
+
+            async function reverseGeocode(lat, lng) {
+                loading.classList.remove('d-none');
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                    const data = await res.json();
+                    if (data && data.display_name) dirInput.value = data.display_name;
+                } catch (err) { console.error(err); }
+                finally { loading.classList.add('d-none'); }
+            }
+
+            // Fix de tamaño del mapa al estar en card oculta
+            setTimeout(() => { map.invalidateSize(); }, 400);
+        });
+    </script>
 }

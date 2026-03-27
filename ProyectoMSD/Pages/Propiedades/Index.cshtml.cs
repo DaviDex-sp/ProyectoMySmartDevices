@@ -11,7 +11,7 @@ using ProyectoMSD.Modelos;
 
 namespace ProyectoMSD.Pages.Propiedades
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ProyectoMSD.Modelos.AppDbContext _context;
@@ -32,15 +32,32 @@ namespace ProyectoMSD.Pages.Propiedades
 
         public async Task OnGetAsync()
         {
-            Propiedade = await _context.Propiedades
+            var isAdmin = User.IsInRole("Admin");
+            IQueryable<Propiedade> propQuery = _context.Propiedades
                 .Include(p => p.UsuariosPropiedades)
                     .ThenInclude(up => up.IdUsuarioNavigation)
-                .ToListAsync();
+                .Include(p => p.Espacios); // Added Include just in case it's used in view item.Espacios
+
+            if (!isAdmin)
+            {
+                var userIdString = User.FindFirst("UserId")?.Value;
+                if (int.TryParse(userIdString, out int currentUserId))
+                {
+                    propQuery = propQuery.Where(p => p.UsuariosPropiedades.Any(up => up.IdUsuario == currentUserId));
+                }
+                else
+                {
+                    propQuery = propQuery.Where(p => false);
+                }
+            }
+
+            Propiedade = await propQuery.ToListAsync();
+
             // Cargar TODOS los datos que necesitas
             Usuario = await _context.Usuarios.ToListAsync();
 
             // Si tienes modelo Espacio
-            Espacios = await _context.Espacios  // ← Incluye dispositivos relacionados
+            Espacios = await _context.Espacios
                 .ToListAsync();
 
             // Si tienes modelo Dispositivo

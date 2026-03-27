@@ -9,8 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoMSD.Modelos;
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace ProyectoMSD.Pages.Propiedades
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly ProyectoMSD.Modelos.AppDbContext _context;

@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ProyectoMSD.Modelos;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace ProyectoMSD.Pages.Propiedades
 {
+    [Authorize(Roles = "Admin")]
     public class DeleteModel : PageModel
     {
         private readonly ProyectoMSD.Modelos.AppDbContext _context;
