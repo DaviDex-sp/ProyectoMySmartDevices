@@ -78,6 +78,7 @@ Aquí el flujo UI detallado de cómo interactúa el usuario y cada módulo dentr
 
 ### `Perfil/`
 *   **`Index`:** Le permite al usuario activo modificar su información personal sin interferir con variables críticas (ej. roles o nivel de seguridad).
+    *   **Arquitectura Limpia Aplicada:** El PageModel (`Index.cshtml.cs`) está totalmente desacoplado del `AppDbContext`. Toda la lógica de negocio (hasheo de contraseñas, inserción de notificaciones y gestión de ubicación) se delegó a la capa de servicios mediante `IUsuarioService` (métodos `GetUsuarioPerfilAsync` y `UpdatePerfilAsync`), cumpliendo con el patrón Anti-Smart UI.
 
 ### Gestión Inmobiliaria (`Propiedades/` y `Espacios/`)
 *   Páginas especializadas que permiten al Propietario o Inversionista modelar de manera virtual su infraestructura física (Ej. Registrar un piso, luego asignarle una habitación llamada "Baño Principal"). Manejan CRUD estándar atados a los ID de las capas superiores o perfiles.
