@@ -15,8 +15,10 @@ namespace ProyectoMSD.Interfaces
         // CRUD de Usuarios
         Task<List<Usuario>> GetAllUsuariosAsync();
         Task<Usuario?> GetUsuarioByIdAsync(int id);
+        Task<Usuario?> GetUsuarioPerfilAsync(int userId);
         Task CreateUsuarioAsync(Usuario usuario);
         Task UpdateUsuarioAsync(Usuario usuario);
+        Task<bool> UpdatePerfilAsync(int userId, Usuario datosActualizados, string? latitud, string? longitud, string? direccion, string? nuevaClave);
         Task DeleteUsuarioAsync(int id);
         
         // Validación

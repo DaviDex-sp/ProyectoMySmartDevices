@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using ProyectoMSD.Interfaces;
 using ProyectoMSD.Modelos;
 
@@ -161,6 +162,102 @@ namespace ProyectoMSD.Services
         public async Task<bool> ExisteDocumentoAsync(string documento)
         {
             return await _db.Usuarios.AnyAsync(u => u.Documento == documento);
+        }
+
+        public async Task<Usuario?> GetUsuarioPerfilAsync(int userId)
+        {
+            return await _db.Usuarios
+                .Include(u => u.UsuariosPropiedades)
+                    .ThenInclude(up => up.IdPropiedadNavigation)
+                .Include(u => u.UbicacionNavigation)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
+        public async Task<bool> UpdatePerfilAsync(int userId, Usuario datosActualizados, string? latitud, string? longitud, string? direccion, string? nuevaClave)
+        {
+            var usuarioDb = await _db.Usuarios
+                .Include(u => u.UbicacionNavigation)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+                
+            if (usuarioDb == null) return false;
+
+            // Actualizar campos personales
+            usuarioDb.Nombre = datosActualizados.Nombre;
+            usuarioDb.Correo = datosActualizados.Correo;
+            usuarioDb.PrefijoTelefono = datosActualizados.PrefijoTelefono;
+            usuarioDb.Telefono = datosActualizados.Telefono;
+
+            // Procesar ubicación si se proporcionaron coordenadas válidas
+            bool ubicacionActualizada = false;
+            if (!string.IsNullOrWhiteSpace(latitud) &&
+                !string.IsNullOrWhiteSpace(longitud) &&
+                decimal.TryParse(latitud, NumberStyles.Float, CultureInfo.InvariantCulture, out var lat) &&
+                decimal.TryParse(longitud, NumberStyles.Float, CultureInfo.InvariantCulture, out var lng) &&
+                (lat != 0 || lng != 0))
+            {
+                if (usuarioDb.IdUbicacion.HasValue && usuarioDb.UbicacionNavigation != null)
+                {
+                    // Actualizar ubicación existente
+                    usuarioDb.UbicacionNavigation.Latitud = lat;
+                    usuarioDb.UbicacionNavigation.Longitud = lng;
+                    usuarioDb.UbicacionNavigation.DireccionFormateada = direccion;
+                    _db.Ubicaciones.Update(usuarioDb.UbicacionNavigation);
+                }
+                else
+                {
+                    // Crear nueva ubicación y vincularla
+                    var nuevaUbicacion = new Ubicacione
+                    {
+                        Latitud = lat,
+                        Longitud = lng,
+                        DireccionFormateada = direccion
+                    };
+                    _db.Ubicaciones.Add(nuevaUbicacion);
+                    await _db.SaveChangesAsync();
+                    usuarioDb.IdUbicacion = nuevaUbicacion.Id;
+                }
+                ubicacionActualizada = true;
+            }
+
+            // Hashear nueva contraseña si se proporcionó
+            bool contrasenaCambiada = false;
+            if (!string.IsNullOrWhiteSpace(nuevaClave))
+            {
+                usuarioDb.Clave = HashPassword(nuevaClave);
+                contrasenaCambiada = true;
+            }
+
+            // Guardar cambios y registrar notificaciones
+            await _db.SaveChangesAsync();
+
+            _db.Notificaciones.Add(new Notificacion
+            {
+                IdUsuarios = userId,
+                Titulo = "Perfil actualizado",
+                Mensaje = ubicacionActualizada
+                    ? "Has actualizado tu información personal y ubicación exitosamente."
+                    : "Has actualizado tu información personal exitosamente.",
+                Tipo = "PerfilActualizado",
+                Leida = false,
+                FechaCreacion = DateTime.Now
+            });
+
+            if (contrasenaCambiada)
+            {
+                _db.Notificaciones.Add(new Notificacion
+                {
+                    IdUsuarios = userId,
+                    Titulo = "Contraseña cambiada",
+                    Mensaje = "Tu contraseña ha sido cambiada exitosamente.",
+                    Tipo = "ContraseñaCambiada",
+                    Leida = false,
+                    FechaCreacion = DateTime.Now
+                });
+            }
+
+            await _db.SaveChangesAsync();
+
+            return true;
         }
     }
 }
