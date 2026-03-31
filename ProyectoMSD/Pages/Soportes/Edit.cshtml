@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Soportes.EditModel
 
 @{
@@ -47,7 +47,7 @@
         </div>
         <div class="info-card">
             <div class="info-card-icon"><i class="fas fa-info-circle"></i></div>
-            <div class="info-card-value" id="estadoCard">@(String.IsNullOrEmpty(Model.Soporte?.Respuesta) ? "Pendiente" : "Respondido")</div>
+            <div class="info-card-value" id="estadoCard">@(String.IsNullOrEmpty(Model.Soporte?.Respuesta) || Model.Soporte?.Respuesta == "Pendiente" ? "Pendiente" : "Resuelto")</div>
             <div class="info-card-label">Estado</div>
         </div>
     </div>
@@ -174,7 +174,7 @@
         document.querySelector('#usuarioCard').textContent = selectedText === '-- Seleccione un usuario --' ? 'N/A' : selectedText;
     });
     document.querySelector('textarea[name="Soporte.Respuesta"]')?.addEventListener('input', function() {
-        document.querySelector('#estadoCard').textContent = this.value.trim() ? 'Respondido' : 'Pendiente';
+        document.querySelector('#estadoCard').textContent = this.value.trim() && this.value.trim() !== 'Pendiente' ? 'Resuelto' : 'Pendiente';
     });
 </script>
 

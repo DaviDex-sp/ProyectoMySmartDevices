@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Soportes.DeleteModel
 
 @{
@@ -65,7 +65,7 @@
             <div class="d-flex justify-content-between align-items-start py-2 border-bottom">
                 <div class="fw-bold"><i class="fas fa-reply me-2 text-danger"></i>Respuesta</div>
                 <div class="text-muted bg-white px-3 py-1 rounded border" style="max-height:100px; overflow-y:auto; flex:1; margin-left:1rem;">
-                    @if (!String.IsNullOrEmpty(Model.Soporte.Respuesta))
+                    @if (!String.IsNullOrEmpty(Model.Soporte.Respuesta) && Model.Soporte.Respuesta != "Pendiente")
                     {
                         @Html.DisplayFor(model => model.Soporte.Respuesta)
                     }
@@ -76,15 +76,15 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
-                <div class="fw-bold"><i class="fas fa-user me-2 text-danger"></i>Usuario Asignado</div>
-                <div class="text-muted bg-white px-3 py-1 rounded border">@(Model.Soporte.IdUsuariosNavigation?.Nombre ?? "No asignado")</div>
+                <div class="fw-bold"><i class="fas fa-user me-2 text-danger"></i>Usuario Creador</div>
+                <div class="text-muted bg-white px-3 py-1 rounded border">@(Model.Soporte.IdUsuariosNavigation?.Nombre ?? "Desconocido")</div>
             </div>
             <div class="d-flex justify-content-between align-items-center py-2">
                 <div class="fw-bold"><i class="fas fa-info-circle me-2 text-danger"></i>Estado</div>
                 <div>
-                    @if (!String.IsNullOrEmpty(Model.Soporte.Respuesta))
+                    @if (!String.IsNullOrEmpty(Model.Soporte.Respuesta) && Model.Soporte.Respuesta != "Pendiente")
                     {
-                        <span class="badge bg-success">Respondido</span>
+                        <span class="badge bg-success">Resuelto</span>
                     }
                     else
                     {

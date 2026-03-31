@@ -30,6 +30,7 @@ namespace ProyectoMSD.Pages.Propiedades
             var propiedade = await _context.Propiedades
                 .Include(p => p.UsuariosPropiedades)
                 .ThenInclude(up => up.IdUsuarioNavigation)
+                .Include(p => p.Espacios)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (propiedade != null && !User.IsInRole("Admin"))
