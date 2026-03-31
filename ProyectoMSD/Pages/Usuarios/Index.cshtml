@@ -10,17 +10,17 @@
 }
 
 <!-- Contenido Principal -->
-<div class="container-fluid px-4" style="padding-top: 20px;">
+<div class="container-fluid px-4 usuarios-main-container">
 
     @if (Model.RequiereInformacionBasica)
     {
-        <div class="alert shadow-sm mb-4" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 15px; border-left: 5px solid #258cfb; display: flex; align-items: center; justify-content: space-between;">
+        <div class="alert shadow-sm mb-4 d-flex align-items-center justify-content-between" style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 15px; border-left: 5px solid #258cfb;">
             <div>
                 <h5 class="alert-heading text-primary fw-bold mb-1"><i class="fas fa-info-circle me-2"></i>Información Básica</h5>
                 <p class="mb-0 text-muted">Alguna información básica es requerida, es necesario completar la información para el correcto funcionamiento.</p>
             </div>
             <div>
-                <a asp-page="/Perfil/Index" class="btn btn-outline-primary" style="border-radius: 20px;" title="Mi Perfil">
+                <a asp-page="/Perfil/Index" class="btn btn-outline-primary rounded-pill" title="Mi Perfil">
                     <i class="fas fa-user-circle me-1"></i>
                     <span>Ir a Mi Perfil</span>
                 </a>
@@ -28,17 +28,17 @@
         </div>
     }
 
-    <div class="row align-items-center mb-4" style="background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,255,255,0.6);">
+    <div class="row align-items-center mb-4 welcome-banner">
         <div class="col-12 text-center">
-            <h1 class="fw-bold mb-2" style="color: #6a4cd5; font-size: 2.5rem; letter-spacing: -0.5px;">Bienvenido a tu hogar inteligente</h1>
+            <h1 class="fw-bold mb-2 welcome-title">Bienvenido a tu hogar inteligente</h1>
             <p class="text-secondary fs-5 mb-0">Controla y monitorea todos tus dispositivos desde un solo lugar</p>
         </div>
     </div>
     
-    <div class="hero-section text-center position-relative mb-5" style="border-radius: 24px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.1);">
-        <div style="background: linear-gradient(135deg, rgba(94, 53, 177, 0.8) 0%, rgba(156, 39, 176, 0.6) 100%), url('https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat; height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;">
-            <h2 class="display-5 fw-bold mb-2 text-white" style="text-shadow: 0 2px 10px rgba(0,0,0,0.3);">Tu hogar conectado</h2>
-            <h4 class="mb-0 text-white-50" style="text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+    <div class="hero-section text-center position-relative mb-5">
+        <div class="hero-background">
+            <h2 class="display-5 fw-bold mb-2 text-white text-shadow-custom">Tu hogar conectado</h2>
+            <h4 class="mb-0 text-white-50 text-shadow-custom">
                 Gestiona @Model.TotalDispositivos dispositivos en @Model.TotalEspacios espacios diferentes
             </h4>
         </div>
@@ -46,14 +46,14 @@
 
     @if (User.IsInRole("Admin"))
     {
-        <!-- 4 Cards Row (Estilo UI Screenshot) -->
+        <!-- 4 Cards Row -->
         <div class="row g-4 mb-5">
             <!-- Card 1: Total Usuarios -->
             <div class="col-xl-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                <div class="card h-100 border-0 shadow-sm stat-card">
                     <div class="card-body p-4 text-center">
                         <p class="text-secondary mb-3 fs-6">Total Usuarios</p>
-                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.TotalUsuarios</h2>
+                        <h2 class="display-5 fw-bold mb-2 stat-value">@Model.TotalUsuarios</h2>
                         <span class="text-muted small">Registrados en el sistema</span>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
 
             <!-- Card 2: Usuarios Activos -->
             <div class="col-xl-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                <div class="card h-100 border-0 shadow-sm stat-card">
                     <div class="card-body p-4 text-center">
                         <p class="text-secondary mb-3 fs-6">Usuarios Activos</p>
-                        <h2 class="display-5 fw-bold mb-2" style="color: #a855f7;">@Model.UsuariosActivos</h2>
+                        <h2 class="display-5 fw-bold mb-2 stat-value-alt">@Model.UsuariosActivos</h2>
                         <span class="text-muted small">Con acceso garantizado</span>
                     </div>
                 </div>
@@ -72,10 +72,10 @@
 
             <!-- Card 3: Espacios Conectados -->
             <div class="col-xl-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                <div class="card h-100 border-0 shadow-sm stat-card">
                     <div class="card-body p-4 text-center">
                         <p class="text-secondary mb-3 fs-6">Espacios Conectados</p>
-                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.TotalEspacios</h2>
+                        <h2 class="display-5 fw-bold mb-2 stat-value">@Model.TotalEspacios</h2>
                         <span class="text-muted small">Zonas configuradas</span>
                     </div>
                 </div>
@@ -83,10 +83,10 @@
 
             <!-- Card 4: Dispositivos Offline -->
             <div class="col-xl-3 col-md-6">
-                <div class="card h-100 border-0 shadow-sm" style="border-radius: 20px; background: white; transition: transform 0.3s;">
+                <div class="card h-100 border-0 shadow-sm stat-card">
                     <div class="card-body p-4 text-center">
                         <p class="text-secondary mb-3 fs-6">Dispositivos Inactivos</p>
-                        <h2 class="display-5 fw-bold mb-2" style="color: #8b5cf6;">@Model.BateriaDispositivosOffline</h2>
+                        <h2 class="display-5 fw-bold mb-2 stat-value">@Model.BateriaDispositivosOffline</h2>
                         <span class="text-muted small">Requieren atención</span>
                     </div>
                 </div>
@@ -95,24 +95,24 @@
 
         <!-- 2 Column Grid: Actividad Reciente y Estado del Sistema -->
         <div class="row g-4 mb-5">
-            <!-- Actividad Reciente (Registro de accesos) -->
+            <!-- Actividad Reciente -->
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100" style="border-radius: 24px; background: white;">
+                <div class="card border-0 shadow-sm h-100 layout-card">
                     <div class="card-body p-4 p-lg-5">
-                        <h4 class="mb-4 text-secondary" style="font-weight: 500;">Actividad Reciente en el Sistema</h4>
+                        <h4 class="mb-4 text-secondary card-title-muted">Actividad Reciente en el Sistema</h4>
                         
                         <div class="activity-feed">
                             @if (Model.UltimosAccesos != null && Model.UltimosAccesos.Any())
                             {
                                 @foreach (var acceso in Model.UltimosAccesos)
                                 {
-                                    <div class="activity-item d-flex mb-4 align-items-center p-3 rounded-3" style="background: rgba(248, 249, 250, 0.7); border-left: 4px solid #8b5cf6;">
-                                        <div class="activity-icon me-3">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 12px; height: 12px; background: #8b5cf6; box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);"></div>
+                                    <div class="activity-item d-flex mb-4 align-items-center p-3 rounded-3">
+                                        <div class="me-3">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center activity-icon-dot"></div>
                                         </div>
-                                        <div class="activity-content flex-grow-1">
+                                        <div class="flex-grow-1">
                                             <div class="d-flex justify-content-between">
-                                                <p class="mb-1" style="color: #4b5563;">@acceso.TipoAccion detectada</p>
+                                                <p class="mb-1 text-dark">@acceso.TipoAccion detectada</p>
                                                 <small class="text-muted">
                                                     @{
                                                         var timeSpan = DateTime.Now - acceso.FechaAcceso;
@@ -121,7 +121,7 @@
                                                     @timeAgo
                                                 </small>
                                             </div>
-                                            <div class="d-inline-block px-3 py-1 rounded-pill bg-white border small text-muted" style="border-color: #e5e7eb !important;">
+                                            <div class="d-inline-block px-3 py-1 rounded-pill bg-white border small text-muted">
                                                 Usuario: @acceso.IdUsuariosNavigation?.Nombre
                                             </div>
                                         </div>
@@ -139,38 +139,38 @@
 
             <!-- Estado del Sistema -->
             <div class="col-lg-6">
-                <div class="card border-0 shadow-sm h-100" style="border-radius: 24px; background: white;">
+                <div class="card border-0 shadow-sm h-100 layout-card">
                     <div class="card-body p-4 p-lg-5">
-                        <h4 class="mb-4 text-secondary" style="font-weight: 500;">Estado del Sistema</h4>
+                        <h4 class="mb-4 text-secondary card-title-muted">Estado del Sistema</h4>
 
-                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3 status-item">
                             <div class="d-flex align-items-center">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: #10b981; color: white;">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 status-icon">
                                     <i class="fas fa-server"></i>
                                 </div>
-                                <span style="color: #4b5563; font-size: 1.1rem;">Servidor Core</span>
+                                <span class="fs-5 text-dark">Servidor Core</span>
                             </div>
                             <span class="badge rounded-pill bg-white border text-success px-3 py-2">En línea</span>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                        <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3 status-item">
                             <div class="d-flex align-items-center">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: #10b981; color: white;">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 status-icon">
                                     <i class="fas fa-database"></i>
                                 </div>
-                                <span style="color: #4b5563; font-size: 1.1rem;">Base de Datos</span>
+                                <span class="fs-5 text-dark">Base de Datos</span>
                             </div>
                             <span class="badge rounded-pill bg-white border text-success px-3 py-2">Excelente</span>
                         </div>
 
-                        <div class="d-flex align-items-center justify-content-between p-3 rounded-3" style="background: rgba(248, 249, 250, 0.7);">
+                        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 status-item">
                             <div class="d-flex align-items-center">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; background: @(Model.BateriaDispositivosOffline > 0 ? "#f59e0b" : "#10b981"); color: white;">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center me-3 status-icon @(Model.BateriaDispositivosOffline > 0 ? "warning" : "")">
                                     <i class="fas fa-exclamation-triangle"></i>
                                 </div>
-                                <span style="color: #4b5563; font-size: 1.1rem;">Dispositivos con alertas</span>
+                                <span class="fs-5 text-dark">Dispositivos con alertas</span>
                             </div>
-                            <span class="badge rounded-pill bg-white border px-3 py-2" style="color: @(Model.BateriaDispositivosOffline > 0 ? "#d97706" : "#059669"); border-color: @(Model.BateriaDispositivosOffline > 0 ? "#fcd34d" : "#a7f3d0") !important;">
+                            <span class="badge rounded-pill bg-white border px-3 py-2 @(Model.BateriaDispositivosOffline > 0 ? "text-warning border-warning" : "text-success border-success")">
                                 @Model.BateriaDispositivosOffline alertas
                             </span>
                         </div>
@@ -179,11 +179,11 @@
             </div>
         </div>
 
-        <!-- Tabla de Usuarios Heredada (Estilizada para integrarse al nuevo diseño) -->
-        <div class="card border-0 shadow-sm" style="border-radius: 24px; background: white;">
+        <!-- Tabla de Usuarios Heredada -->
+        <div class="card border-0 shadow-sm layout-card">
             <div class="card-header bg-white border-0 pt-5 px-5 pb-0 d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 text-secondary" style="font-weight: 500;">Gestión de Usuarios</h4>
-                <a asp-page="Create" class="btn btn-primary" style="background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%); border: none; border-radius: 20px; padding: 10px 25px;">
+                <h4 class="mb-0 text-secondary card-title-muted">Gestión de Usuarios</h4>
+                <a asp-page="Create" class="btn btn-gradient-primary">
                     <i class="fas fa-plus me-2"></i>Crear Nuevo
                 </a>
             </div>
@@ -196,16 +196,18 @@
                                 @foreach (var item in Model.Usuario)
                                 {
                                     <div class="col-12">
-                                        <div class="card border shadow-none rounded-3" style="background: #fdfdfd;">
-                                            <div class="card-body d-flex align-items-center flex-wrap gap-3">
+                                        <div class="card border rounded-3 user-card-item">
+                                            <div class="card-body row align-items-center g-3">
                                                 <!-- Avatar púrpura -->
-                                                <div class="avatar text-white fs-4 d-flex justify-content-center align-items-center rounded-circle" style="width:50px; height:50px; background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%); flex-shrink: 0;">
-                                                    @(item.Nombre?.Substring(0, 1).ToUpper())
+                                                <div class="col-auto">
+                                                    <div class="user-avatar text-white fs-4 d-flex justify-content-center align-items-center rounded-circle">
+                                                        @(item.Nombre?.Substring(0, 1).ToUpper())
+                                                    </div>
                                                 </div>
 
                                                 <!-- Info del usuario -->
-                                                <div class="flex-grow-1" style="min-width: 250px;">
-                                                    <h5 class="fw-bold mb-1" style="color: #4b5563;">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                                                <div class="col-12 col-md-3">
+                                                    <h5 class="fw-bold mb-1 text-dark">@Html.DisplayFor(modelItem => item.Nombre)</h5>
                                                     <p class="mb-1 text-muted small">
                                                         <i class="fas fa-envelope me-2"></i>@Html.DisplayFor(modelItem => item.Correo)
                                                     </p>
@@ -214,17 +216,17 @@
                                                     </p>
                                                 </div>
                                                 
-                                                <div class="flex-grow-1" style="min-width: 200px;">
+                                                <div class="col-12 col-md-4">
                                                     <p class="mb-1 text-muted small">
                                                         <i class="fas fa-phone me-2"></i>@(ProyectoMSD.Helpers.TelefonoHelper.ObtenerPrefijoConBandera(item.PrefijoTelefono)) @Html.DisplayFor(modelItem => item.Telefono)
                                                     </p>
-                                                    <p class="mb-0 text-muted small">
+                                                    <p class="mb-0 text-muted small text-truncate" title="@item.UbicacionNavigation?.DireccionFormateada">
                                                         <i class="fas fa-map-marker-alt me-2"></i>@Html.DisplayFor(modelItem => item.UbicacionNavigation.DireccionFormateada)
                                                     </p>
                                                 </div>
 
                                                 <!-- Status -->
-                                                <div style="min-width: 120px;">
+                                                <div class="col-12 col-md-2 text-md-end">
                                                     @{
                                                         var accesoClass = item.Acesso?.ToLower() switch
                                                         {
@@ -235,15 +237,15 @@
                                                             _ => "text-danger bg-danger"
                                                         };
                                                     }
-                                                    <span class="badge rounded-pill bg-opacity-10 py-2 px-3 @accesoClass" style="border: 1px solid currentColor;">
+                                                    <span class="badge rounded-pill bg-opacity-10 py-2 px-3 badge-outline @accesoClass">
                                                         @Html.DisplayFor(modelItem => item.Acesso)
                                                     </span>
                                                 </div>
 
                                                 <!-- Botones de acción -->
-                                                @if (User.IsInRole("Admin"))
-                                                {
-                                                    <div class="ms-auto">
+                                                <div class="col-auto ms-auto">
+                                                    @if (User.IsInRole("Admin"))
+                                                    {
                                                         <div class="btn-group" role="group">
                                                             <a asp-page="./Edit" asp-route-id="@item.Id"
                                                                class="btn btn-outline-secondary btn-sm"
@@ -256,8 +258,8 @@
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </a>
                                                         </div>
-                                                    </div>
-                                                }
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -269,7 +271,7 @@
                             <div class="text-center py-5">
                                 <i class="fas fa-users fa-4x mb-4 opacity-25" style="color: #8b5cf6;"></i>
                                 <h4 class="mb-3 text-secondary">No hay usuarios registrados</h4>
-                                <a asp-page="Create" class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);">
+                                <a asp-page="Create" class="btn btn-gradient-primary btn-lg">
                                     <i class="fas fa-plus me-2"></i>Crear Primer Usuario
                                 </a>
                             </div>
@@ -286,10 +288,10 @@
         <div class="row g-4 mb-5">
             <div class="col-12">
                 <!-- Main Glass Card -->
-                <div class="card border-0 shadow-lg" style="border-radius: 24px; overflow: hidden; background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(116, 81, 248, 0.1) !important;">
-                    <div class="card-header border-0 p-4 p-lg-5" style="background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);">
+                <div class="card border-0 glass-card-persuasive">
+                    <div class="card-header border-0 p-4 p-lg-5 glass-header">
                         <div class="d-flex align-items-center">
-                            <div class="icon-shape bg-white text-primary rounded-circle me-4 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.8rem; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+                            <div class="bg-white text-primary rounded-circle me-4 d-flex align-items-center justify-content-center icon-shape-shadow">
                                 <i class="fas fa-magic" style="color: #5e35b1;"></i>
                             </div>
                             <div>
@@ -301,24 +303,24 @@
                     <div class="card-body p-4 p-md-5">
                         <div class="row align-items-center">
                             <div class="col-lg-7 mb-4 mb-lg-0">
-                                <h3 class="fw-bold mb-4" style="color: #3f2b96;">Automatiza tus Rutinas</h3>
+                                <h3 class="fw-bold mb-4 hero-subtitle-color">Automatiza tus Rutinas</h3>
                                 <p class="text-secondary fs-5 mb-5" style="line-height: 1.7;">
                                     Controla luces, temperatura, seguridad y más desde un solo lugar. Con <strong>MySmartDevice</strong>, tu hogar se adapta a tu estilo de vida, brindándote un nivel superior de confort, seguridad y eficiencia energética.
                                 </p>
                                 <div class="d-flex flex-column flex-sm-row gap-3">
-                                    <a asp-page="/Espacios/Index" class="btn btn-lg px-4 gap-3 fw-bold shadow-sm d-flex align-items-center justify-content-center" style="border-radius: 30px; background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%); color: white; border: none; transition: transform 0.3s; min-width: 200px;">
+                                    <a asp-page="/Espacios/Index" class="btn btn-lg px-4 gap-3 fw-bold shadow-sm d-flex align-items-center justify-content-center btn-gradient-primary" style="border-radius: 30px; min-width: 200px;">
                                         <i class="fas fa-home me-2"></i> Mis Espacios
                                     </a>
-                                    <a asp-page="/Dispositivos/Index" class="btn btn-lg px-4 fw-bold d-flex align-items-center justify-content-center" style="border-radius: 30px; background: transparent; color: #5e35b1; border: 2px solid #5e35b1; transition: transform 0.3s; min-width: 200px;">
+                                    <a asp-page="/Dispositivos/Index" class="btn btn-lg px-4 fw-bold d-flex align-items-center justify-content-center btn-action-outline">
                                         <i class="fas fa-plug me-2"></i> Dispositivos
                                     </a>
                                 </div>
                             </div>
                             <div class="col-lg-5 d-flex justify-content-center position-relative">
                                 <!-- Glowing background behind icon -->
-                                <div class="position-absolute" style="width: 250px; height: 250px; background: radial-gradient(circle, rgba(156, 39, 176, 0.2) 0%, rgba(255,255,255,0) 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%;"></div>
-                                <div class="robot-icon" style="width: 220px; height: 220px; background: rgba(255, 255, 255, 0.8); border: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 15px 35px rgba(0,0,0,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;">
-                                    <i class="fas fa-laptop-house" style="font-size: 7rem; background: -webkit-linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                                <div class="position-absolute robot-bg-glow"></div>
+                                <div class="robot-icon-wrap d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-laptop-house text-gradient" style="font-size: 7rem;"></i>
                                 </div>
                             </div>
                         </div>
@@ -328,36 +330,36 @@
 
             <!-- Beneficios Cards -->
             <div class="col-md-4">
-                <div class="card text-center h-100 border-0" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s;">
+                <div class="card text-center h-100 border-0 benefit-card">
                     <div class="card-body p-4 p-lg-5">
-                        <div class="icon-circle mb-4 mx-auto" style="width: 70px; height: 70px; border-radius: 20px; background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(156, 39, 176, 0.1) 100%); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            <i class="fas fa-leaf" style="color: #673ab7;"></i>
+                        <div class="mb-4 mx-auto benefit-icon-box d-flex align-items-center justify-content-center">
+                            <i class="fas fa-leaf" style="color: #673ab7; font-size: 2rem;"></i>
                         </div>
-                        <h4 class="fw-bold" style="color: #3f2b96;">Eficiencia Energética</h4>
+                        <h4 class="fw-bold hero-subtitle-color">Eficiencia Energética</h4>
                         <p class="text-muted mb-0 mt-3 fs-6">Reduce tu consumo y huella de carbono optimizando el uso de energía.</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4">
-                <div class="card text-center h-100 border-0" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s;">
+                <div class="card text-center h-100 border-0 benefit-card">
                     <div class="card-body p-4 p-lg-5">
-                        <div class="icon-circle mb-4 mx-auto" style="width: 70px; height: 70px; border-radius: 20px; background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(156, 39, 176, 0.1) 100%); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            <i class="fas fa-shield-alt" style="color: #ea4c89;"></i>
+                        <div class="mb-4 mx-auto benefit-icon-box d-flex align-items-center justify-content-center">
+                            <i class="fas fa-shield-alt" style="color: #ea4c89; font-size: 2rem;"></i>
                         </div>
-                        <h4 class="fw-bold" style="color: #3f2b96;">Seguridad Total</h4>
+                        <h4 class="fw-bold hero-subtitle-color">Seguridad Total</h4>
                         <p class="text-muted mb-0 mt-3 fs-6">Monitorea tu hogar 24/7 y recibe alertas en tiempo real sobre cualquier actividad inusual.</p>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card text-center h-100 border-0" style="border-radius: 20px; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: transform 0.3s, box-shadow 0.3s;">
+                <div class="card text-center h-100 border-0 benefit-card">
                     <div class="card-body p-4 p-lg-5">
-                        <div class="icon-circle mb-4 mx-auto" style="width: 70px; height: 70px; border-radius: 20px; background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(156, 39, 176, 0.1) 100%); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            <i class="fas fa-couch" style="color: #9c27b0;"></i>
+                        <div class="mb-4 mx-auto benefit-icon-box d-flex align-items-center justify-content-center">
+                            <i class="fas fa-couch" style="color: #9c27b0; font-size: 2rem;"></i>
                         </div>
-                        <h4 class="fw-bold" style="color: #3f2b96;">Confort Absoluto</h4>
+                        <h4 class="fw-bold hero-subtitle-color">Confort Absoluto</h4>
                         <p class="text-muted mb-0 mt-3 fs-6">Prepara el ambiente perfecto antes de llegar, desde tu dispositivo móvil.</p>
                     </div>
                 </div>
