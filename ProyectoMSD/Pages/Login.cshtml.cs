@@ -40,6 +40,11 @@ namespace ProyectoMSD.Pages
 
             if (usuario != null)
             {
+                if (usuario.Acesso?.ToLower() == "pendiente" || usuario.Acesso?.ToLower() == "inactivo")
+                {
+                    return RedirectToPage("/AccesoPendiente");
+                }
+
                 // Crear claims de autenticacion
                 var claims = new List<Claim>
                 {
@@ -108,6 +113,13 @@ namespace ProyectoMSD.Pages
 
             // Buscar/Crear usuario en DB mediante servicio
             var usuario = await _usuarioService.AuthenticateGoogleAsync(email, name ?? "Usuario Google");
+
+            if (usuario.Acesso?.ToLower() == "pendiente" || usuario.Acesso?.ToLower() == "inactivo")
+            {
+                // Borrar la cookie temporal por precaución antes de redireccionar
+                await HttpContext.SignOutAsync("ExternalCookie");
+                return RedirectToPage("/AccesoPendiente");
+            }
 
             // Crear claims y hacer SignIn local
             var claims = new List<Claim>

@@ -1,37 +1,229 @@
-/* ============================================================
-   USUARIOS.CSS
-   Estilos exclusivos de las páginas de Usuarios (Index, Delete).
-   ============================================================ */
+/* wwwroot/css/pages/usuarios.css 
+   Estilos específicos para la vista de Gestión de Usuarios y User Dashboard 
+*/
 
-/* Hero background override para la página de usuarios */
+/* General */
+.usuarios-main-container {
+    padding-top: 20px;
+}
+
+.welcome-banner {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.welcome-title {
+    color: #6a4cd5;
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+}
+
+/* Hero Section */
+.hero-section {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
 .hero-background {
-    background-color: slategrey !important;
-    position: relative !important;
-    z-index: 0 !important;
-    isolation: auto !important;
+    background: linear-gradient(135deg, rgba(94, 53, 177, 0.8) 0%, rgba(156, 39, 176, 0.6) 100%), 
+                url('https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
 }
 
-.hero-background * {
-    position: relative !important;
-    z-index: 1 !important;
+.text-shadow-custom {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Delete page: header con tema rojo */
-.usuarios-delete .profile-header {
-    background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+/* Stats Cards */
+.stat-card {
+    border-radius: 20px;
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Delete page: activity items con tema rojo */
-.usuarios-delete .activity-item {
-    background: #fef2f2;
-    border-left-color: #ef4444;
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05) !important;
 }
 
-.usuarios-delete .activity-item:hover {
-    box-shadow: 0 3px 10px rgba(239, 68, 68, 0.1);
+.stat-value {
+    color: #8b5cf6;
 }
 
-.usuarios-delete .activity-action {
-    color: #ef4444;
+.stat-value-alt {
+    color: #a855f7;
+}
+
+/* Layout Cards (Activity, Status, Users) */
+.layout-card {
+    border-radius: 24px;
+    background: white;
+}
+
+.card-title-muted {
+    font-weight: 500;
+}
+
+/* Activity Items */
+.activity-item {
+    background: rgba(248, 249, 250, 0.7);
+    border-left: 4px solid #8b5cf6;
+}
+
+.activity-icon-dot {
+    width: 12px;
+    height: 12px;
+    background: #8b5cf6;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+/* Status Items */
+.status-item {
+    background: rgba(248, 249, 250, 0.7);
+}
+
+.status-icon {
+    width: 45px;
+    height: 45px;
+    background: #10b981;
+    color: white;
+}
+
+.status-icon.warning {
+    background: #f59e0b;
+}
+
+.status-icon.danger {
+    background: #ef4444;
+}
+
+/* Gestión de Usuarios Table/List */
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);
+    border: none;
+    border-radius: 20px;
+    padding: 10px 25px;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+    color: white;
+}
+
+.user-card-item {
+    background: #fdfdfd;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
+}
+
+.badge-outline {
+    border: 1px solid currentColor;
+}
+
+/* Persuasion/Motivational View for Normal Users */
+.glass-card-persuasive {
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 35px rgba(116, 81, 248, 0.1) !important;
+}
+
+.glass-header {
+    background: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);
+}
+
+.icon-shape-shadow {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.hero-subtitle-color {
+    color: #3f2b96;
+}
+
+.btn-action-outline {
+    border-radius: 30px;
+    background: transparent;
+    color: #5e35b1;
+    border: 2px solid #5e35b1;
+    transition: transform 0.3s, background 0.3s;
+    min-width: 200px;
+}
+
+.btn-action-outline:hover {
+    transform: translateY(-2px);
+    background: rgba(94, 53, 177, 0.05);
+}
+
+.robot-bg-glow {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(156, 39, 176, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+.robot-icon-wrap {
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.text-gradient {
+    background: -webkit-linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.benefit-card {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.benefit-icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(156, 39, 176, 0.1) 100%);
 }
