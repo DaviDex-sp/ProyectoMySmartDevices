@@ -1,30 +1,27 @@
-// Implementación de Modo Oscuro para MySmartDevice
+// site.js - MySmartDevice Logic
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
-    const icon = themeToggle?.querySelector('i');
-
-    // Cargar preferencia guardada
-    const savedTheme = localStorage.getItem('theme') || 'light';
     
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-theme');
-        if (icon) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-        }
-    }
+    if (!themeToggle) return;
 
-    // Lógica del Toggle
-    themeToggle?.addEventListener('click', () => {
+    const icon = themeToggle.querySelector('i');
+
+    // Lógica del Toggle (Sesión Volátil)
+    // Nota: Se eliminó localStorage por conflictos en Merge/Producción (MSD13)
+    themeToggle.addEventListener('click', () => {
         const isDark = body.classList.toggle('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
 
         // Cambiar icono
         if (icon) {
             if (isDark) {
                 icon.classList.replace('fa-moon', 'fa-sun');
+                if (icon.classList.contains('fa-moon')) icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
             } else {
                 icon.classList.replace('fa-sun', 'fa-moon');
+                if (icon.classList.contains('fa-sun')) icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
             }
         }
 
