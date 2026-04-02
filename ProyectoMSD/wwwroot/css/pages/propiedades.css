@@ -1,38 +1,127 @@
-/* ============================================================
-   PROPIEDADES.CSS
-   Estilos exclusivos de las páginas de Propiedades.
-   ============================================================ */
+/* wwwroot/css/pages/propiedades.css */
 
-/* Property Card styles */
-.property-card {
-    border-radius: 15px;
+/* Contenedor principal */
+.propiedad-details-container {
+    background: linear-gradient(135deg, #D2EFFE 0%, #D2D9FE 100%);
+    min-height: 100vh;
+}
+
+/* Botón de regreso */
+.prop-btn-back {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.prop-btn-back:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.property-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Property Detail Header */
-.property-detail-header {
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+/* Tarjeta Principal */
+.prop-card-main {
     border-radius: 20px;
-    padding: 2rem;
-    color: white;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
-    position: relative;
-    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+}
+.prop-card-header {
+    border-radius: 20px 20px 0 0;
+    border: none;
+}
+.prop-badge-tipo {
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.property-detail-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
+/* Cajas de información (Info General) */
+.prop-info-box {
+    background: rgba(52, 152, 219, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(52, 152, 219, 0.1);
     height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+}
+.prop-info-title {
+    border-bottom: 2px solid rgba(52, 152, 219, 0.2);
+}
+
+/* Iconos circulares generales */
+.prop-icon-box {
+    width: 45px;
+    height: 45px;
+}
+
+/* Cajas de usuarios (Propietarios) */
+.prop-users-box {
+    background: rgba(46, 204, 113, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(46, 204, 113, 0.1);
+    height: 100%;
+}
+.prop-users-title {
+    border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Ítem de la lista de usuarios */
+.prop-user-item {
+    background: white !important;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+}
+.prop-user-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Estado de listado vacío */
+.prop-empty-state-icon {
+    width: 70px;
+    height: 70px;
+}
+
+/* Cajas de Espacios Conectados */
+.prop-spaces-box {
+    background: rgba(155, 89, 182, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(155, 89, 182, 0.1);
+}
+.prop-spaces-title {
+    border-bottom: 2px solid rgba(155, 89, 182, 0.2);
+    color: #8e44ad;
+}
+
+/* Tarjeta individual de espacio */
+.prop-space-card {
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.prop-space-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(142, 68, 173, 0.15) !important;
+}
+
+/* Icono del espacio */
+.prop-space-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+}
+
+/* Botón Editar */
+.prop-btn-edit {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.prop-btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3) !important;
+}
+
+/* Tipografía de etiquetas */
+.prop-label-text {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
 }
