@@ -1,31 +1,49 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using ProyectoMSD.Interfaces;
 using ProyectoMSD.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
-namespace ProyectoMSD.Pages.Configuraciones
+namespace ProyectoMSD.Pages.Configuraciones;
+
+[Authorize]
+public class IndexModel : PageModel
 {
-    [Authorize(Roles = "Admin")]
-    public class IndexModel : PageModel
+    private readonly IConfiguracionService _configService;
+
+    public IndexModel(IConfiguracionService configService)
     {
-        private readonly ProyectoMSD.Modelos.AppDbContext _context;
+        _configService = configService;
+    }
 
-        public IndexModel(ProyectoMSD.Modelos.AppDbContext context)
+    public IList<Configuracione> Configuracione { get; set; } = default!;
+    public int TotalNotificaciones { get; set; }
+    public int DispositivosActivos { get; set; }
+    public string UltimaSincronizacion { get; set; } = string.Empty;
+
+    public async Task OnGetAsync()
+    {
+        // Obtener el ID del usuario actual de forma segura
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        bool esAdmin = User.IsInRole("Admin") || User.IsInRole("Administrador");
+
+        if (esAdmin)
         {
-            _context = context;
+            Configuracione = await _configService.ObtenerTodasAsync();
+        }
+        else if (int.TryParse(userIdClaim, out int userId))
+        {
+            Configuracione = await _configService.ObtenerPorUsuarioAsync(userId);
+        }
+        else
+        {
+            Configuracione = new List<Configuracione>();
         }
 
-        public IList<Configuracione> Configuracione { get;set; } = default!;
-
-        public async Task OnGetAsync()
-        {
-            Configuracione = await _context.Configuraciones
-                .ToListAsync();
-        }
+        // Obtener métricas desde el servicio
+        TotalNotificaciones = await _configService.ObtenerConteoNotificacionesAsync();
+        DispositivosActivos = await _configService.ObtenerConteoDispositivosAsync();
+        UltimaSincronizacion = DateTime.Now.AddMinutes(-5).ToString("dd/MM/yyyy HH:mm");
     }
 }

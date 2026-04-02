@@ -15,77 +15,52 @@ namespace ProyectoMSD.Pages.Usuarios
     [Authorize(Roles = "Admin,Usuario,Huesped")]
     public class IndexModel : PageModel
     {
-        private readonly ProyectoMSD.Modelos.AppDbContext _context;
         private readonly IUsuarioService _usuarioService;
-        public string FilterId { get; set; } = string.Empty;
+        private readonly IDashboardService _dashboardService;
 
-        // Nuevas propiedades para la UI del Dashboard (Opción B)
-        public IList<RegistroAcceso> UltimosAccesos { get; set; } = new List<RegistroAcceso>();
-        public int BateriaDispositivosOffline => Dispositivos.Count(d => d.Estado != null && d.Estado.ToLower() != "activo" && d.Estado.ToLower() != "conectado");
-        
-        public IndexModel(AppDbContext context, IUsuarioService usuarioService) 
+        public IndexModel(IUsuarioService usuarioService, IDashboardService dashboardService)
         {
-            _context = context;
             _usuarioService = usuarioService;
+            _dashboardService = dashboardService;
         }
 
-        public IList<Usuario> Usuario { get;set; } = default!;
-        public IList<Espacio> Espacios { get; set; } = default!;
-        public IList<Dispositivo> Dispositivos { get; set; } = default!;
+        // Datos del Dashboard
+        public IList<Usuario> Usuario { get; set; } = new List<Usuario>();
+        public List<RegistroAcceso> UltimosAccesos { get; set; } = new List<RegistroAcceso>();
+        public ProyectoMSD.Modelos.DTOs.DashboardMetricsDto Metricas { get; set; } = null!;
 
         public bool RequiereInformacionBasica { get; set; }
-
-        // Propiedades calculadas para las estadísticas
-        public int TotalUsuarios => Usuario?.Count ?? 0;
-        public int TotalEspacios => Espacios?.Count ?? 0;
-        public int TotalDispositivos => Dispositivos?.Count ?? 0;
-        public int UsuariosActivos => Usuario?.Count() ?? 0;
-        public int DispositivosActivos => Dispositivos?.Count() ?? 0;
-        
+        public bool EsAdmin => User.IsInRole("Admin") || User.IsInRole("Administrador");
 
         public async Task OnGetAsync()
         {
-            // Cargar datos principales para Admin
-            if (User.IsInRole("Admin"))
+            var userIdStr = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            int.TryParse(userIdStr, out int userId);
+
+            if (EsAdmin)
             {
+                // El Admin ve todo globalmente
                 Usuario = await _usuarioService.GetAllUsuariosAsync();
+                Metricas = await _dashboardService.GetMetricsAsync();
+                UltimosAccesos = await _usuarioService.GetRecentAccessLogsAsync(null, 5);
+            }
+            else if (userId > 0)
+            {
+                // Los usuarios estándar solo ven sus propias métricas y accesos
+                Metricas = await _dashboardService.GetUserMetricsAsync(userId);
+                UltimosAccesos = await _usuarioService.GetRecentAccessLogsAsync(userId, 5);
                 
-                // Cargar registros de acceso para simular "Actividad Reciente" (Logins)
-                UltimosAccesos = await _context.RegistroAccesos
-                    .Include(r => r.IdUsuariosNavigation)
-                    .OrderByDescending(r => r.FechaAcceso)
-                    .Take(5)
-                    .ToListAsync();
-            }
-            else
-            {
-                Usuario = new List<Usuario>(); // Lista vacía para prevenir NullReferenceException en la vista
-            }
-
-            // Si tienes modelo Espacio
-            Espacios = await _context.Espacios  // ← Incluye dispositivos relacionados
-                .ToListAsync();
-
-            // Si tienes modelo Dispositivo
-            Dispositivos = await _context.Dispositivos
-                .ToListAsync();
-
-            // Lógica para Alerta de Información Básica
-            var userIdClaim = User.FindFirst("UserId")?.Value;
-            if (int.TryParse(userIdClaim, out int userId))
-            {
-                var currentUser = Usuario.FirstOrDefault(u => u.Id == userId);
-                if (currentUser != null)
+                var profile = await _usuarioService.GetUsuarioPerfilAsync(userId);
+                if (profile != null)
                 {
-                    // Determinar si falta información que generalmente no se obtiene de Google
-                    if (string.IsNullOrWhiteSpace(currentUser.Documento) || currentUser.Documento == "0" || string.IsNullOrWhiteSpace(currentUser.Telefono) || currentUser.Telefono == "0")
+                    // Validación de datos básicos
+                    if (string.IsNullOrWhiteSpace(profile.Documento) || profile.Documento == "0" || 
+                        string.IsNullOrWhiteSpace(profile.Telefono) || profile.Telefono == "0")
                     {
                         RequiereInformacionBasica = true;
                     }
                 }
             }
-
-          
         }
     }
 }

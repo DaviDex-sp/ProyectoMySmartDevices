@@ -259,5 +259,20 @@ namespace ProyectoMSD.Services
 
             return true;
         }
+
+        public async Task<List<RegistroAcceso>> GetRecentAccessLogsAsync(int? userId, int count)
+        {
+            var query = _db.RegistroAccesos.Include(r => r.IdUsuariosNavigation).AsQueryable();
+            
+            if (userId.HasValue)
+            {
+                query = query.Where(r => r.IdUsuarios == userId.Value);
+            }
+
+            return await query
+                .OrderByDescending(r => r.FechaAcceso)
+                .Take(count)
+                .ToListAsync();
+        }
     }
 }

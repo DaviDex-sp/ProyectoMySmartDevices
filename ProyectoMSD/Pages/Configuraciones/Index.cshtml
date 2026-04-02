@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Configuraciones.IndexModel
 
 @{
@@ -7,89 +7,242 @@
 
 @section Styles {
     <link href="~/css/pages/configuraciones.css" rel="stylesheet" />
+    <style>
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .settings-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: var(--transition-base);
+            box-shadow: var(--card-shadow);
+        }
+        .settings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        .settings-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .bg-glass-purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .bg-glass-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .bg-glass-orange { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .bg-glass-green { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
 }
 
 <div class="container-fluid px-4 py-4">
-
-    <div class="config-header text-center mb-4">
-        <h1 class="display-4 fw-bold mb-2">
-            <i class="fas fa-gear me-3"></i>Configuraciones del sistema
-        </h1>
-        <p class="lead mb-0">Administra las configuraciones principales en MySmartDevice</p>
+    <!-- Header Hero -->
+    <div class="config-header p-5 rounded-4 mb-4" style="background: var(--primary-gradient); color: var(--text-dark);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-2">Panel de Ajustes</h1>
+                <p class="fs-5 opacity-75">Personaliza tu experiencia en MySmartDevice y gestiona tu ecosistema conectado.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <div class="d-flex align-items-center gap-2 bg-white bg-opacity-25 px-3 py-2 rounded-3">
+                        <i class="fas fa-clock"></i>
+                        <span>Sincronización: @Model.UltimaSincronizacion</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-end">
+                <i class="fas fa-sliders-h fa-5x opacity-25"></i>
+            </div>
+        </div>
     </div>
 
-    <div class="table-container">
-        <div class="table-header d-flex justify-content-between align-items-center">
-            <h3 class="mb-0 fw-bold">
-                <i class="fas fa-list me-2"></i>Lista de Configuraciones
-            </h3>
-            <span class="badge bg-primary px-3 py-2">@Model.Configuracione.Count() configuraciones registradas</span>
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stats-card text-center p-4">
+                <h6 class="text-muted text-uppercase mb-2">Notificaciones Totales</h6>
+                <p class="h2 fw-bold text-primary mb-0">@Model.TotalNotificaciones</p>
+                <small class="text-success"><i class="fas fa-arrow-up"></i> +12% esta semana</small>
+            </div>
         </div>
-        @if (Model.Configuracione != null && Model.Configuracione.Any())
-        {
-            <table class="table custom-table">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-hashtag me-2"></i>ID</th>
-                        <th><i class="fas fa-language me-2"></i>Idioma</th>
-                        <th><i class="fas fa-bell me-2"></i>Alertas</th>
-                        <th><i class="fas fa-robot me-2"></i>Automatización</th>
-                        <th><i class="fas fa-plug me-2"></i>Adaptador</th>
-                        <th><i class="fas fa-microchip me-2"></i>ID_Dispositivo</th>
-                        <th><i class="fas fa-user me-2"></i>ID_Usuario</th>
-                        <th><i class="fas fa-cogs me-2"></i>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Configuracione)
-                    {
-                        <tr>
-                            <td><span class="badge bg-secondary fs-6">@item.Codigo</span></td>
-                            <td>@item.Idioma</td>
-                            <td>@item.Alertas</td>
-                            <td>
-                                <span class="badge-config @(item.Automatizacion ? "bg-success" : "bg-secondary")">
-                                    @(item.Automatizacion ? "General" : "Personalizada")
-                                </span>
-                            </td>
-                            <td>@item.Adaptador</td>
-                            <td>@item.IdDispositivos</td>
-                            <td>@item.IdUsuarios</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a asp-page="./Details" asp-route-id="@item.Codigo"
-                                       class="btn-action btn-details" title="Ver detalles">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a asp-page="./Edit" asp-route-id="@item.Codigo"
-                                       class="btn-action btn-edit" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a asp-page="./Delete" asp-route-id="@item.Codigo"
-                                       class="btn-action btn-delete" title="Eliminar">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <div class="text-center py-5">
-                <i class="fas fa-cogs fa-4x mb-4 text-muted opacity-50"></i>
-                <h4 class="mb-3">No hay configuraciones registradas</h4>
-                <p class="mb-4 text-muted">Comienza agregando tu primera configuración del sistema.</p>
-                <a asp-page="Create" class="btn btn-success btn-lg">
-                    <i class="fas fa-plus me-2"></i>Agregar Configuración
+        <div class="col-md-4">
+            <div class="stats-card text-center p-4">
+                <h6 class="text-muted text-uppercase mb-2">Dispositivos Vinculados</h6>
+                <p class="h2 fw-bold text-success mb-0">@Model.DispositivosActivos</p>
+                <small class="text-muted">Todos los sistemas operativos</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card text-center p-4">
+                <h6 class="text-muted text-uppercase mb-2">Modo de Interfaz</h6>
+                <div class="d-flex justify-content-center align-items-center gap-2 py-1">
+                    <span id="theme-status-text" class="h5 mb-0 fw-bold">Modo Claro</span>
+                    <button class="btn btn-sm btn-outline-primary" onclick="document.getElementById('theme-toggle').click()">Cambiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-grid">
+        <!-- Tarjeta: Apariencia -->
+        <div class="settings-card">
+            <div class="settings-icon bg-glass-purple">
+                <i class="fas fa-paint-brush"></i>
+            </div>
+            <h5 class="fw-bold">Apariencia y Tema</h5>
+            <p class="text-muted small">Configura cómo visualizas la plataforma en este dispositivo.</p>
+            <hr class="opacity-10">
+            <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="darkModeSwitch" onchange="document.getElementById('theme-toggle').click()">
+                <label class="form-check-label" for="darkModeSwitch">Activar Modo Oscuro (Negro Puro)</label>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Idioma del Sistema (Visual)</label>
+                <select class="form-select form-select-sm" disabled>
+                    <option selected>Español (Colombia)</option>
+                    <option>English (US)</option>
+                    <option>Português (Brasil)</option>
+                </select>
+                <small class="text-muted" style="font-size: 0.7rem;">La persistencia de idioma está desactivada.</small>
+            </div>
+        </div>
+
+        <!-- Tarjeta: Notificaciones -->
+        <div class="settings-card">
+            <div class="settings-icon bg-glass-blue">
+                <i class="fas fa-bell"></i>
+            </div>
+            <h5 class="fw-bold">Centro de Notificaciones</h5>
+            <p class="text-muted small">Gestiona cómo y cuándo recibes las alertas de tus dispositivos.</p>
+            <hr class="opacity-10">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small">Alertas por Email</span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" checked>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small">Notificaciones Push</span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" checked>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="small">Alertas de Seguridad</span>
+                <span class="status-badge bg-danger bg-opacity-10 text-danger">Prioritarias</span>
+            </div>
+        </div>
+
+        <!-- Tarjeta: Seguridad -->
+        <div class="settings-card">
+            <div class="settings-icon bg-glass-orange">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h5 class="fw-bold">Seguridad y Acceso</h5>
+            <p class="text-muted small">Configuración de adaptadores y llaves de acceso del sistema.</p>
+            <hr class="opacity-10">
+            <div class="mb-3">
+                <p class="small mb-1"><strong>Adaptador Actual:</strong> WebSocket v2.1</p>
+                <p class="small text-muted font-monospace">Key: **********X4R2</p>
+            </div>
+            <button class="btn btn-outline-warning btn-sm w-100">
+                <i class="fas fa-key me-2"></i>Rotar Llave de Acceso
+            </button>
+        </div>
+    </div>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Administrador"))
+    {
+        <!-- Vista de Administrador: Lista de Configuraciones DB -->
+        <div class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold"><i class="fas fa-database me-2 fs-4"></i>Registros de Configuración (Admin)</h3>
+                <a asp-page="Create" class="btn btn-primary-custom">
+                    <i class="fas fa-plus me-2"></i>Nuevo Registro
                 </a>
             </div>
-        }
-    </div>
+            <div class="table-container">
+                <table class="table custom-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Idioma</th>
+                            <th>Alertas</th>
+                            <th>Automatización</th>
+                            <th>Usuario</th>
+                            <th>Dispositivo</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Configuracione)
+                        {
+                            <tr>
+                                <td><span class="badge bg-secondary">@item.Codigo</span></td>
+                                <td>@item.Idioma</td>
+                                <td>@item.Alertas</td>
+                                <td>
+                                    <span class="badge @(item.Automatizacion ? "bg-success" : "bg-dark") bg-opacity-10" style="color: inherit;">
+                                        @(item.Automatizacion ? "🟢 Activa" : "⚪ Off")
+                                    </span>
+                                </td>
+                                <td>@(item.IdUsuariosNavigation?.Nombre ?? item.IdUsuarios.ToString())</td>
+                                <td>@(item.IdDispositivosNavigation?.Nombre ?? "Genérico")</td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-page="./Edit" asp-route-id="@item.Codigo" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                        <a asp-page="./Delete" asp-route-id="@item.Codigo" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 </div>
 
-<a asp-page="Create" class="create-button" title="Agregar configuración">
-    <i class="fas fa-plus"></i>
-</a>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const switchEl = document.getElementById('darkModeSwitch');
+            const statusText = document.getElementById('theme-status-text');
+            
+            // Sincronizar switch con el tema actual
+            const updateUI = () => {
+                const isDark = document.body.classList.contains('dark-theme');
+                switchEl.checked = isDark;
+                statusText.innerText = isDark ? 'Modo Oscuro' : 'Modo Claro';
+            };
+
+            updateUI();
+
+            // Escuchar cambios de tema (producidos por el botón del layout)
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        updateUI();
+                    }
+                });
+            });
+
+            observer.observe(document.body, { attributes: true });
+        });
+    </script>
+}

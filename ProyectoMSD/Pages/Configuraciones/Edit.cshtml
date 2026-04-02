@@ -1,64 +1,92 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Configuraciones.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Configuración";
 }
 
-<h1>Edit</h1>
+@section Styles {
+    <style>
+        .edit-container {
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+    </style>
+}
 
-<h4>Configuracione</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container edit-container">
+    <div class="form-container">
+        <div class="form-header">
+            <h3><i class="fas fa-edit me-2"></i>Editar Registro de Configuración</h3>
+            <p>Modifica los parámetros técnicos de sincronización y alertas.</p>
+        </div>
+
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3"></div>
             <input type="hidden" asp-for="Configuracione.Codigo" />
-            <div class="form-group">
-                
-                <label asp-for="Configuracione.Idioma" class="control-label"></label>
-                <input asp-for="Configuracione.Idioma" class="form-control" />
-                <span asp-validation-for="Configuracione.Idioma" class="text-danger"></span>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Configuracione.Idioma" class="form-label">Idioma de Interfaz</label>
+                        <input asp-for="Configuracione.Idioma" class="form-control" placeholder="Ej: Español" />
+                        <span asp-validation-for="Configuracione.Idioma" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Configuracione.Alertas" class="form-label">Canales de Alerta</label>
+                        <input asp-for="Configuracione.Alertas" class="form-control" placeholder="Ej: Email, Push" />
+                        <span asp-validation-for="Configuracione.Alertas" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group p-3 border rounded-3 bg-light bg-opacity-10">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" asp-for="Configuracione.Automatizacion">
+                            <label class="form-check-label fw-bold" asp-for="Configuracione.Automatizacion">Activar Automatización Avanzada</label>
+                            <small class="d-block text-muted">Permite que el sistema tome decisiones basadas en sensores (Escenas AI).</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="Configuracione.Adaptador" class="form-label">Adaptador de Protocolo</label>
+                        <input asp-for="Configuracione.Adaptador" class="form-control font-monospace" placeholder="Ej: MQTT, WebSocket" />
+                        <span asp-validation-for="Configuracione.Adaptador" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Configuracione.IdDispositivos" class="form-label">Dispositivo Vinculado</label>
+                        <select asp-for="Configuracione.IdDispositivos" class="form-select" asp-items="ViewBag.IdDispositivos"></select>
+                        <span asp-validation-for="Configuracione.IdDispositivos" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Configuracione.IdUsuarios" class="form-label">Usuario Propietario</label>
+                        <select asp-for="Configuracione.IdUsuarios" class="form-select" asp-items="ViewBag.IdUsuarios"></select>
+                        <span asp-validation-for="Configuracione.IdUsuarios" class="text-danger small"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                
-                <label asp-for="Configuracione.Alertas" class="control-label"></label>
-                <input asp-for="Configuracione.Alertas" class="form-control" />
-                <span asp-validation-for="Configuracione.Alertas" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Configuracione.Automatizacion" /> @Html.DisplayNameFor(model => model.Configuracione.Automatizacion)
-                </label>
-            </div>
-            <div class="form-group">
-                
-                <label asp-for="Configuracione.Adaptador" class="control-label"></label>
-                <input asp-for="Configuracione.Adaptador" class="form-control" />
-                <span asp-validation-for="Configuracione.Adaptador" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                
-                <label asp-for="Configuracione.IdDispositivos" class="control-label"></label>
-                <select asp-for="Configuracione.IdDispositivos" class="form-control" asp-items="ViewBag.IdDispositivos"></select>
-                <span asp-validation-for="Configuracione.IdDispositivos" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                
-                <label asp-for="Configuracione.IdUsuarios" class="control-label"></label>
-                <select asp-for="Configuracione.IdUsuarios" class="form-control" asp-items="ViewBag.IdUsuarios"></select>
-                <span asp-validation-for="Configuracione.IdUsuarios" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="d-flex justify-content-between align-items-center mt-5 pt-3 border-top">
+                <a asp-page="./Index" class="btn btn-secondary-custom">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Panel
+                </a>
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="fas fa-save me-2"></i>Guardar Cambios
+                </button>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {
