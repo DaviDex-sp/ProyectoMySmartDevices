@@ -19,6 +19,9 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IUsuarioService, ProyectoMSD.S
 // Registrar la capa de Servicios del Dashboard (Métricas)
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IDashboardService, ProyectoMSD.Services.DashboardService>();
 
+// Registrar la capa de Servicios de Configuraciones
+builder.Services.AddScoped<ProyectoMSD.Interfaces.IConfiguracionService, ProyectoMSD.Services.ConfiguracionService>();
+
 // Configuración de Autenticación Múltiple (Cookies locales + Google)
 builder.Services.AddAuthentication(options =>
     {
