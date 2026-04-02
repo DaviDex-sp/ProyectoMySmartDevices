@@ -8,56 +8,26 @@
 
 /* ----- Variables Globales ----- */
 :root {
-    /* Colores Core */
+    --primary-gradient: linear-gradient(135deg, #e0e7ff 0%, #fae8ff 100%);
+    --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    /* Sombra más sutil para resina */
+    --hover-shadow: 0 15px 50px rgba(139, 92, 246, 0.2);
+    --support-green: #10b981;
+    --support-blue: #3b82f6;
     --primary-blue: #8b5cf6;
     --secondary-blue: #a855f7;
-    --primary-gradient: linear-gradient(135deg, #e0e7ff 0%, #fae8ff 100%);
-    
-    /* Superficies y Fondos */
-    --bg-light: #f1f5f9;
-    --bg-app: #f8fafc;
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --nav-bg: rgba(255, 255, 255, 0.75);
-    
-    /* Texto */
+    --light-blue: #f3e8ff;
+    --extra-light-blue: #faf5ff;
     --text-dark: #1e293b;
     --text-light: #64748b;
-    --text-muted: #94a3b8;
-
-    /* Efectos Glass (Resina) */
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --glass-border: 1px solid rgba(255, 255, 255, 0.6);
-    --glass-blur: blur(12px);
-    
-    /* Sombras */
-    --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
-    --hover-shadow: 0 20px 50px rgba(139, 92, 246, 0.15);
-    
-    /* Otros */
-    --support-green: #10b981;
-    --support-red: #ef4444;
-    --support-orange: #f59e0b;
-    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ----- Modo Oscuro ----- */
-.dark-theme {
-    --bg-light: #000000;
-    --bg-app: #0a0a0a;
-    --card-bg: rgba(20, 20, 20, 0.85);
-    --nav-bg: rgba(0, 0, 0, 0.9);
-    
-    --text-dark: #ffffff;
-    --text-light: #cbd5e1;
-    --text-muted: #94a3b8;
-
-    --glass-bg: rgba(20, 20, 20, 0.7);
-    --glass-border: 1px solid rgba(255, 255, 255, 0.15);
-    
-    --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-    --hover-shadow: 0 25px 60px rgba(139, 92, 246, 0.4);
-    
-    --primary-gradient: linear-gradient(135deg, #111 0%, #222 100%);
+    --bg-light: #f8fafc;
+    /* Efecto "Resina Transparente" */
+    --glass-bg: rgba(255, 255, 255, 0.15);
+    /* Mucho más transparente */
+    --glass-border: 1px solid rgba(255, 255, 255, 0.8);
+    /* Borde blanco brillante como cristal */
+    --glass-blur: blur(4px);
+    /* Menos blur para que parezca agua/resina limpia */
 }
 
 /* ----- Reset y Base ----- */
@@ -74,41 +44,23 @@ html {
 }
 
 body {
-    background-color: var(--bg-light);
-    background-image: 
-        radial-gradient(at 0% 0%, var(--bg-app) 0, transparent 50%),
-        radial-gradient(at 100% 100%, var(--bg-app) 0, transparent 50%);
+    background-color: #f1f5f9;
+    background-image:
+        radial-gradient(at 0% 0%, rgba(224, 231, 255, 1) 0, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(243, 232, 255, 1) 0, transparent 50%);
     background-attachment: fixed;
-    color: var(--text-dark);
     min-height: 100vh;
-    font-family: 'Outfit', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 60px;
-    transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-/* Theme-Aware Utilities Overrides */
-.dark-theme .text-primary { color: #60a5fa !important; }
-.dark-theme .text-success { color: #4ade80 !important; }
-.dark-theme .text-muted { color: var(--text-muted) !important; }
-.dark-theme .bg-light { background-color: var(--bg-app) !important; color: var(--text-dark) !important; }
-.dark-theme .border { border-color: var(--glass-border) !important; }
-.dark-theme .form-control, .dark-theme .form-select {
-    background-color: #111 !important;
-    border-color: #333 !important;
-    color: #fff !important;
-}
-
-/* Transiciones Suaves */
-body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ----- Focus States ----- */
 .btn:focus,
 .btn:active:focus,
+.btn-link.nav-link:focus,
 .form-control:focus,
 .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem var(--bg-light), 0 0 0 0.25rem var(--primary-blue);
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 /* ----- Form Placeholders ----- */
@@ -125,16 +77,16 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Navbar ----- */
 .navbar-custom {
-    background: var(--nav-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
     padding: 0.5rem 0;
     position: sticky;
     top: 0;
     z-index: 1050;
-    transition: var(--transition-base);
+    transition: all 0.3s ease;
 }
 
 /* Brand */
@@ -216,14 +168,15 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* Dropdown Menu */
 .dropdown-menu-custom {
-    background: var(--card-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: var(--glass-border);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 16px;
     padding: 0.5rem;
     min-width: 260px;
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
     margin-top: 0.5rem !important;
     animation: dropdownFadeIn 0.25s ease;
 }
@@ -323,36 +276,10 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     background: linear-gradient(135deg, #64748b, #94a3b8);
 }
 
-/* Theme Toggle Button */
-.btn-nav-theme-toggle {
-    background: var(--card-bg);
-    color: var(--text-light);
-    border: 1px solid var(--glass-border);
-    padding: 0.45rem 0.65rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition-base);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-nav-theme-toggle:hover {
-    background: var(--primary-blue);
-    color: white;
-    transform: rotate(15deg) scale(1.1);
-    box-shadow: var(--hover-shadow);
-}
-
-.dark-theme .btn-nav-theme-toggle i {
-    color: #fbbf24; /* Yellow for sun icon in dark mode */
-}
-
 /* Navbar Actions (right side) */
 .navbar-actions {
     padding-left: 0.75rem;
-    border-left: 1px solid var(--glass-border);
+    border-left: 1px solid rgba(0, 0, 0, 0.06);
     margin-left: 0.5rem;
 }
 
@@ -501,14 +428,14 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Stats Cards ----- */
 .stats-card {
-    background: var(--card-bg);
+    background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
     border-radius: 24px;
     padding: 2rem 1.5rem;
     box-shadow: var(--card-shadow);
-    transition: var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
 }
@@ -536,7 +463,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Action Cards ----- */
 .action-card {
-    background: var(--card-bg);
+    background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
@@ -546,7 +473,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    transition: var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     box-shadow: var(--card-shadow);
     text-decoration: none;
@@ -578,7 +505,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Tablas ----- */
 .table-container {
-    background: var(--card-bg);
+    background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
@@ -652,7 +579,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 }
 
 .form-container {
-    background: var(--card-bg);
+    background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border-radius: 24px;
@@ -685,14 +612,16 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 /* Glass Inputs */
 .form-control,
 .form-select {
-    background: rgba(var(--text-dark-rgb, 255, 255, 255), 0.05) !important;
-    border: 1px solid var(--glass-border) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
     border-radius: 16px;
     padding: 0.85rem 1.2rem;
     color: var(--text-dark);
-    transition: var(--transition-base);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 2px 5px rgba(0, 0, 0, 0.02);
+    font-size: 0.95rem;
 }
 
 .form-control::placeholder {

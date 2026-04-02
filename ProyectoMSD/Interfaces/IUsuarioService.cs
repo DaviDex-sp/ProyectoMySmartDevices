@@ -26,6 +26,5 @@ namespace ProyectoMSD.Interfaces
         string HashPassword(string password);
         Task<bool> ExisteCorreoAsync(string correo);
         Task<bool> ExisteDocumentoAsync(string documento);
-        Task<List<RegistroAcceso>> GetRecentAccessLogsAsync(int? userId, int count);
     }
 }

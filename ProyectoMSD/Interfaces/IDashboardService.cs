@@ -10,5 +10,4 @@ public interface IDashboardService
     /// </summary>
     /// <returns>DashboardMetricsDto con todos los KPIs, gráficos y tablas.</returns>
     Task<DashboardMetricsDto> GetMetricsAsync();
-    Task<DashboardMetricsDto> GetUserMetricsAsync(int userId);
 }
