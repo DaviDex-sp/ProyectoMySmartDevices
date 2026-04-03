@@ -22,6 +22,11 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IDashboardService, ProyectoMSD
 // Registrar la capa de Servicios de Configuraciones
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IConfiguracionService, ProyectoMSD.Services.ConfiguracionService>();
 
+// Registrar la capa de Servicios de Propiedades, Espacios y Dispositivos
+builder.Services.AddScoped<ProyectoMSD.Interfaces.IPropiedadService, ProyectoMSD.Services.PropiedadService>();
+builder.Services.AddScoped<ProyectoMSD.Interfaces.IEspacioService, ProyectoMSD.Services.EspacioService>();
+builder.Services.AddScoped<ProyectoMSD.Interfaces.IDispositivoService, ProyectoMSD.Services.DispositivoService>();
+
 // Configuración de Autenticación Múltiple (Cookies locales + Google)
 builder.Services.AddAuthentication(options =>
     {
