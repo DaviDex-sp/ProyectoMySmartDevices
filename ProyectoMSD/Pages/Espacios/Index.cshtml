@@ -1,8 +1,8 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Espacios.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Espacios";
 }
 
 @section Styles {
@@ -13,12 +13,12 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h2 mb-2 fw-bold">ESPACIOS</h1>
+            <h1 class="h2 mb-2 fw-bold text-main">ESPACIOS</h1>
             <p class="text-muted mb-0">Organiza tus dispositivos por habitaciones</p>
         </div>
         @if (User.IsInRole("Admin"))
         {
-            <a asp-page="Create" class="btn btn-dark">
+            <a asp-page="Create" class="btn btn-primary-custom">
                 <i class="fas fa-plus me-2"></i>Agregar Espacio
             </a>
         }
@@ -26,134 +26,72 @@
 
     <!-- Spaces Grid -->
     <div class="row">
-        @if (Model.Espacio != null && Model.Espacio.Any())
+        @if (Model.EspaciosDto != null && Model.EspaciosDto.Any())
         {
-            @foreach (var espacio in Model.Espacio)
+            @foreach (var espacio in Model.EspaciosDto)
             {
-                <div class="col-lg-4 col-md-6 col-12">
-                    <div class="space-card">
+                <div class="col-lg-4 col-md-6 col-12 mb-4 d-flex">
+                    <div class="space-card glass-card w-100 d-flex flex-column">
                         <!-- Card Header -->
-                        <div class="card-header-custom">
+                        <div class="card-header-custom d-flex justify-content-between mb-3 border-bottom pb-2 border-color-custom">
                             <div>
-                                <h3 class="space-title">@espacio.Nombre</h3>
-                                <div class="property-info">
-                                    @if (espacio.IdPropiedadesNavigation != null)
-                                    {
-                                        <span class="property-badge">
-                                            <i class="fas fa-home me-1"></i>
-                                            Propiedad: @espacio.IdPropiedadesNavigation.Direccion
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="property-badge">
-                                            <i class="fas fa-home me-1"></i>
-                                            Propiedad ID: @espacio.IdPropiedades
-                                        </span>
-                                    }
+                                <h3 class="space-title text-main h5 fw-bold mb-1">@espacio.Nombre</h3>
+                                <div class="property-info small text-muted">
+                                    <i class="fas fa-home me-1"></i>
+                                    @espacio.NombrePropiedad
                                 </div>
                             </div>
                             @if (User.IsInRole("Admin"))
                             {
                                 <div class="action-buttons">
-                                    <a asp-page="./Edit" asp-route-id="@espacio.Id" class="action-btn edit-btn" title="Editar">
+                                    <a asp-page="./Edit" asp-route-id="@espacio.Id" class="text-muted me-2 hover-primary" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a asp-page="./Delete" asp-route-id="@espacio.Id" class="action-btn delete-btn" title="Eliminar">
+                                    <a asp-page="./Delete" asp-route-id="@espacio.Id" class="text-danger hover-danger" title="Eliminar">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             }
                         </div>
                         <!-- Device Stats -->
-                        <div class="device-stats">
-                            <div class="stat-item">
-                                <i class="fas fa-microchip text-danger"></i>
-                                <span>Dispositivos</span>
+                        <div class="device-stats d-flex justify-content-between mb-3 text-muted">
+                            <div class="stat-item text-center">
+                                <div class="small fw-bold">Dispositivos</div>
+                                <i class="fas fa-microchip text-primary-custom"></i>
                             </div>
-                            <div class="stat-item">
-                                @{
-                                    var rand = new Random(espacio.Id);
-                                    int activos = rand.Next(1, 3);
-                                }
-                                <span class="badge bg-danger">@activos Inactivos</span>
+                            <div class="stat-item text-center">
+                                <span class="badge bg-danger rounded-pill">@espacio.DispositivosInactivos Inactivos</span>
                             </div>
-                            <div class="stat-item">
-                                <span class="badge bg-primary">@Model.TotalDispositivos Dispositivos</span>
+                            <div class="stat-item text-center">
+                                <span class="badge bg-primary rounded-pill">@espacio.TotalDispositivos Total</span>
                             </div>
                         </div>
 
-                        <div class="devices-section">
-                            <div class="devices-title">Dispositivos disponibles</div>
+                        <div class="devices-section flex-grow-1 overflow-auto" style="max-height: 200px;">
+                            <div class="devices-title text-muted mb-2 small fw-bold text-uppercase">Dispositivos en espacio</div>
 
-                            @{
-                                var todosDispositivos = Model.GetTodosLosDispositivos();
-                            }
-
-                            @if (todosDispositivos.Any())
+                            @if (espacio.Dispositivos.Any())
                             {
-                                @foreach (var dispositivo in todosDispositivos)
+                                @foreach (var dispositivo in espacio.Dispositivos)
                                 {
-                                    var isActive = dispositivo.Estado.ToLower().Contains("activo") ||
-                                    dispositivo.Estado.ToLower().Contains("encendido") ||
-                                    dispositivo.Estado.ToLower().Contains("en uso") ||
-                                    dispositivo.Estado.ToLower().Contains("trabajando") ||
-                                    dispositivo.Estado.ToLower().Contains("reposo") ||
-                                    dispositivo.Estado.ToLower().Contains("on");
-
-                                    string iconClass = "fas fa-microchip";
-                                    string colorClass = isActive ? "text-secondary" : "text-danger";
-
-                                    if (dispositivo.Tipo.ToLower().Contains("termostato"))
-                                    {
-                                        iconClass = "fas fa-thermometer-half";
-                                        colorClass = isActive ? "text-danger" : "text-muted";
-                                    }
-                                    else if (dispositivo.Tipo.ToLower().Contains("luz"))
-                                    {
-                                        iconClass = "fas fa-lightbulb";
-                                        colorClass = isActive ? "text-warning" : "text-danger";
-                                    }
-                                    else if (dispositivo.Tipo.ToLower().Contains("camara"))
-                                    {
-                                        iconClass = "fas fa-camera";
-                                        colorClass = isActive ? "text-info" : "text-danger";
-                                    }
-                                    else if (dispositivo.Tipo.ToLower().Contains("sensor"))
-                                    {
-                                        iconClass = "fas fa-eye";
-                                        colorClass = isActive ? "text-primary" : "text-danger";
-                                    }
-                                    else if (dispositivo.Tipo.ToLower().Contains("altavoz"))
-                                    {
-                                        iconClass = "fas fa-volume-up";
-                                        colorClass = isActive ? "text-success" : "text-danger";
-                                    }
-                                    else if (dispositivo.Tipo.ToLower().Contains("television") || dispositivo.Tipo.ToLower().Contains("tv"))
-                                    {
-                                        iconClass = "fas fa-tv";
-                                        colorClass = isActive ? "text-dark" : "text-danger";
-                                    }
-
-                                    <div class="device-item @(isActive ? "" : "device-inactive")">
-                                        <div class="device-info">
-                                            <div class="device-icon">
-                                                <i class="@iconClass @colorClass"></i>
+                                    <div class="device-item d-flex justify-content-between align-items-center p-2 mb-2 rounded bg-card-item border-color-custom">
+                                        <div class="device-info d-flex align-items-center">
+                                            <div class="device-icon me-3 ps-1 pe-2 fs-5">
+                                                <i class="@dispositivo.IconClass @dispositivo.TextColorClass"></i>
                                             </div>
-                                            <span class="device-name @(isActive ? "" : "text-muted")">@dispositivo.Nombre</span>
+                                            <span class="device-name fw-medium text-main">@dispositivo.Nombre</span>
                                         </div>
                                         <div class="device-status">
-                                            <span class="status-badge @(isActive ? "status-on" : "status-off")">
+                                            <span class="status-badge badge @(dispositivo.IsActive ? "bg-success" : "bg-danger bg-opacity-75")">
                                                 @dispositivo.Estado.ToUpper()
                                             </span>
-                                            <div class="status-indicator @(isActive ? "indicator-on" : "indicator-off")"></div>
                                         </div>
                                     </div>
                                 }
                             }
                             else
                             {
-                                <p class="text-muted">No hay dispositivos creados en el sistema</p>
+                                <p class="text-muted small fst-italic">No hay dispositivos asignados a este espacio</p>
                             }
                         </div>
                     </div>
@@ -163,13 +101,16 @@
         else
         {
             <div class="col-12">
-                <div class="text-center py-5">
+                <div class="text-center py-5 glass-card rounded-3 mx-auto" style="max-width: 600px;">
                     <i class="fas fa-home fa-4x mb-4 text-muted opacity-50"></i>
-                    <h4 class="mb-3">No hay espacios registrados</h4>
+                    <h4 class="mb-3 text-main">No hay espacios registrados</h4>
                     <p class="mb-4 text-muted">Comienza agregando el primer espacio a tu hogar inteligente.</p>
-                    <a asp-page="Create" class="btn btn-primary btn-lg">
-                        <i class="fas fa-plus me-2"></i>Crear Primer Espacio
-                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-page="Create" class="btn btn-primary-custom btn-lg">
+                            <i class="fas fa-plus me-2"></i>Crear Primer Espacio
+                        </a>
+                    }
                 </div>
             </div>
         }

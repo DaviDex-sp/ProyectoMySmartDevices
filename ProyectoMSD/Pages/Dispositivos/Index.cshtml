@@ -1,8 +1,8 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Dispositivos.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Dispositivos";
 }
 
 @section Styles {
@@ -12,191 +12,155 @@
 <div class="container-fluid px-4 py-4">
 
     <!-- Header de Dispositivos -->
-    <div class="devices-header text-center">
-        <h1 class="display-4 fw-bold mb-3">
-            <i class="fas fa-microchip me-3"></i>Lista de Dispositivos
+    <div class="devices-header text-center mb-4">
+        <h1 class="display-4 fw-bold mb-3 text-main">
+            <i class="fas fa-microchip me-3 text-primary-custom"></i>Lista de Dispositivos
         </h1>
-        <p class="lead mb-0">Control y administración de todos los dispositivos inteligentes</p>
+        <p class="lead mb-0 text-muted">Control y administración de todos los dispositivos inteligentes</p>
     </div>
 
     <!-- Estadísticas Rápidas -->
-    <div class="row mb-4 dispositivos-stats">
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="d-flex justify-content-between">
+    <div class="row pe-0 ps-0 mb-4 dispositivos-stats">
+        <div class="col-md-3 mb-3">
+            <div class="stats-card glass-card">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h3 class="fw-bold text-success">@Model.Dispositivo.Count()</h3>
-                        <p class="text-muted mb-0">Total Dispositivos</p>
+                        <h3 class="fw-bold text-success m-0">@Model.DispositivosDto.Count()</h3>
+                        <p class="text-muted mb-0 small text-uppercase">Total Dispositivos</p>
                     </div>
-                    <i class="fas fa-microchip fa-2x text-success"></i>
+                    <i class="fas fa-microchip fa-2x text-success opacity-50"></i>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="d-flex justify-content-between">
+        <div class="col-md-3 mb-3">
+            <div class="stats-card glass-card">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h3 class="fw-bold text-success">
-                            @Model.Dispositivo.Count(d =>
-                            !string.IsNullOrEmpty(d.Estado) &&
-                            d.Estado.ToLower().Trim() switch
-                            {
-                                "activo" or "active" or "encendido" or "on" or "1" or "habilitado" or "conectado" or "funcionando" => true,
-                                _ => false
-                            })
+                        <h3 class="fw-bold text-success m-0">
+                            @Model.DispositivosDto.Count(d => d.IsActive)
                         </h3>
-                        <p class="text-muted mb-0">Activos</p>
+                        <p class="text-muted mb-0 small text-uppercase">Activos</p>
                     </div>
-                    <i class="fas fa-power-off fa-2x text-success"></i>
+                    <i class="fas fa-power-off fa-2x text-success opacity-50"></i>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="d-flex justify-content-between">
+        <div class="col-md-3 mb-3">
+            <div class="stats-card glass-card">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h3 class="fw-bold text-primary">@Model.Dispositivo.GroupBy(d => d.Tipo).Count()</h3>
-                        <p class="text-muted mb-0">Tipos Diferentes</p>
+                        <h3 class="fw-bold text-primary-custom m-0">@Model.DispositivosDto.GroupBy(d => d.Tipo).Count()</h3>
+                        <p class="text-muted mb-0 small text-uppercase">Tipos Diferentes</p>
                     </div>
-                    <i class="fas fa-layer-group fa-2x text-primary"></i>
+                    <i class="fas fa-layer-group fa-2x text-primary-custom opacity-50"></i>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="d-flex justify-content-between">
+        <div class="col-md-3 mb-3">
+            <div class="stats-card glass-card">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h3 class="fw-bold text-warning">@Model.Dispositivo.GroupBy(d => d.Marca).Count()</h3>
-                        <p class="text-muted mb-0">Marcas</p>
+                        <h3 class="fw-bold text-warning m-0">@Model.DispositivosDto.GroupBy(d => d.Marca).Count()</h3>
+                        <p class="text-muted mb-0 small text-uppercase">Marcas</p>
                     </div>
-                    <i class="fas fa-tags fa-2x text-warning"></i>
+                    <i class="fas fa-tags fa-2x text-warning opacity-50"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Tabla de Dispositivos -->
-    <div class="devices-table-container">
-        <div class="table-header">
+    <div class="devices-table-container glass-card mb-4 p-0 overflow-hidden">
+        <div class="table-header p-4 border-bottom border-color-custom">
             <div class="d-flex justify-content-between align-items-center">
-                <h3 class="mb-0 fw-bold">
-                    <i class="fas fa-list me-2"></i>Lista de Dispositivos
+                <h3 class="mb-0 fw-bold text-main h5">
+                    <i class="fas fa-list me-2"></i>Catálogo de Dispositivos
                 </h3>
-                <span class="badge bg-primary fs-6 px-3 py-2">@Model.Dispositivo.Count() dispositivos registrados</span>
+                <span class="badge bg-primary-custom fs-6 px-3 py-2">@Model.DispositivosDto.Count() registrados</span>
             </div>
         </div>
 
-        @if (Model.Dispositivo != null && Model.Dispositivo.Any())
+        @if (Model.DispositivosDto != null && Model.DispositivosDto.Any())
         {
-            <table class="table custom-table">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-hashtag me-2"></i>ID</th>
-                        <th><i class="fas fa-tag me-2"></i>Tipo</th>
-                        <th><i class="fas fa-signature me-2"></i>Nombre</th>
-                        <th><i class="fas fa-wrench me-2"></i>Usos</th>
-                        <th><i class="fas fa-industry me-2"></i>Marca</th>
-                        <th><i class="fas fa-toggle-on me-2"></i>Estado</th>
-                        <th><i class="fas fa-cogs me-2"></i>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Dispositivo)
-                    {
+            <div class="table-responsive">
+                <table class="table custom-table mb-0 align-middle">
+                    <thead class="bg-card-item text-muted">
                         <tr>
-                            <td>
-                                <span class="badge bg-secondary fs-6">@Html.DisplayFor(modelItem => item.Id)</span>
-                            </td>
-                            <td>
-                                @{
-                                    var tipoClass = item.Tipo?.ToLower() switch
-                                    {
-                                        "camara" or "cámara" => "badge-camara",
-                                        "luz" => "badge-luz",
-                                        "puerta" => "badge-puerta",
-                                        _ => "bg-light text-dark"
-                                    };
-
-                                    var tipoIcon = item.Tipo?.ToLower() switch
-                                    {
-                                        "camara" or "cámara" => "fa-camera",
-                                        "luz" => "fa-lightbulb",
-                                        "puerta" => "fa-door-open",
-                                        _ => "fa-microchip"
-                                    };
-                                }
-                                <span class="badge-device @tipoClass">
-                                    <i class="fas @tipoIcon me-1"></i>
-                                    @Html.DisplayFor(modelItem => item.Tipo)
-                                </span>
-                            </td>
-                            <td>
-                                <div class="fw-bold">@Html.DisplayFor(modelItem => item.Nombre)</div>
-                            </td>
-                            <td>
-                                <span class="text-muted">@Html.DisplayFor(modelItem => item.Usos)</span>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-industry me-2 text-muted"></i>
-                                    <span class="fw-semibold">@Html.DisplayFor(modelItem => item.Marca)</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="device-status">
-                                    @{
-                                        var estadoLower = item.Estado?.ToLower()?.Trim();
-                                        var isActive = estadoLower switch
-                                        {
-                                            "activo" or "active" or "encendido" or "on" or "1" or "habilitado" or "conectado" or "funcionando" => true,
-                                            _ => false
-                                        };
-                                    }
-                                    <div class="status-toggle @(isActive ? "active" : "")"
-                                         title="@(isActive ? "Dispositivo Activo" : "Dispositivo Inactivo")">
-                                    </div>
-                                    <span class="ms-2 fw-semibold @(isActive ? "text-success" : "text-danger")">
-                                        @Html.DisplayFor(modelItem => item.Estado)
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-buttons">
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <a asp-page="./Details" asp-route-id="@item.Id"
-                                           class="btn-action btn-details"
-                                           title="Ver detalles del dispositivo"
-                                           data-bs-toggle="tooltip">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a asp-page="./Edit" asp-route-id="@item.Id"
-                                            class="btn-action btn-edit"
-                                           title="Editar dispositivo"
-                                           data-bs-toggle="tooltip">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a asp-page="./Delete" asp-route-id="@item.Id"
-                                        class="btn-action btn-delete"
-                                        title="Eliminar dispositivo"
-                                        data-bs-toggle="tooltip">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    }
-                                </div>
-                            </td>
+                            <th class="ps-4 fw-medium border-color-custom py-3">ID</th>
+                            <th class="fw-medium border-color-custom py-3">Tipo</th>
+                            <th class="fw-medium border-color-custom py-3">Nombre</th>
+                            <th class="fw-medium border-color-custom py-3 text-center">Estado</th>
+                            <th class="fw-medium border-color-custom py-3">Marca / Usos</th>
+                            <th class="pe-4 fw-medium border-color-custom py-3 text-end">Acciones</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DispositivosDto)
+                        {
+                            <tr class="table-row-hover">
+                                <td class="ps-4 border-color-custom text-muted small">
+                                    #@item.Id
+                                </td>
+                                <td class="border-color-custom">
+                                    <span class="badge-device @item.BadgeClass">
+                                        <i class="@item.IconClass me-1"></i>
+                                        @item.Tipo
+                                    </span>
+                                </td>
+                                <td class="border-color-custom">
+                                    <div class="fw-bold text-main">@item.Nombre</div>
+                                </td>
+                                <td class="border-color-custom text-center">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <form method="post" asp-page-handler="ToggleEstado" class="m-0 p-0">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-link p-0 border-0 me-2 status-btn" title="Alternar Estado">
+                                                <div class="status-toggle @(item.IsActive ? "active" : "")"></div>
+                                            </button>
+                                        </form>
+                                        <span class="badge @(item.IsActive ? "bg-success" : "bg-danger bg-opacity-75") fs-7">
+                                            @item.Estado.ToUpper()
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="border-color-custom text-muted small">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-semibold text-main mb-1"><i class="fas fa-industry me-1 opacity-50"></i>@item.Marca</span>
+                                        <span class="fst-italic opacity-75">@item.Usos</span>
+                                    </div>
+                                </td>
+                                <td class="pe-4 border-color-custom text-end">
+                                    <div class="action-buttons d-inline-flex gap-2">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-page="./Details" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-info" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-page="./Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-primary" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
         else
         {
             <div class="text-center py-5">
-                <i class="fas fa-microchip fa-4x mb-4 text-muted opacity-50"></i>
-                <h4 class="mb-3">No hay dispositivos registrados</h4>
+                <i class="fas fa-microchip fa-4x mb-4 text-muted opacity-25"></i>
+                <h4 class="mb-3 text-main">No hay dispositivos registrados</h4>
                 <p class="mb-4 text-muted">Comienza agregando tu primer dispositivo inteligente al sistema.</p>
-                <a asp-page="Create" class="btn btn-success btn-lg">
+                <a asp-page="Create" class="btn btn-primary-custom btn-lg">
                     <i class="fas fa-plus me-2"></i>Agregar Primer Dispositivo
                 </a>
             </div>
@@ -205,6 +169,6 @@
 </div>
 
 <!-- Botón flotante para crear -->
-<a asp-page="Create" class="create-button" title="Agregar nuevo dispositivo">
+<a asp-page="Create" class="create-button hover-lift" title="Agregar nuevo dispositivo">
     <i class="fas fa-plus"></i>
 </a>
