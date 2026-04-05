@@ -1,7 +1,6 @@
-/* ============================================================
-   DISPOSITIVOS.CSS
-   Estilos exclusivos de las páginas de Dispositivos.
-   ============================================================ */
+/* wwwroot/css/pages/dispositivos.css */
+@import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
+@import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
 /* ----- Index Page ----- */
 .devices-header {
@@ -15,16 +14,39 @@
     overflow: hidden;
 }
 
-.devices-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transform: translate(50px, -50px);
+/* Utilities */
+.text-main { color: var(--text-main); }
+.text-muted { color: var(--text-muted); }
+.border-color-custom { border-color: var(--border-color) !important; }
+.bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.5rem;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary-custom {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: opacity 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+    opacity: 0.9;
+    color: white;
 }
 
 .devices-table-container {
@@ -72,32 +94,71 @@
 }
 
 /* ----- Status Toggle ----- */
+.text-primary-custom { color: var(--primary-color); }
+.bg-primary-custom { background: var(--primary-gradient); color: white; }
+
+/* Custom table tweaks */
+.custom-table {
+    color: var(--text-main);
+}
+.table-row-hover:hover {
+    background-color: var(--bg-card);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Status toggles */
+.status-btn {
+    outline: none;
+}
 .status-toggle {
-    width: 50px;
-    height: 26px;
-    background: #dc3545;
-    border-radius: 50px;
+    width: 40px;
+    height: 20px;
+    background: var(--danger-color);
+    border-radius: 20px;
     position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s;
 }
-
-.status-toggle.active {
-    background: #4a90e2;
-}
-
 .status-toggle::after {
     content: '';
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 22px;
-    height: 22px;
+    width: 16px;
+    height: 16px;
     background: white;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: transform 0.3s;
+}
+.status-toggle.active {
+    background: var(--success-color);
+}
+.status-toggle.active::after {
+    transform: translateX(20px);
 }
 
-.status-toggle.active::after {
-    transform: translateX(24px);
+/* Floating button */
+.create-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s, box-shadow 0.3s;
+    z-index: 1000;
 }
+
+.create-button:hover, .hover-lift:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-lg);
+    color: white;
+}
+
+.fs-7 { font-size: 0.85rem; }

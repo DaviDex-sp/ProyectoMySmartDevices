@@ -1,0 +1,22 @@
+/* wwwroot/css/temaOscuro/variables.css */
+[data-theme="dark"], body.dark-theme {
+    --bg-main: #121212;
+    --bg-card: rgba(30, 30, 30, 0.95);
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.5);
+    --primary-color: #7e57c2;
+    --primary-gradient: linear-gradient(135deg, #7e57c2 0%, #ba68c8 100%);
+    --success-color: #10b981;
+    --danger-color: #ef5350;
+    --warning-color: #ffca28;
+    --info-color: #42a5f5;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(30, 30, 30, 0.8);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(15px);
+}

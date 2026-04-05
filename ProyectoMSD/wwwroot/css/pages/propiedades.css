@@ -1,4 +1,6 @@
 /* wwwroot/css/pages/propiedades.css */
+@import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
+@import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
 /* Contenedor principal */
 .propiedad-details-container {
@@ -6,32 +8,43 @@
     min-height: 100vh;
 }
 
-/* Botón de regreso */
-.prop-btn-back {
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
-}
-.prop-btn-back:hover {
-    background: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+/* Utilities */
+.text-main { color: var(--text-main); }
+.text-muted { color: var(--text-muted); }
+.border-color-custom { border-color: var(--border-color) !important; }
+.bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
+
+.propiedades-container {
+    background: var(--bg-main);
 }
 
-/* Tarjeta Principal */
-.prop-card-main {
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.property-card {
     border-radius: 20px;
     background: var(--card-bg);
     backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
+    box-shadow: var(--shadow-md);
 }
-.prop-card-header {
-    border-radius: 20px 20px 0 0;
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary-custom {
+    background: var(--primary-gradient);
+    color: white;
     border: none;
-}
-.prop-badge-tipo {
-    border-radius: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: opacity 0.3s ease;
 }
 
 /* Cajas de información (Info General) */
@@ -110,17 +123,19 @@
     height: 48px;
     min-width: 48px;
     background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.btn-primary-custom:hover {
+    opacity: 0.9;
     color: white;
 }
 
-/* Botón Editar */
-.prop-btn-edit {
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
-.prop-btn-edit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3) !important;
+.text-primary-custom { color: var(--primary-color); }
+.bg-primary-custom { background: var(--primary-gradient); color: white; }
+
+.property-img-container {
+    height: 250px;
+    background: url('https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') center/cover no-repeat;
 }
 
 /* Tipografía de etiquetas */
@@ -176,3 +191,9 @@
 .theme-text-main {
     color: var(--text-dark);
 }
+
+.property-img-overlay {
+    background: rgba(0,0,0, 0.4);
+}
+
+.hover-danger:hover { background-color: var(--danger-color); color: white; }

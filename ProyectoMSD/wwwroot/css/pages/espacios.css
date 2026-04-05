@@ -1,7 +1,6 @@
-/* ============================================================
-   ESPACIOS.CSS
-   Estilos exclusivos de las páginas de Espacios.
-   ============================================================ */
+/* wwwroot/css/pages/espacios.css */
+@import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
+@import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
 /* ----- Index Page: Space Cards ----- */
 .space-card {
@@ -12,13 +11,28 @@
     background: var(--card-bg);
     backdrop-filter: var(--glass-blur);
     box-shadow: var(--card-shadow);
-    transition: var(--transition-base);
     transition: all 0.3s ease;
 }
 
-.space-card:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+/* Utilities */
+.text-main { color: var(--text-main); }
+.text-muted { color: var(--text-muted); }
+.border-color-custom { border-color: var(--border-color) !important; }
+.bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
+
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.5rem;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
 .card-header-custom {
@@ -42,13 +56,15 @@
     width: 32px;
     height: 32px;
     border-radius: 8px;
+}
+
+.btn-primary-custom {
+    background: var(--primary-gradient);
+    color: white;
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    font-size: 0.875rem;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    transition: opacity 0.3s ease;
 }
 
 .edit-btn {
@@ -183,3 +199,12 @@
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-in-out;
 }
+
+.btn-primary-custom:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.hover-primary:hover { color: var(--primary-color) !important; }
+.hover-danger:hover { color: var(--danger-color) !important; }
+.text-primary-custom { color: var(--primary-color); }

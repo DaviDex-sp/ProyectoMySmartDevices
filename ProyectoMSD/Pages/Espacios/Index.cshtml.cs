@@ -1,81 +1,31 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ProyectoMSD.Modelos;
+using ProyectoMSD.Interfaces;
+using ProyectoMSD.Modelos.DTOs;
 
 namespace ProyectoMSD.Pages.Espacios
 {
     public class IndexModel : PageModel
     {
-        private readonly ProyectoMSD.Modelos.AppDbContext _context;
+        private readonly IEspacioService _espacioService;
+        private readonly IDispositivoService _dispositivoService;
 
-        public IndexModel(ProyectoMSD.Modelos.AppDbContext context)
+        public IndexModel(IEspacioService espacioService, IDispositivoService dispositivoService)
         {
-            _context = context;
+            _espacioService = espacioService;
+            _dispositivoService = dispositivoService;
         }
 
-        public IList<Espacio> Espacio { get; set; } = default!;
+        public IList<EspacioDto> EspaciosDto { get; set; } = new List<EspacioDto>();
         public int TotalDispositivos { get; set; }
-        public Dictionary<int, List<Dispositivo>> DispositivosPorEspacio { get; set; } = new();
+        public List<DispositivoDto> TodosLosDispositivos { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            // Cargar espacios con propiedades y dispositivos
-            Espacio = await _context.Espacios
-                .Include(e => e.IdPropiedadesNavigation)
-                .Include(e => e.Dispositivos)
-                .ToListAsync();
-
-            // Total de dispositivos en el sistema
-            TotalDispositivos = await _context.Dispositivos.CountAsync();
-
-            // Crear diccionario de dispositivos por espacio
-            foreach (var espacio in Espacio)
-            {
-                var dispositivos = espacio.Dispositivos.ToList();
-
-                DispositivosPorEspacio[espacio.Id] = dispositivos;
-            }
-        }
-
-        // Métodos auxiliares
-        public List<Dispositivo> GetDispositivos(int espacioId)
-        {
-            return DispositivosPorEspacio.ContainsKey(espacioId)
-                ? DispositivosPorEspacio[espacioId]
-                : new List<Dispositivo>();
-        }
-
-        public int GetDispositivosActivos(int espacioId)
-        {
-            var dispositivos = GetDispositivos(espacioId);
-            return dispositivos.Count(d =>
-                d.Estado.ToLower().Contains("activo") ||
-                d.Estado.ToLower().Contains("encendido") ||
-                d.Estado.ToLower().Contains("on"));
-        }
-
-        public List<Dispositivo> GetTodosLosDispositivos()
-        {
-            return _context.Dispositivos.ToList();
-        }
-
-        public int GetDispositivosInactivos(int espacioId)
-        {
-            var dispositivos = GetDispositivos(espacioId);
-            return dispositivos.Count(d =>
-                d.Estado.ToLower().Contains("inactivo") ||
-                d.Estado.ToLower().Contains("apagado") ||
-                d.Estado.ToLower().Contains("off"));
-        }
-
-        public int GetTotalDispositivosEspacio(int espacioId)
-        {
-            return GetDispositivos(espacioId).Count;
+            EspaciosDto = await _espacioService.GetEspaciosConDispositivosAsync();
+            TotalDispositivos = await _dispositivoService.GetTotalDispositivosAsync();
+            TodosLosDispositivos = await _dispositivoService.GetDispositivosAsync();
         }
     }
 }

@@ -1,0 +1,22 @@
+/* wwwroot/css/temaClaro/variables.css */
+:root {
+    --bg-main: #f8f9fa;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --text-main: #343a40;
+    --text-muted: #6c757d;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.1);
+    --primary-color: #5e35b1;
+    --primary-gradient: linear-gradient(135deg, #5e35b1 0%, #9c27b0 100%);
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+    --glass-blur: blur(15px);
+}
