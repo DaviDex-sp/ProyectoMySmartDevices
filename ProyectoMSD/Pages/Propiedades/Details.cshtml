@@ -16,7 +16,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="display-5 fw-bold text-dark mb-2">
+                    <h1 class="display-5 fw-bold theme-text-main mb-2">
                         <i class="fas fa-home me-3 text-primary"></i>Detalles de Propiedad
                     </h1>
                     <p class="text-secondary fs-5 mb-0">Información completa de esta ubicación</p>
@@ -70,7 +70,7 @@
                                         </div>
                                         <div>
                                             <small class="text-muted d-block fw-bold text-uppercase prop-label-text">Tipo de Propiedad</small>
-                                            <span class="fw-bold text-dark fs-5">@Model.Propiedade.Tipo</span>
+                                            <span class="fw-bold theme-text-main fs-5">@Model.Propiedade.Tipo</span>
                                         </div>
                                     </li>
                                     <li class="d-flex align-items-center">
@@ -79,7 +79,7 @@
                                         </div>
                                         <div>
                                             <small class="text-muted d-block fw-bold text-uppercase prop-label-text">Número de Pisos</small>
-                                            <span class="fw-bold text-dark fs-5">@Model.Propiedade.Pisos Nivel@(Model.Propiedade.Pisos > 1 ? "es" : "")</span>
+                                            <span class="fw-bold theme-text-main fs-5">@Model.Propiedade.Pisos Nivel@(Model.Propiedade.Pisos > 1 ? "es" : "")</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -102,7 +102,7 @@
                                                     @(usuario?.Nombre?.Substring(0, 1).ToUpper() ?? "U")
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="mb-0 fw-bold text-dark">@(usuario?.Nombre ?? "Usuario Desconocido")</h6>
+                                                    <h6 class="mb-0 fw-bold theme-text-main">@(usuario?.Nombre ?? "Usuario Desconocido")</h6>
                                                     <small class="text-muted">
                                                         <i class="fas fa-envelope me-1"></i>@(usuario?.Correo ?? "Sin correo")
                                                     </small>
@@ -115,7 +115,7 @@
                                 else
                                 {
                                     <div class="text-center text-muted py-5">
-                                        <div class="bg-white rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3 prop-empty-state-icon">
+                                        <div class="rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3 prop-empty-state-icon" style="background: var(--card-bg);">
                                             <i class="fas fa-user-slash fa-2x text-muted opacity-50"></i>
                                         </div>
                                         <p class="mb-0 fw-bold">No hay propietarios asignados.</p>
@@ -155,7 +155,7 @@
                                 else
                                 {
                                     <div class="text-center text-muted py-4">
-                                        <div class="bg-white rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3 prop-icon-box">
+                                        <div class="rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3 prop-icon-box" style="background: var(--card-bg);">
                                             <i class="fas fa-store-slash fa-2x text-muted opacity-50"></i>
                                         </div>
                                         <p class="mb-0 fw-bold">Sin espacios conectados a esta propiedad.</p>

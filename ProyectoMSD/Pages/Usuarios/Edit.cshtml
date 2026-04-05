@@ -88,12 +88,12 @@
                         <span asp-validation-for="Usuario.Rol" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group form-grid-full mb-3" style="max-width: 50%;">
+                    <div class="form-group form-grid-full mb-3 w-50">
                         <label class="form-label">
                             <i class="fas fa-phone me-1 text-primary"></i>Teléfono Móvil
                         </label>
                         <div class="input-group">
-                            <select asp-for="Usuario.PrefijoTelefono" class="form-select text-center" style="max-width: 130px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                            <select asp-for="Usuario.PrefijoTelefono" class="form-select text-center rounded-end-0 mw-130">
                                 <option value="+57">🇨🇴 +57</option>
                                 <option value="+1">🇺🇸 +1</option>
                                 <option value="+52">🇲🇽 +52</option>
@@ -106,7 +106,7 @@
                                 <option value="+593">🇪🇨 +593</option>
                                 <option value="+507">🇵🇦 +507</option>
                             </select>
-                            <input asp-for="Usuario.Telefono" type="number" class="form-control" placeholder="Número de celular" style="border-top-left-radius: 0; border-bottom-left-radius: 0;" />
+                            <input asp-for="Usuario.Telefono" type="number" class="form-control rounded-start-0" placeholder="Número de celular" />
                         </div>
                         <span asp-validation-for="Usuario.PrefijoTelefono" class="text-danger d-block mt-1"></span>
                         <span asp-validation-for="Usuario.Telefono" class="text-danger d-block mt-1"></span>
@@ -160,17 +160,17 @@
                         <div class="alert alert-light border border-primary-subtle text-muted small mb-3">
                             <i class="fas fa-info-circle me-1 text-primary"></i> Haz clic en el mapa interactivo para cambiar la dirección de residencia.
                         </div>
-                        <div id="map" style="height: 300px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1;"></div>
+                        <div id="map" class="map-container-interactive"></div>
                         
                         <input type="hidden" asp-for="Latitud" id="latInput" />
                         <input type="hidden" asp-for="Longitud" id="lngInput" />
 
-                        <div class="input-group mb-2 shadow-sm" style="border-radius: 12px; z-index: 0;">
+                        <div class="input-group mb-2">
                             <div class="form-floating flex-grow-1">
-                                <input type="text" asp-for="DireccionFormateada" class="form-control bg-light" id="direccionInput" placeholder="Dirección" style="border-right: 0; border-top-left-radius: 12px; border-bottom-left-radius: 12px; box-shadow: none;" />
+                                <input type="text" asp-for="DireccionFormateada" class="form-control" id="direccionInput" placeholder="Dirección" />
                                 <label asp-for="DireccionFormateada"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección (Por favor, agrega el número de tu casa)</label>
                             </div>
-                            <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                            <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion">
                                 <i class="fas fa-search me-2"></i> Buscar
                             </button>
                         </div>

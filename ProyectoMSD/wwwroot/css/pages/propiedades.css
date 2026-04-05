@@ -2,7 +2,7 @@
 
 /* Contenedor principal */
 .propiedad-details-container {
-    background: linear-gradient(135deg, #D2EFFE 0%, #D2D9FE 100%);
+    background: var(--primary-gradient);
     min-height: 100vh;
 }
 
@@ -21,7 +21,9 @@
 /* Tarjeta Principal */
 .prop-card-main {
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
 }
 .prop-card-header {
     border-radius: 20px 20px 0 0;
@@ -62,7 +64,7 @@
 
 /* Ítem de la lista de usuarios */
 .prop-user-item {
-    background: white !important;
+    background: var(--card-bg) !important;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
     transition: all 0.2s ease;
@@ -91,7 +93,8 @@
 
 /* Tarjeta individual de espacio */
 .prop-space-card {
-    background: white;
+    background: var(--card-bg);
+    border: var(--glass-border);
     border-radius: 12px;
     transition: all 0.3s ease;
     cursor: default;
@@ -124,4 +127,52 @@
 .prop-label-text {
     font-size: 0.75rem;
     letter-spacing: 0.5px;
+}
+
+/* Modificaciones Modo Oscuro / Glassmorphism para Index */
+.propiedades-main-container {
+    padding-top: 2rem;
+}
+
+.glass-card-header {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+}
+
+.property-glass-card {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    transition: var(--transition-base);
+}
+
+.property-glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.glass-card-inner {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.dark-theme .glass-card-inner {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-stat {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.dark-theme .glass-card-stat {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-text-main {
+    color: var(--text-dark);
 }

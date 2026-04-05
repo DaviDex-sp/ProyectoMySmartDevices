@@ -5,9 +5,10 @@
 
 /* ----- Index Page ----- */
 .devices-header {
-    background: #4a90e2;
-    color: white;
+    background: var(--primary-gradient);
+    color: var(--text-dark);
     padding: 2.5rem 2rem;
+    border: var(--glass-border);
     border-radius: 20px;
     margin-bottom: 2rem;
     position: relative;
@@ -27,32 +28,42 @@
 }
 
 .devices-table-container {
-    background: white;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(127, 176, 105, 0.1);
+    box-shadow: var(--card-shadow);
+    border: var(--glass-border);
 }
 
 /* Table de dispositivos: colores personalizados */
 .devices-table-container .table-header {
-    background: #b3d4fc;
-    color: #2c5aa0;
+    background: rgba(139, 92, 246, 0.05);
+    color: var(--text-dark);
     padding: 1.5rem 2rem;
-    border-bottom: 2px solid #4a90e2;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .devices-table-container .custom-table th {
-    background: #b3d4fc;
-    color: #2c5aa0;
+    background: rgba(139, 92, 246, 0.05);
+    color: var(--text-dark);
 }
 
 .devices-table-container .custom-table td {
-    border-bottom: 1px solid rgba(127, 176, 105, 0.1);
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-dark);
 }
 
 .devices-table-container .custom-table tbody tr:hover {
-    background: rgba(127, 176, 105, 0.05);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.dark-theme .devices-table-container .table-header,
+.dark-theme .devices-table-container .custom-table th {
+    background: rgba(255, 255, 255, 0.05);
+}
+.dark-theme .devices-table-container .custom-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* Stats card con borde izquierdo para dispositivos */

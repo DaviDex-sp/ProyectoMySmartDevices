@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Dispositivos.IndexModel
 
 @{
@@ -114,7 +114,7 @@
                                         "camara" or "cámara" => "badge-camara",
                                         "luz" => "badge-luz",
                                         "puerta" => "badge-puerta",
-                                        _ => "bg-light text-dark"
+                                        _ => "bg-secondary"
                                     };
 
                                     var tipoIcon = item.Tipo?.ToLower() switch

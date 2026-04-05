@@ -9,14 +9,14 @@
     <link href="~/css/pages/soportes.css" rel="stylesheet" />
 }
 
-<div class="main-container" style="max-width: 900px;">
+<div class="main-container max-w-900 mx-auto">
     <div class="form-container">
         <!-- Header -->
         <div class="text-center mb-4 pb-3 border-bottom">
-            <div style="width:80px; height:80px; background: var(--primary-blue, #3b82f6); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; color:white; margin:0 auto 1rem;">
-                <i class="fas fa-headset"></i>
+            <div class="icon-container-lg mx-auto bg-primary text-white mb-3 shadow fs-1">
+                <i class="fas fa-ticket-alt"></i>
             </div>
-            <h1 class="fw-bold" style="color: var(--primary-blue, #3b82f6);">Ticket #@Html.DisplayFor(model => model.Soporte.Id)</h1>
+            <h1 class="fw-bold text-primary">Ticket #@Html.DisplayFor(model => model.Soporte.Id)</h1>
             <p class="text-muted">Detalles completos del ticket de soporte</p>
         </div>
 
@@ -32,16 +32,17 @@
             </div>
             <div class="d-flex justify-content-between align-items-start py-3 border-bottom">
                 <div class="fw-bold"><i class="fas fa-file-alt me-2 text-primary"></i>Descripción</div>
-                <div class="text-muted" style="background: var(--extra-light-blue, #eff6ff); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary-blue, #3b82f6); font-style: italic; flex: 1; margin-left: 1rem;">
+                <div class="text-muted glass-card-inner p-3 rounded-2 border-start border-4 border-primary flex-grow-1 ms-3 fst-italic">
                     @Html.DisplayFor(model => model.Soporte.Descripcion)
                 </div>
             </div>
             <div class="d-flex justify-content-between align-items-start py-3 border-bottom">
                 <div class="fw-bold"><i class="fas fa-reply me-2 text-primary"></i>Respuesta</div>
-                <div class="text-muted" style="flex: 1; margin-left: 1rem;">
+                <div class="text-muted flex-grow-1 ms-3">
                     @if (!String.IsNullOrEmpty(Model.Soporte.Respuesta) && Model.Soporte.Respuesta != "Pendiente")
                     {
-                        <div style="background: var(--extra-light-blue, #eff6ff); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary-blue, #3b82f6); font-style: italic;">
+                        <p class="mb-1">El equipo de soporte no ha respondido.</p>
+                        <div class="glass-card-inner p-3 bg-secondary bg-opacity-10 rounded-2 border-start border-4 border-secondary fst-italic">
                             @Html.DisplayFor(model => model.Soporte.Respuesta)
                         </div>
                     }

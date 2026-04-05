@@ -35,7 +35,7 @@
 
 <div class="container mt-4">
     <div class="d-flex align-items-center mb-4">
-        <a asp-page="./Index" class="btn btn-outline-secondary me-3" style="border-radius: 50%; width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+        <a asp-page="./Index" class="btn btn-outline-secondary me-3 btn-circle-sm">
             <i class="fas fa-arrow-left"></i>
         </a>
         <h2 class="mb-0">
@@ -78,9 +78,9 @@
 
                     <div class="mb-4">
                         <label asp-for="Ubicacione.DireccionFormateada" class="form-label text-muted fw-bold">Dirección</label>
-                        <div class="input-group shadow-sm" style="border-radius: 12px;">
-                            <textarea asp-for="Ubicacione.DireccionFormateada" class="form-control" id="direccionInput" rows="2" placeholder="Haz clic en el mapa o busca..."></textarea>
-                            <button class="btn btn-primary px-3 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                        <div class="input-group mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Ej. Avenida Siempre Viva..." />
+                            <button class="btn btn-primary px-3 rounded-end-3" type="button" id="btnSearchUbicacion">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -91,9 +91,9 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center" style="border-radius: 10px;">
-                                <i class="fas fa-save me-2"></i> Guardar Cambios
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center rounded-3">
+                                <i class="fas fa-save me-2"></i>Actualizar Ubicación
                             </button>
                         </div>
                     </div>

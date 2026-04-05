@@ -12,7 +12,7 @@
 
 <div class="main-container">
     <!-- Property Header -->
-    <div class="profile-header" style="background: linear-gradient(135deg, var(--primary-blue, #3b82f6), var(--secondary-blue, #60a5fa));">
+    <div class="profile-header glass-card-header">
         <div class="d-flex align-items-center">
             <div class="avatar-container me-4" style="position:relative;">
                 <div style="width:100px; height:100px; background:rgba(255,255,255,0.2); border:4px solid rgba(255,255,255,0.3); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:white;">
@@ -72,19 +72,19 @@
                         <div class="alert alert-light border border-primary-subtle text-muted small mb-3">
                             <i class="fas fa-info-circle me-1 text-primary"></i> Haz clic en el mapa interactivo para cambiar la ubicación de esta propiedad.
                         </div>
-                        <div id="map" style="height: 300px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); z-index: 1;"></div>
+                        <div id="map" class="map-container" style="height: 300px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--glass-border); z-index: 1;"></div>
                         
                         <input type="hidden" asp-for="Latitud" id="latInput" />
                         <input type="hidden" asp-for="Longitud" id="lngInput" />
                         @* Binding DireccionFormateada to the text input so it acts like Direccion *@
                         <input type="hidden" asp-for="DireccionFormateada" id="hiddenDireccionFormateada" />
 
-                        <div class="input-group mb-2 shadow-sm" style="border-radius: 12px; z-index: 0;">
+                        <div class="input-group mb-2">
                             <div class="form-floating flex-grow-1">
-                                <input type="text" asp-for="Propiedade.Direccion" class="form-control bg-light" id="direccionInput" placeholder="Dirección" style="border-right: 0; border-top-left-radius: 12px; border-bottom-left-radius: 12px; box-shadow: none;" />
+                                <input type="text" asp-for="Propiedade.Direccion" class="form-control" id="direccionInput" placeholder="Dirección" />
                                 <label asp-for="Propiedade.Direccion"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección Exacta (con número)</label>
                             </div>
-                            <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion" style="border-top-right-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;">
+                            <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion">
                                 <i class="fas fa-search me-2"></i> Buscar
                             </button>
                         </div>
@@ -143,23 +143,23 @@
 
             @if (Model.Propiedade?.UsuariosPropiedades != null && Model.Propiedade.UsuariosPropiedades.Any())
             {
-                <div class="table-responsive mb-4">
-                    <table class="table table-hover">
-                        <thead class="table-light">
+                <div class="table-responsive glass-card-inner rounded-3 mb-4" style="overflow: hidden;">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-borderless" style="background: rgba(0,0,0,0.05);">
                             <tr>
-                                <th>Nombre</th>
-                                <th>Correo</th>
-                                <th>Rol</th>
-                                <th>Acciones</th>
+                                <th class="theme-text-main border-0">Nombre</th>
+                                <th class="theme-text-main border-0">Correo</th>
+                                <th class="theme-text-main border-0">Rol</th>
+                                <th class="theme-text-main border-0">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var up in Model.Propiedade.UsuariosPropiedades)
                             {
                                 <tr>
-                                    <td>@up.IdUsuarioNavigation?.Nombre</td>
-                                    <td>@up.IdUsuarioNavigation?.Correo</td>
-                                    <td><span class="badge bg-info text-dark">@up.RolEnPropiedad</span></td>
+                                    <td class="theme-text-main">@up.IdUsuarioNavigation?.Nombre</td>
+                                    <td class="theme-text-main">@up.IdUsuarioNavigation?.Correo</td>
+                                    <td><span class="badge bg-secondary">@up.RolEnPropiedad</span></td>
                                     <td>
                                         <form method="post" asp-page-handler="RemoveUser" class="d-inline">
                                             <input type="hidden" name="propId" value="@Model.Propiedade.Id" />
@@ -182,16 +182,16 @@
 
             <hr />
             
-            <h5 class="mb-3">Añadir Nuevo Usuario</h5>
+            <h5 class="mb-3 theme-text-main">Añadir Nuevo Usuario</h5>
             <form method="post" asp-page-handler="AddUser" class="row g-3 align-items-end">
                 <input type="hidden" name="propId" value="@Model.Propiedade.Id" />
                 
                 <div class="col-md-5">
-                    <label class="form-label">Correo del Usuario</label>
+                    <label class="form-label theme-text-main">Correo del Usuario</label>
                     <input type="email" name="emailUsuario" class="form-control" placeholder="usuario@correo.com" required />
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Rol Asignado</label>
+                    <label class="form-label theme-text-main">Rol Asignado</label>
                     <select name="rolEnPropiedad" class="form-select">
                         <option value="Residente">Residente</option>
                         <option value="Propietario">Co-Propietario</option>
