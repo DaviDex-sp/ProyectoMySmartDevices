@@ -5,39 +5,59 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="main-container" style="max-width: 900px;">
+    <!-- Header -->
+    <div class="profile-header glass-card-header" style="border-bottom: 2px solid var(--primary-blue, #4a90e2);">
+        <div class="d-flex align-items-center">
+            <div class="position-relative me-4">
+                <div class="device-icon" style="width:100px; height:100px; background:rgba(74, 144, 226, 0.1); border:2px solid rgba(74, 144, 226, 0.3); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:var(--primary-blue, #4a90e2);">
+                    <i class="fas fa-cube"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1">
+                <h2 class="mb-2 theme-text-main">@Html.DisplayFor(model => model.Espacio.Nombre)</h2>
+                <div class="profile-status text-muted">
+                    Gestión detallada de espacio inteligente
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <h4>Espacio</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Espacio.Nombre)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Espacio.Nombre)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Espacio.Señal)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Espacio.Señal)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Espacio.Permisos)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Espacio.Permisos)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Espacio.IdPropiedadesNavigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Espacio.IdPropiedadesNavigation.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Espacio.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <!-- Space Details -->
+    <div class="form-container mt-4">
+        <div class="form-header">
+            <h3><i class="fas fa-info-circle me-2"></i>Información del Espacio</h3>
+        </div>
+        <div class="glass-card-inner p-4 text-center mt-3">
+            <div class="info-grid text-start">
+                <div class="row w-100 m-0">
+                    <div class="col-6 mb-3">
+                        <strong class="d-block theme-text-main"><i class="fas fa-tag me-1"></i>Nombre del Espacio</strong>
+                        <span class="theme-text-main">@Html.DisplayFor(model => model.Espacio.Nombre)</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong class="d-block theme-text-main"><i class="fas fa-wifi me-1"></i>Intensidad de Señal</strong>
+                        <span class="theme-text-main">@Html.DisplayFor(model => model.Espacio.Señal)%</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong class="d-block theme-text-main"><i class="fas fa-shield-alt me-1"></i>Permisos de Acceso</strong>
+                        <span class="theme-text-main">@Html.DisplayFor(model => model.Espacio.Permisos)</span>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <strong class="d-block theme-text-main"><i class="fas fa-home me-1"></i>ID de Propiedad Asociada</strong>
+                        <span class="theme-text-main">@Html.DisplayFor(model => model.Espacio.IdPropiedadesNavigation.Id)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <a asp-page="./Index" class="btn-secondary-custom">
+                <i class="fas fa-arrow-left me-2"></i>Volver a la lista
+            </a>
+            <a asp-page="./Edit" asp-route-id="@Model.Espacio.Id" class="btn-primary-custom">
+                <i class="fas fa-edit me-2"></i>Editar Espacio
+            </a>
+        </div>
+    </div>
 </div>

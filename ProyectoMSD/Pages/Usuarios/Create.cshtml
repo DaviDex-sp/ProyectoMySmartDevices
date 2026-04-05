@@ -5,16 +5,17 @@
         ViewData["Title"] = "Create";
         }
 
-<div class="container py-4">
+<div class="main-container">
     <div class="row">
         <!-- COLUMNA IZQUIERDA: FORMULARIO -->
         <div class="col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Crear Nuevo Usuario</h3>
+            <div class="form-container">
+                <div class="form-header">
+                    <h3><i class="fas fa-user-plus me-2"></i>Crear Nuevo Usuario</h3>
+                    <p>Agrega un nuevo residente o invitado al sistema</p>
                 </div>
 
-                <div class="card-body">
+                <div class="form-content">
                     <form method="post" id="userForm">
                         <!-- MOSTRAR TODOS los errores -->
                         <div asp-validation-summary="All" class="alert alert-danger"></div>
@@ -68,7 +69,7 @@
                                     <i class="fas fa-phone me-1"></i>Teléfono Móvil
                                 </label>
                                 <div class="input-group">
-                                    <select asp-for="Usuario.PrefijoTelefono" class="form-select" style="max-width: 110px;" id="inputPrefijoTelefono">
+                                    <select asp-for="Usuario.PrefijoTelefono" class="form-select mw-130" id="inputPrefijoTelefono">
                                         <option value="+57">🇨🇴 +57</option>
                                         <option value="+1">🇺🇸 +1</option>
                                         <option value="+52">🇲🇽 +52</option>
@@ -154,14 +155,14 @@
 
         <!-- COLUMNA DERECHA: VISTA PREVIA -->
         <div class="col-lg-4">
-            <div class="card shadow position-sticky" style="top: 20px;">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-eye me-2"></i>Vista Previa</h5>
+            <div class="form-container user-sticky-form">
+                <div class="form-header text-center">
+                    <h5><i class="fas fa-eye me-2"></i>Vista Previa</h5>
                 </div>
-                <div class="card-body">
+                <div class="form-content">
                     <div class="d-flex align-items-center">
                         <!-- Avatar dinámico -->
-                        <div class="avatar bg-primary text-white me-3 fs-4 d-flex justify-content-center align-items-center rounded-circle" style="width:50px; height:50px;" id="previewAvatar">
+                        <div class="avatar bg-primary text-white me-3 fs-4 btn-circle-md" id="previewAvatar">
                             ?
                         </div>
 

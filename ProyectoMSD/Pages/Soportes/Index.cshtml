@@ -136,7 +136,7 @@
         @if (Model.Soporte != null && Model.Soporte.Any())
         {
             <div class="mb-4">
-                <div class="row align-items-center bg-white p-3 rounded-3 shadow-sm" style="border-left: 4px solid #3b82f6;">
+                <div class="row align-items-center glass-card-inner border-start border-4 border-primary p-3 rounded-3 shadow-sm">
                     <div class="col-md-5 mb-2 mb-md-0">
                         <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-filter me-2"></i>Filtro Rápido</h5>
                     </div>
@@ -145,7 +145,7 @@
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="fas fa-search text-muted"></i>
                             </span>
-                            <input type="text" id="ticketSearchInput" class="form-control border-start-0 ps-0" placeholder="Buscar por número de ticket (Ej. 1)..." onkeyup="filterTickets()" style="box-shadow: none;">
+                            <input type="text" id="ticketSearchInput" class="form-control border-start-0 ps-0 shadow-none" placeholder="Buscar por número de ticket (Ej. 1)..." onkeyup="filterTickets()">
                         </div>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                                         </span>
                                         @if (esAdmin)
                                         {
-                                            <div class="small text-muted mt-1" style="max-width:200px; white-space:normal;">
+                                            <div class="small text-muted mt-1 text-wrap text-start">
                                                 @item.Respuesta
                                             </div>
                                         }
@@ -227,8 +227,7 @@
                                 {
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
-                                                 style="width:32px;height:32px;font-size:0.8rem;flex-shrink:0;">
+                                            <div class="btn-circle-sm bg-primary text-white me-2 fs-6 flex-shrink-0 fw-bold">
                                                 @(item.IdUsuariosNavigation?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
                                             </div>
                                             <span class="fw-semibold">@(item.IdUsuariosNavigation?.Nombre ?? "Desconocido")</span>

@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ProyectoMSD.Pages.Soportes.CreateModel
 
 @{
@@ -14,21 +14,19 @@
         <div class="col-lg-8">
 
             <!-- Banner: Usuario que envía el ticket (fuera del formulario) -->
-            <div class="alert d-flex align-items-center mb-4"
-                 style="background: linear-gradient(135deg, #1e40af15, #3b82f615); border: 1.5px solid #3b82f6; border-radius: 14px; padding: 1rem 1.5rem;">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3 flex-shrink-0"
-                     style="width:46px; height:46px; font-size:1.2rem; font-weight:700;">
+            <div class="alert d-flex align-items-center mb-4 glass-card-inner border-primary p-3">
+                <div class="rounded-circle bg-primary text-white btn-circle-md flex-shrink-0 fw-bold me-3 fs-5">
                     @(Model.UsuarioSesion?.Nombre?.Substring(0, 1).ToUpper() ?? "?")
                 </div>
                 <div>
-                    <div class="fw-bold" style="color: #1e40af;">
+                    <div class="fw-bold text-primary">
                         <i class="fas fa-user-check me-2"></i>Enviando como: @(Model.UsuarioSesion?.Nombre ?? "Desconocido")
                     </div>
                     <div class="small text-muted">
                         @(Model.UsuarioSesion?.Correo ?? "") &nbsp;·&nbsp; Sesión activa
                     </div>
                 </div>
-                <span class="badge bg-primary ms-auto px-3 py-2" style="font-size:0.75rem;">
+                <span class="badge bg-primary ms-auto px-3 py-2 small">
                     <i class="fas fa-lock me-1"></i>Asignado automáticamente
                 </span>
             </div>

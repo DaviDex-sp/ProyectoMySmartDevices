@@ -15,7 +15,12 @@
     <!-- Sección para CSS específico de cada página -->
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+@{
+    var themePrefCookie = Context.Request.Cookies["ThemePref"];
+    var bodyClass = themePrefCookie == "dark" ? "dark-theme" : "";
+    var iconClass = themePrefCookie == "dark" ? "fa-sun" : "fa-moon";
+}
+<body class="@bodyClass">
     <header>
         @if (ViewData["ShowNavbar"] == null || (ViewData["ShowNavbar"] as bool? == true))
         {
@@ -138,9 +143,9 @@
 
                         <!-- Controles de la derecha -->
                         <div class="d-flex align-items-center gap-2 navbar-actions">
-                            <!-- Tema Toggle -->
+                            <!-- Tema Toggle (Modo Oscuro) -->
                             <button id="theme-toggle" class="btn btn-nav-theme-toggle" title="Cambiar modo de color">
-                                <i class="fas fa-moon"></i>
+                                <i class="fas @iconClass"></i>
                             </button>
 
                             <!-- Notificaciones -->

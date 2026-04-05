@@ -38,6 +38,11 @@
     --support-red: #ef4444;
     --support-orange: #f59e0b;
     --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Gradientes Semánticos para Cajas de Alerta/Headers */
+    --danger-gradient: linear-gradient(135deg, rgba(239, 68, 68, 0.85), rgba(185, 28, 28, 0.9));
+    --success-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.85), rgba(4, 120, 87, 0.9));
+    --warning-gradient: linear-gradient(135deg, rgba(245, 158, 11, 0.85), rgba(180, 83, 9, 0.9));
 }
 
 /* ----- Modo Oscuro (Vanguardista Negro Puro) ----- */
@@ -54,6 +59,94 @@
     --card-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
     --hover-shadow: 0 20px 50px rgba(139, 92, 246, 0.3);
     --primary-gradient: linear-gradient(135deg, #0f172a 0%, #000000 100%);
+    --danger-gradient: linear-gradient(135deg, rgba(220, 38, 38, 0.7), rgba(153, 27, 27, 0.85));
+    --success-gradient: linear-gradient(135deg, rgba(5, 150, 105, 0.7), rgba(6, 78, 59, 0.85));
+    --warning-gradient: linear-gradient(135deg, rgba(217, 119, 6, 0.7), rgba(146, 64, 14, 0.85));
+}
+
+/* ----- Clases Utilitarias (Reemplazo de Inline Styles) ----- */
+.map-container-interactive {
+    height: 300px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid var(--glass-border);
+    z-index: 1;
+}
+
+.btn-circle-sm {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-circle-md {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-container-lg {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.bg-gradient-danger {
+    background: var(--danger-gradient) !important;
+}
+
+.bg-gradient-success {
+    background: var(--success-gradient) !important;
+}
+
+.bg-gradient-warning {
+    background: var(--warning-gradient) !important;
+}
+
+.bg-gradient-primary {
+    background: var(--primary-gradient) !important;
+}
+
+.min-vh-80 {
+    min-height: 80vh !important;
+}
+
+.text-inherit { color: inherit !important; }
+.resize-none { resize: none !important; }
+.mw-130 { max-width: 130px !important; }
+.mw-150 { max-width: 150px !important; }
+.mw-200 { max-width: 200px !important; }
+.mw-900 { max-width: 900px !important; }
+.border-dashed { border-style: dashed !important; }
+
+.min-vh-80 {
+    min-height: 80vh !important;
+}
+
+.text-inherit { color: inherit !important; }
+.resize-none { resize: none !important; }
+.mw-130 { max-width: 130px !important; }
+.mw-150 { max-width: 150px !important; }
+.mw-200 { max-width: 200px !important; }
+.mw-900 { max-width: 900px !important; }
+
+.min-vh-80 {
+    min-height: 80vh !important;
 }
 
 /* ----- Reset y Base ----- */

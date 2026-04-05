@@ -2,6 +2,12 @@
 @import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
 @import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
+/* Contenedor principal */
+.propiedad-details-container {
+    background: var(--primary-gradient);
+    min-height: 100vh;
+}
+
 /* Utilities */
 .text-main { color: var(--text-main); }
 .text-muted { color: var(--text-muted); }
@@ -21,6 +27,9 @@
 
 .property-card {
     border-radius: 20px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
     box-shadow: var(--shadow-md);
 }
 
@@ -38,6 +47,84 @@
     transition: opacity 0.3s ease;
 }
 
+/* Cajas de información (Info General) */
+.prop-info-box {
+    background: rgba(52, 152, 219, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(52, 152, 219, 0.1);
+    height: 100%;
+}
+.prop-info-title {
+    border-bottom: 2px solid rgba(52, 152, 219, 0.2);
+}
+
+/* Iconos circulares generales */
+.prop-icon-box {
+    width: 45px;
+    height: 45px;
+}
+
+/* Cajas de usuarios (Propietarios) */
+.prop-users-box {
+    background: rgba(46, 204, 113, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(46, 204, 113, 0.1);
+    height: 100%;
+}
+.prop-users-title {
+    border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+}
+
+/* Ítem de la lista de usuarios */
+.prop-user-item {
+    background: var(--card-bg) !important;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease;
+}
+.prop-user-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Estado de listado vacío */
+.prop-empty-state-icon {
+    width: 70px;
+    height: 70px;
+}
+
+/* Cajas de Espacios Conectados */
+.prop-spaces-box {
+    background: rgba(155, 89, 182, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(155, 89, 182, 0.1);
+}
+.prop-spaces-title {
+    border-bottom: 2px solid rgba(155, 89, 182, 0.2);
+    color: #8e44ad;
+}
+
+/* Tarjeta individual de espacio */
+.prop-space-card {
+    background: var(--card-bg);
+    border: var(--glass-border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.prop-space-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(142, 68, 173, 0.15) !important;
+}
+
+/* Icono del espacio */
+.prop-space-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
 .btn-primary-custom:hover {
     opacity: 0.9;
     color: white;
@@ -49,6 +136,60 @@
 .property-img-container {
     height: 250px;
     background: url('https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') center/cover no-repeat;
+}
+
+/* Tipografía de etiquetas */
+.prop-label-text {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+/* Modificaciones Modo Oscuro / Glassmorphism para Index */
+.propiedades-main-container {
+    padding-top: 2rem;
+}
+
+.glass-card-header {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+}
+
+.property-glass-card {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    transition: var(--transition-base);
+}
+
+.property-glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.glass-card-inner {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.dark-theme .glass-card-inner {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-stat {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.dark-theme .glass-card-stat {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.theme-text-main {
+    color: var(--text-dark);
 }
 
 .property-img-overlay {

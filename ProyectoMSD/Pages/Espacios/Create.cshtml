@@ -5,15 +5,16 @@
     ViewData["Title"] = "Crear Espacio";
 }
 
-<div class="container py-4">
+<div class="main-container">
     <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"><i class="fas fa-cube me-2"></i>Crear Nuevo Espacio</h3>
+        <div class="col-lg-8">
+            <div class="form-container">
+                <div class="form-header">
+                    <h3><i class="fas fa-cube me-2"></i>Crear Nuevo Espacio</h3>
+                    <p>Registra un nuevo espacio en tu propiedad</p>
                 </div>
 
-                <div class="card-body">
+                <div class="form-content">
                     <form method="post">
                         <div asp-validation-summary="All" class="alert alert-danger"></div>
 
@@ -65,7 +66,7 @@
                             <a asp-page="Index" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-1"></i>Volver
                             </a>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-primary px-4">
                                 <i class="fas fa-save me-1"></i>Crear Espacio
                             </button>
                         </div>

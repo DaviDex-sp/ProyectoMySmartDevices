@@ -2,6 +2,18 @@
 @import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
 @import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
+/* ----- Index Page: Space Cards ----- */
+.space-card {
+    border: var(--glass-border);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
 /* Utilities */
 .text-main { color: var(--text-main); }
 .text-muted { color: var(--text-muted); }
@@ -23,6 +35,29 @@
     box-shadow: var(--shadow-lg);
 }
 
+.card-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.space-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+/* Action buttons for spaces */
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+
 .btn-primary-custom {
     background: var(--primary-gradient);
     color: white;
@@ -30,6 +65,139 @@
     border-radius: 8px;
     padding: 0.5rem 1rem;
     transition: opacity 0.3s ease;
+}
+
+.edit-btn {
+    background: rgba(120, 120, 120, 0.1);
+    color: var(--text-light);
+}
+
+.edit-btn:hover {
+    background: #0d6efd;
+    color: white;
+}
+
+.delete-btn {
+    background: rgba(120, 120, 120, 0.1);
+    color: var(--text-light);
+}
+
+.delete-btn:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* ----- Device Stats (in Space card) ----- */
+.device-stats {
+    background: rgba(120, 120, 120, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.devices-title {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+/* ----- Device Item (in Space card) ----- */
+.device-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.device-item:last-child {
+    border-bottom: none;
+}
+
+.device-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.space-card .device-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    background: none;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    margin-bottom: 0;
+    backdrop-filter: none;
+}
+
+.device-name {
+    font-size: 0.875rem;
+    color: var(--text-dark);
+}
+
+.space-card .device-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ----- Status Badges ----- */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-on {
+    background-color: #198754 !important;
+    color: white !important;
+}
+
+.status-off {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.indicator-on {
+    background-color: #198754 !important;
+}
+
+.indicator-off {
+    background-color: #dc3545 !important;
+}
+
+/* Hover especial para el botón "Agregar Espacio" */
+.btn-dark:hover {
+    position: relative;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
 }
 
 .btn-primary-custom:hover {

@@ -21,7 +21,7 @@
             @if (Model.CantidadNoLeidas > 0)
             {
                 <span class="notif-count-badge">
-                    <i class="fas fa-circle" style="font-size: 0.5rem;"></i>
+                    <i class="fas fa-circle small me-1"></i>
                     @Model.CantidadNoLeidas sin leer
                 </span>
             }
@@ -66,10 +66,10 @@
                     
                     @if (!string.IsNullOrEmpty(notif.RutaRedireccion))
                     {
-                        <a href="/Notificaciones/Index?handler=Ir&id=@notif.Id" class="notif-content text-decoration-none" style="display: block; color: inherit;">
+                        <a href="/Notificaciones/Index?handler=Ir&id=@notif.Id" class="notif-content text-decoration-none d-block text-dark">
                             <div class="notif-title">
                                 @notif.Titulo
-                                <i class="fas fa-external-link-alt ms-2 text-muted" style="font-size: 0.75rem;"></i>
+                                <i class="fas fa-external-link-alt ms-2 text-muted small"></i>
                             </div>
                             <div class="notif-message">@notif.Mensaje</div>
                             <div class="notif-time">

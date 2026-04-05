@@ -2,6 +2,18 @@
 @import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
 @import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
+/* ----- Index Page ----- */
+.devices-header {
+    background: var(--primary-gradient);
+    color: var(--text-dark);
+    padding: 2.5rem 2rem;
+    border: var(--glass-border);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
 /* Utilities */
 .text-main { color: var(--text-main); }
 .text-muted { color: var(--text-muted); }
@@ -37,6 +49,51 @@
     color: white;
 }
 
+.devices-table-container {
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    border: var(--glass-border);
+}
+
+/* Table de dispositivos: colores personalizados */
+.devices-table-container .table-header {
+    background: rgba(139, 92, 246, 0.05);
+    color: var(--text-dark);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.devices-table-container .custom-table th {
+    background: rgba(139, 92, 246, 0.05);
+    color: var(--text-dark);
+}
+
+.devices-table-container .custom-table td {
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-dark);
+}
+
+.devices-table-container .custom-table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.dark-theme .devices-table-container .table-header,
+.dark-theme .devices-table-container .custom-table th {
+    background: rgba(255, 255, 255, 0.05);
+}
+.dark-theme .devices-table-container .custom-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Stats card con borde izquierdo para dispositivos */
+.dispositivos-stats .stats-card {
+    border-left: 4px solid #4a90e2;
+}
+
+/* ----- Status Toggle ----- */
 .text-primary-custom { color: var(--primary-color); }
 .bg-primary-custom { background: var(--primary-gradient); color: white; }
 
