@@ -1,5 +1,6 @@
 @page
 @model ProyectoMSD.Pages.Propiedades.CreateModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
         @{
         ViewData["Title"] = "Create";
@@ -14,8 +15,7 @@
                     <p>Registra una nueva ubicación para tu hogar inteligente</p>
                 </div>
 
-                <!-- Leaflet CSS -->
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+                <!-- Google Maps will be loaded below -->
 
                 <div class="form-content">
                     <form method="post">
@@ -34,14 +34,9 @@
                             <input type="hidden" asp-for="Latitud" id="latInput" />
                             <input type="hidden" asp-for="Longitud" id="lngInput" />
 
-                            <div class="input-group mb-2">
-                                <div class="form-floating flex-grow-1">
-                                    <input type="text" asp-for="Propiedade.Direccion" class="form-control" id="direccionInput" placeholder="Dirección" />
-                                    <label asp-for="Propiedade.Direccion"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección Exacta (con número)</label>
-                                </div>
-                                <button class="btn btn-primary px-4 d-flex align-items-center justify-content-center" type="button" id="btnSearchUbicacion">
-                                    <i class="fas fa-search me-2"></i> Buscar
-                                </button>
+                            <div class="form-floating mb-2">
+                                <input type="text" asp-for="Propiedade.Direccion" class="form-control shadow-sm rounded-3" id="direccionInput" placeholder="Dirección" />
+                                <label asp-for="Propiedade.Direccion"><i class="fas fa-map-pin me-2 text-primary"></i>Dirección (Escribe y escoge de la lista)</label>
                             </div>
                             <span asp-validation-for="Propiedade.Direccion" class="text-danger fw-bold"></span>
                             <div id="loadingAddress" class="form-text text-primary d-none mt-2">
@@ -108,7 +103,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleCloud:MapsApiKey"]&libraries=places"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -126,116 +121,89 @@
             // -- Inicialización del Mapa --
             const defaultLat = 4.6097;
             const defaultLng = -74.0817;
-            const map = L.map('map').setView([defaultLat, defaultLng], 12);
-            let currentMarker = null;
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: { lat: defaultLat, lng: defaultLng },
+                mapTypeControl: false,
+                streetViewControl: false
+            });
 
-            map.locate({setView: true, maxZoom: 14});
+            const currentMarker = new google.maps.Marker({
+                position: { lat: defaultLat, lng: defaultLng },
+                map: map,
+                draggable: true
+            });
 
             const latInput = document.getElementById('latInput');
             const lngInput = document.getElementById('lngInput');
             const direccionInput = document.getElementById('direccionInput');
             const loadingAddress = document.getElementById('loadingAddress');
-            const btnSearch = document.getElementById('btnSearchUbicacion');
+            const geocoder = new google.maps.Geocoder();
 
-            // --- Geocoding de Búsqueda de Texto ---
-            btnSearch.addEventListener('click', async function() {
-                const query = direccionInput.value.trim();
-                if (!query) return;
-
-                loadingAddress.classList.remove('d-none');
-                try {
-                    let cleanQuery = query.replace(/#/g, '');
-                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cleanQuery)}&limit=1&countrycodes=co`;
-                    
-                    const response = await fetch(url);
-                    const data = await response.json();
-                    
-                    if (data && data.length > 0) {
-                        const result = data[0];
-                        const lat = parseFloat(result.lat);
-                        const lng = parseFloat(result.lon);
-                        
-                        map.setView([lat, lng], 16);
-                        
-                        if (currentMarker) {
-                            currentMarker.setLatLng([lat, lng]);
-                        } else {
-                            currentMarker = L.marker([lat, lng]).addTo(map);
-                        }
-                        
-                        latInput.value = lat.toFixed(8).replace(',', '.');
-                        lngInput.value = lng.toFixed(8).replace(',', '.');
-                        direccionInput.value = result.display_name;
-                    } else {
-                        alert("No se encontró la dirección. Intente ser más específico.");
-                    }
-                } catch (error) {
-                    console.error("Geocoding err:", error);
-                } finally {
-                    loadingAddress.classList.add('d-none');
-                }
+            // Configurar Autocomplete nativo de Google Places
+            const autocomplete = new google.maps.places.Autocomplete(direccionInput, {
+                componentRestrictions: { country: ["co", "us"] },
+                fields: ["geometry", "formatted_address"]
             });
 
-            direccionInput.addEventListener('keypress', function(e) {
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                if (!place.geometry || !place.geometry.location) {
+                    return; // Enter presionado sin preselección
+                }
+                
+                loadingAddress.classList.add('d-none');
+                map.setCenter(place.geometry.location);
+                map.setZoom(16);
+                currentMarker.setPosition(place.geometry.location);
+                
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                
+                latInput.value = lat.toFixed(8).replace(',', '.');
+                lngInput.value = lng.toFixed(8).replace(',', '.');
+                direccionInput.value = place.formatted_address;
+            });
+
+
+
+            direccionInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    btnSearch.click();
                 }
             });
 
             // --- Evento Click Normal ---
-            map.on('click', function(e) {
-                const lat = e.latlng.lat;
-                const lng = e.latlng.lng;
-
-                if (currentMarker) {
-                    currentMarker.setLatLng(e.latlng);
-                } else {
-                    currentMarker = L.marker(e.latlng).addTo(map);
-                }
-
+            map.addListener('click', function(e) {
+                const lat = e.latLng.lat();
+                const lng = e.latLng.lng();
+                currentMarker.setPosition(e.latLng);
                 latInput.value = lat.toFixed(8).replace(',', '.');
                 lngInput.value = lng.toFixed(8).replace(',', '.');
-
+                obtenerDireccion(lat, lng);
+            });
+            
+            currentMarker.addListener('dragend', function(e) {
+                const lat = e.latLng.lat();
+                const lng = e.latLng.lng();
+                latInput.value = lat.toFixed(8).replace(',', '.');
+                lngInput.value = lng.toFixed(8).replace(',', '.');
                 obtenerDireccion(lat, lng);
             });
 
-            async function obtenerDireccion(lat, lng) {
+            function obtenerDireccion(lat, lng) {
                 loadingAddress.classList.remove('d-none');
-                
-                try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
-                    const data = await response.json();
-                    
-                    if (data && data.address) {
-                        let calle = data.address.road || '';
-                        let barrio = data.address.neighbourhood || data.address.suburb || '';
-                        let ciudad = data.address.city || data.address.town || '';
-                        
-                        let direccionLimpia = [calle, barrio, ciudad].filter(Boolean).join(', ');
-                        if (!calle && data.display_name) {
-                            direccionLimpia = data.display_name.split(',').slice(0, 3).join(', ');
-                        }
-
-                        direccionInput.value = direccionLimpia;
+                geocoder.geocode({ location: { lat: lat, lng: lng } }, function(results, status) {
+                    loadingAddress.classList.add('d-none');
+                    if (status === 'OK' && results[0]) {
+                        direccionInput.value = results[0].formatted_address;
                         direccionInput.focus();
                     } else {
                         direccionInput.value = "";
                     }
-                } catch (error) {
-                    console.error("Geocoding err:", error);
-                    direccionInput.value = "";
-                } finally {
-                    loadingAddress.classList.add('d-none');
-                }
+                });
             }
-            
-            setTimeout(() => { map.invalidateSize(); }, 300);
         });
     </script>
 }

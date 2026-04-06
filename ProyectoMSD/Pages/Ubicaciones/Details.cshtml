@@ -1,13 +1,13 @@
 @page
 @model ProyectoMSD.Pages.Ubicaciones.DetailsModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     ViewData["Title"] = "Detalles de la Ubicación";
 }
 
 @section Styles {
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Google Maps Static Styles CSS -->
     <style>
         #staticMap {
             height: 300px;
@@ -79,32 +79,30 @@
 </div>
 
 @section Scripts {
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleCloud:MapsApiKey"]"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const lat = "@Html.Raw(Model.Ubicacione?.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture))";
-            const lng = "@Html.Raw(Model.Ubicacione?.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture))";
+            const lat = parseFloat("@Html.Raw(Model.Ubicacione?.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture))") || 4.6097;
+            const lng = parseFloat("@Html.Raw(Model.Ubicacione?.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture))") || -74.0817;
             
-            const map = L.map('staticMap', {
-                center: [parseFloat(lat), parseFloat(lng)],
+            const map = new google.maps.Map(document.getElementById('staticMap'), {
+                center: { lat: lat, lng: lng },
                 zoom: 16,
-                zoomControl: true,
-                dragging: false,      // Read-only impression
-                scrollWheelZoom: false
+                disableDefaultUI: true,
+                gestureHandling: 'none'
             });
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(map);
+            const marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map
+            });
 
-            L.marker([parseFloat(lat), parseFloat(lng)]).addTo(map)
-                .bindPopup("<b>Ubicación del Dispositivo/Espacio</b><br/>" + "@Html.Raw(Model.Ubicacione?.DireccionFormateada?.Replace("\"", ""))")
-                .openPopup();
-
-            setTimeout(() => { map.invalidateSize(); }, 300);
+            const infoWindow = new google.maps.InfoWindow({
+                content: "<b>Ubicación del Dispositivo/Espacio</b><br/>@Html.Raw(Model.Ubicacione?.DireccionFormateada?.Replace("\"", "\\\""))"
+            });
+            
+            infoWindow.open(map, marker);
         });
     </script>
 }
