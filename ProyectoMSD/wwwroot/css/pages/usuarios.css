@@ -1,5 +1,10 @@
 /* USUARIOS.CSS - Negro Puro & Glassmorphism */
 
+/* Utilidad de texto que se ajusta automática y nativamente al tema (oscuro/claro) */
+.text-theme-dynamic {
+    color: var(--text-dark) !important;
+}
+
 .usuarios-header-banner {
     background: var(--primary-gradient);
     border: var(--glass-border);
