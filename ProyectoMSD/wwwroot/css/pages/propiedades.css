@@ -3,10 +3,7 @@
 @import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
 /* Contenedor principal */
-.propiedad-details-container {
-    background: var(--primary-gradient);
-    min-height: 100vh;
-}
+
 
 /* Utilities */
 .text-main { color: var(--text-main); }
