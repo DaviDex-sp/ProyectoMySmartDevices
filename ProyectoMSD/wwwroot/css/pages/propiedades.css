@@ -37,7 +37,7 @@
 
 .btn-primary-custom {
     background: var(--primary-gradient);
-    color: white;
+    color: var(--text-dark);
     border: none;
     border-radius: 8px;
     padding: 0.5rem 1rem;
@@ -128,7 +128,7 @@
 }
 
 .text-primary-custom { color: var(--primary-color); }
-.bg-primary-custom { background: var(--primary-gradient); color: white; }
+.bg-primary-custom { background: var(--primary-gradient); color: var(--text-dark); }
 
 .property-img-container {
     height: 250px;
