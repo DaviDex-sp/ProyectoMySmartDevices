@@ -27,6 +27,9 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IPropiedadService, ProyectoMSD
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IEspacioService, ProyectoMSD.Services.EspacioService>();
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IDispositivoService, ProyectoMSD.Services.DispositivoService>();
 
+// Registrar el servicio MQTT para que corra en segundo plano
+builder.Services.AddHostedService<ProyectoMSD.Services.MqttDomoticaService>();
+
 // Configuración de Autenticación Múltiple (Cookies locales + Google)
 builder.Services.AddAuthentication(options =>
     {
