@@ -98,6 +98,8 @@ namespace ProyectoMSD.Pages
                 ModelState.AddModelError("Usuario.Nombre", "El nombre debe tener al menos 2 caracteres.");
             else if (Usuario.Nombre.Length > 100)
                 ModelState.AddModelError("Usuario.Nombre", "El nombre no puede exceder 100 caracteres.");
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(Usuario.Nombre, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$"))
+                ModelState.AddModelError("Usuario.Nombre", "El nombre solo puede contener letras y espacios.");
 
             if (string.IsNullOrWhiteSpace(Usuario.Correo))
                 ModelState.AddModelError("Usuario.Correo", "El correo es obligatorio.");
@@ -123,6 +125,8 @@ namespace ProyectoMSD.Pages
                 ModelState.AddModelError("Usuario.Telefono", "El teléfono debe ser un número válido.");
             else if (Usuario.Telefono.Trim().Length < 7)
                 ModelState.AddModelError("Usuario.Telefono", "El teléfono debe tener al menos 7 dígitos.");
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(Usuario.Telefono.Trim(), @"^\d+$"))
+                ModelState.AddModelError("Usuario.Telefono", "El teléfono solo puede contener números.");
 
             if (string.IsNullOrWhiteSpace(DireccionFormateada))
                 ModelState.AddModelError("DireccionFormateada", "Debes seleccionar tu ubicación en el mapa y completar la dirección.");
@@ -133,6 +137,8 @@ namespace ProyectoMSD.Pages
             {
                 if (Usuario.Documento.Length < 6)
                     ModelState.AddModelError("Usuario.Documento", "El documento debe tener al menos 6 dígitos.");
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(Usuario.Documento, @"^\d+$"))
+                    ModelState.AddModelError("Usuario.Documento", "El documento solo puede contener números.");
                 else
                 {
                     var existeDocumento = await _usuarioService.ExisteDocumentoAsync(Usuario.Documento);
@@ -147,6 +153,8 @@ namespace ProyectoMSD.Pages
                     ModelState.AddModelError("Usuario.Rut", "El RUT debe tener al menos 8 caracteres.");
                 else if (Usuario.Rut.Length > 50)
                     ModelState.AddModelError("Usuario.Rut", "El RUT no puede exceder 50 caracteres.");
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(Usuario.Rut, @"^[a-zA-Z0-9\-]+$"))
+                    ModelState.AddModelError("Usuario.Rut", "El RUT solo puede contener caracteres alfanuméricos y guiones.");
             }
 
             if (string.IsNullOrWhiteSpace(Usuario.Rol))
@@ -155,11 +163,35 @@ namespace ProyectoMSD.Pages
 
         private void LimpiarDatos()
         {
-            Usuario.Nombre = Usuario.Nombre?.Trim();
+            Usuario.Nombre = SanitizarTextoBasico(Usuario.Nombre);
             Usuario.Correo = Usuario.Correo?.Trim().ToLower();
-            Usuario.Rut = string.IsNullOrWhiteSpace(Usuario.Rut) ? null : Usuario.Rut.Trim();
-            Usuario.Clave = Usuario.Clave?.Trim();
-            DireccionFormateada = DireccionFormateada?.Trim();
+            Usuario.Rut = string.IsNullOrWhiteSpace(Usuario.Rut) ? null : SanitizarAlfanumerico(Usuario.Rut);
+            Usuario.Documento = string.IsNullOrWhiteSpace(Usuario.Documento) ? null : SanitizarSoloNumeros(Usuario.Documento);
+            Usuario.Telefono = string.IsNullOrWhiteSpace(Usuario.Telefono) ? null : SanitizarSoloNumeros(Usuario.Telefono);
+            Usuario.Clave = Usuario.Clave?.Trim(); 
+            DireccionFormateada = SanitizarTextoBasico(DireccionFormateada);
+        }
+
+        private string? SanitizarTextoBasico(string? input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return input;
+            var limpio = input.Trim();
+            // Remover posibles etiquetas HTML/Script para evitar XSS persistente
+            return System.Text.RegularExpressions.Regex.Replace(limpio, "<.*?>", string.Empty);
+        }
+
+        private string? SanitizarAlfanumerico(string? input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return input;
+            var limpio = input.Trim();
+            return System.Text.RegularExpressions.Regex.Replace(limpio, "[^a-zA-Z0-9\\-]", string.Empty);
+        }
+
+        private string? SanitizarSoloNumeros(string? input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return input;
+            var limpio = input.Trim();
+            return System.Text.RegularExpressions.Regex.Replace(limpio, "[^0-9]", string.Empty);
         }
 
         private bool EsEmailValido(string email)
