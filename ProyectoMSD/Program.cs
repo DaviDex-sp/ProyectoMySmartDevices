@@ -27,6 +27,9 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IPropiedadService, ProyectoMSD
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IEspacioService, ProyectoMSD.Services.EspacioService>();
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IDispositivoService, ProyectoMSD.Services.DispositivoService>();
 
+// Registrar la capa de Servicios del Módulo de Soporte (sanitización + CRUD)
+builder.Services.AddScoped<ProyectoMSD.Interfaces.ISoporteService, ProyectoMSD.Services.SoporteService>();
+
 // Registrar el servicio MQTT para que corra en segundo plano
 builder.Services.AddHostedService<ProyectoMSD.Services.MqttDomoticaService>();
 

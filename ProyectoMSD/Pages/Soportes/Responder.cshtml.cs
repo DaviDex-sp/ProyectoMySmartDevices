@@ -2,18 +2,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using ProyectoMSD.Interfaces;
 using ProyectoMSD.Modelos;
-using System.Threading.Tasks;
 
 namespace ProyectoMSD.Pages.Soportes
 {
     [Authorize(Roles = "Admin")]
     public class ResponderModel : PageModel
     {
+        private readonly ISoporteService _soporteService;
         private readonly AppDbContext _context;
 
-        public ResponderModel(AppDbContext context)
+        public ResponderModel(ISoporteService soporteService, AppDbContext context)
         {
+            _soporteService = soporteService;
             _context = context;
         }
 
@@ -27,10 +29,7 @@ namespace ProyectoMSD.Pages.Soportes
             if (id == null)
                 return NotFound();
 
-            var soporte = await _context.Soportes
-                .Include(s => s.IdUsuariosNavigation)
-                .FirstOrDefaultAsync(s => s.Id == id);
-
+            var soporte = await _soporteService.ObtenerPorIdAsync(id.Value, incluirUsuario: true);
             if (soporte == null)
                 return NotFound();
 
@@ -41,35 +40,34 @@ namespace ProyectoMSD.Pages.Soportes
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            var soporte = await _context.Soportes.FindAsync(id);
-            if (soporte == null)
-                return NotFound();
-
             if (string.IsNullOrWhiteSpace(Respuesta))
             {
                 ModelState.AddModelError(nameof(Respuesta), "La respuesta no puede estar vacía.");
-                // Recargar para mostrar datos del ticket
-                Soporte = await _context.Soportes
-                    .Include(s => s.IdUsuariosNavigation)
-                    .FirstAsync(s => s.Id == id);
+                Soporte = (await _soporteService.ObtenerPorIdAsync(id, incluirUsuario: true))!;
                 return Page();
             }
 
-            // Solo actualizamos el campo Respuesta
-            soporte.Respuesta = Respuesta.Trim();
-            await _context.SaveChangesAsync();
+            // El servicio aplica SanitizarTexto antes de persistir
+            var respondido = await _soporteService.ResponderAsync(id, Respuesta);
+            if (!respondido)
+                return NotFound();
 
-            _context.Notificaciones.Add(new Notificacion
+            // Recuperar el soporte para obtener el IdUsuarios de la notificación
+            var soporte = await _context.Soportes.FindAsync(id);
+            if (soporte != null)
             {
-                IdUsuarios = soporte.IdUsuarios,
-                Titulo = "Ticket respondido",
-                Mensaje = $"Tu ticket #{id} ha sido respondido por el equipo de soporte.",
-                Tipo = "TicketRespondido",
-                Leida = false,
-                FechaCreacion = DateTime.Now,
-                RutaRedireccion = $"/Soportes/Details?id={id}"
-            });
-            await _context.SaveChangesAsync();
+                _context.Notificaciones.Add(new Notificacion
+                {
+                    IdUsuarios      = soporte.IdUsuarios,
+                    Titulo          = "Ticket respondido",
+                    Mensaje         = $"Tu ticket #{id} ha sido respondido por el equipo de soporte.",
+                    Tipo            = "TicketRespondido",
+                    Leida           = false,
+                    FechaCreacion   = DateTime.Now,
+                    RutaRedireccion = $"/Soportes/Details?id={id}"
+                });
+                await _context.SaveChangesAsync();
+            }
 
             TempData["SuccessMessage"] = $"Ticket #{id} respondido exitosamente.";
             return RedirectToPage("./Index");

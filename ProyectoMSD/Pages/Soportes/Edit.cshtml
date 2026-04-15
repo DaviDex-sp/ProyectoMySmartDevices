@@ -66,22 +66,22 @@
 
             <form method="post">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <input type="hidden" asp-for="Soporte.Id" />
+                <input type="hidden" asp-for="Input.Id" />
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-calendar-alt me-1 text-primary"></i>Fecha del Soporte
                         </label>
-                        <input asp-for="Soporte.Fecha" type="date" class="form-control" />
-                        <span asp-validation-for="Soporte.Fecha" class="text-danger"></span>
+                        <input asp-for="Input.Fecha" type="date" class="form-control" />
+                        <span asp-validation-for="Input.Fecha" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
                             <i class="fas fa-list-alt me-1 text-primary"></i>Tipo de Soporte
                         </label>
-                        <select asp-for="Soporte.Tipo" class="form-control">
+                        <select asp-for="Input.Tipo" class="form-control">
                             <option value="">Seleccionar tipo...</option>
                             <option value="Técnico">🔧 Técnico</option>
                             <option value="Consulta">❓ Consulta</option>
@@ -89,33 +89,33 @@
                             <option value="Solicitud">📝 Solicitud</option>
                             <option value="Mantenimiento">🛠️ Mantenimiento</option>
                         </select>
-                        <span asp-validation-for="Soporte.Tipo" class="text-danger"></span>
+                        <span asp-validation-for="Input.Tipo" class="text-danger"></span>
                     </div>
 
                     <div class="form-group form-grid-full">
                         <label class="form-label">
                             <i class="fas fa-file-alt me-1 text-primary"></i>Descripción del Problema
                         </label>
-                        <textarea asp-for="Soporte.Descripcion" class="form-control" rows="4" placeholder="Describe detalladamente el problema o solicitud..."></textarea>
-                        <span asp-validation-for="Soporte.Descripcion" class="text-danger"></span>
+                        <textarea asp-for="Input.Descripcion" class="form-control" rows="4" placeholder="Describe detalladamente el problema o solicitud..."></textarea>
+                        <span asp-validation-for="Input.Descripcion" class="text-danger"></span>
                     </div>
 
                     <div class="form-group form-grid-full">
                         <label class="form-label">
                             <i class="fas fa-reply me-1 text-success"></i>Respuesta del Soporte
                         </label>
-                        <textarea asp-for="Soporte.Respuesta" class="form-control" rows="4" placeholder="Ingresa la respuesta o solución proporcionada..."></textarea>
-                        <span asp-validation-for="Soporte.Respuesta" class="text-danger"></span>
+                        <textarea asp-for="Input.Respuesta" class="form-control" rows="4" placeholder="Ingresa la respuesta o solución proporcionada..."></textarea>
+                        <span asp-validation-for="Input.Respuesta" class="text-danger"></span>
                     </div>
 
                     <div class="form-group form-grid-full">
                         <label class="form-label">
                             <i class="fas fa-user me-1 text-primary"></i>Usuario Responsable
                         </label>
-                        <select asp-for="Soporte.IdUsuarios" class="form-control" asp-items="ViewBag.IdUsuarios">
+                        <select asp-for="Input.IdUsuarios" class="form-control" asp-items="ViewBag.IdUsuarios">
                             <option value="">-- Seleccione un usuario --</option>
                         </select>
-                        <span asp-validation-for="Soporte.IdUsuarios" class="text-danger"></span>
+                        <span asp-validation-for="Input.IdUsuarios" class="text-danger"></span>
                     </div>
                 </div>
 
