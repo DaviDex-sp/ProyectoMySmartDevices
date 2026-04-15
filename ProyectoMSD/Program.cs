@@ -30,6 +30,9 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IDispositivoService, ProyectoM
 // Registrar la capa de Servicios del Módulo de Soporte (sanitización + CRUD)
 builder.Services.AddScoped<ProyectoMSD.Interfaces.ISoporteService, ProyectoMSD.Services.SoporteService>();
 
+// Registrar el servicio MQTT para que corra en segundo plano
+builder.Services.AddHostedService<ProyectoMSD.Services.MqttDomoticaService>();
+
 // Configuración de Autenticación Múltiple (Cookies locales + Google)
 builder.Services.AddAuthentication(options =>
     {
