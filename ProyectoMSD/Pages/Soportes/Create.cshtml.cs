@@ -1,25 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using ProyectoMSD.Interfaces;
 using ProyectoMSD.Modelos;
+using ProyectoMSD.Modelos.DTOs;
 
 namespace ProyectoMSD.Pages.Soportes
 {
     [Authorize(Roles = "Usuario")]
     public class CreateModel : PageModel
     {
+        private readonly ISoporteService _soporteService;
         private readonly AppDbContext _context;
 
-        public CreateModel(AppDbContext context)
+        public CreateModel(ISoporteService soporteService, AppDbContext context)
         {
+            _soporteService = soporteService;
             _context = context;
         }
 
+        /// <summary>
+        /// DTO de entrada — previene over-posting al exponer solo Tipo y Descripcion.
+        /// </summary>
         [BindProperty]
-        public Soporte Soporte { get; set; } = default!;
+        public CrearSoporteDto Input { get; set; } = new();
 
-        // Datos del usuario en sesión (para mostrarlo en la vista)
+        // Datos del usuario en sesión (solo para mostrar en la vista)
         public Usuario UsuarioSesion { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
@@ -33,14 +40,6 @@ namespace ProyectoMSD.Pages.Soportes
                 return RedirectToPage("/Index");
 
             UsuarioSesion = usuario;
-
-            Soporte = new Soporte
-            {
-                Fecha = DateOnly.FromDateTime(DateTime.Now),
-                IdUsuarios = usuarioId.Value,
-                Respuesta = "Pendiente"
-            };
-
             return Page();
         }
 
@@ -50,66 +49,65 @@ namespace ProyectoMSD.Pages.Soportes
             if (usuarioId == null)
                 return RedirectToPage("/Index");
 
-            // Forzar siempre los valores que el usuario NO debe poder cambiar
-            Soporte.Fecha = DateOnly.FromDateTime(DateTime.Now);
-            Soporte.IdUsuarios = usuarioId.Value;
-            Soporte.Respuesta = "Pendiente";
-
-            // Limpiar errores previos de Model Binding para campos que asignamos manualmente o no vienen del form
-            ModelState.Remove("Soporte.Fecha");
-            ModelState.Remove("Soporte.IdUsuarios");
-            ModelState.Remove("Soporte.Respuesta");
-            ModelState.Remove("Soporte.IdUsuariosNavigation");
-
-            // Validaciones solo de los campos que el usuario sí rellena
-            if (string.IsNullOrWhiteSpace(Soporte.Descripcion))
-                ModelState.AddModelError("Soporte.Descripcion", "La descripción es obligatoria.");
-
-            if (string.IsNullOrWhiteSpace(Soporte.Tipo))
-                ModelState.AddModelError("Soporte.Tipo", "Debe seleccionar un tipo de consulta.");
+            // Validar whitelist del campo Tipo antes de continuar
+            if (!_soporteService.EsTipoValido(Input.Tipo))
+                ModelState.AddModelError("Input.Tipo", "El tipo de consulta seleccionado no es válido.");
 
             if (!ModelState.IsValid)
             {
-                // Recargar usuario para la vista
                 UsuarioSesion = (await _context.Usuarios.FindAsync(usuarioId.Value))!;
                 return Page();
             }
 
             try
             {
-                // Cargar UsuarioSesion para usar su nombre en la notificación
+                // Cargar datos del usuario para la notificación
                 UsuarioSesion = (await _context.Usuarios.FindAsync(usuarioId.Value))!;
 
-                _context.Soportes.Add(Soporte);
-                await _context.SaveChangesAsync();
+                // El servicio aplica sanitización y persiste el ticket
+                var creado = await _soporteService.CrearAsync(Input, usuarioId.Value);
+                if (!creado)
+                {
+                    ModelState.AddModelError(string.Empty, "No se pudo crear el ticket. Tipo de consulta inválido.");
+                    return Page();
+                }
 
-                // Notificar a todos los administradores del sistema
-                var administradores = await _context.Usuarios.Where(u => u.Rol == "Admin").ToListAsync();
+                // Obtener el ticket recién creado para la notificación
+                var nuevoTicket = await _context.Soportes
+                    .Where(s => s.IdUsuarios == usuarioId.Value)
+                    .OrderByDescending(s => s.Id)
+                    .FirstOrDefaultAsync();
+
+                // Notificar a todos los administradores
+                var administradores = await _context.Usuarios
+                    .Where(u => u.Rol == "Admin")
+                    .ToListAsync();
+
                 foreach (var admin in administradores)
                 {
                     _context.Notificaciones.Add(new Notificacion
                     {
-                        IdUsuarios = admin.Id,
-                        Titulo = "Nuevo Ticket de Soporte",
-                        Mensaje = $"El usuario {UsuarioSesion.Nombre} ha creado un nuevo ticket de tipo {Soporte.Tipo}.",
-                        Tipo = "NuevoTicket",
-                        Leida = false,
-                        FechaCreacion = DateTime.Now,
-                        RutaRedireccion = $"/Soportes/Responder/{Soporte.Id}"
+                        IdUsuarios      = admin.Id,
+                        Titulo          = "Nuevo Ticket de Soporte",
+                        Mensaje         = $"El usuario {UsuarioSesion.Nombre} ha creado un nuevo ticket de tipo {Input.Tipo}.",
+                        Tipo            = "NuevoTicket",
+                        Leida           = false,
+                        FechaCreacion   = DateTime.Now,
+                        RutaRedireccion = nuevoTicket != null
+                            ? $"/Soportes/Responder/{nuevoTicket.Id}"
+                            : "/Soportes/Index"
                     });
                 }
-                
+
                 if (administradores.Any())
-                {
                     await _context.SaveChangesAsync();
-                }
 
                 TempData["SuccessMessage"] = "Ticket creado exitosamente.";
                 return RedirectToPage("./Index");
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Error al crear el ticket.");
+                ModelState.AddModelError(string.Empty, "Error al crear el ticket. Intenta nuevamente.");
                 UsuarioSesion = (await _context.Usuarios.FindAsync(usuarioId.Value))!;
                 return Page();
             }

@@ -44,24 +44,24 @@
                     <form method="post">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-                        <!-- Fecha (automática, solo lectura) -->
+                        <!-- Fecha (automática, solo lectura — asignada por el servidor) -->
                         <div class="mb-3">
-                            <label asp-for="Soporte.Fecha" class="form-label">
+                            <label class="form-label">
                                 <i class="fas fa-calendar-alt me-2 text-primary"></i>Fecha del Ticket
                             </label>
-                            <input asp-for="Soporte.Fecha" type="date" class="form-control" readonly
-                                   value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            <input type="date" class="form-control" readonly
+                                   value="@DateTime.Now.ToString("yyyy-MM-dd")" disabled>
                             <div class="form-text">
-                                <i class="fas fa-info-circle me-1"></i>La fecha se asigna automáticamente
+                                <i class="fas fa-info-circle me-1"></i>La fecha se asigna automáticamente al crear el ticket
                             </div>
                         </div>
 
                         <!-- Tipo de Consulta -->
                         <div class="mb-3">
-                            <label asp-for="Soporte.Tipo" class="form-label">
+                            <label asp-for="Input.Tipo" class="form-label">
                                 <i class="fas fa-tags me-2 text-primary"></i>Tipo de Consulta
                             </label>
-                            <select asp-for="Soporte.Tipo" class="form-select">
+                            <select asp-for="Input.Tipo" class="form-select">
                                 <option value="">Seleccionar tipo de consulta...</option>
                                 <option value="consulta">❓ Consulta General</option>
                                 <option value="problema">⚠️ Problema Técnico</option>
@@ -70,17 +70,17 @@
                                 <option value="configuracion">⚙️ Configuración</option>
                                 <option value="facturacion">💳 Facturación</option>
                             </select>
-                            <span asp-validation-for="Soporte.Tipo" class="text-danger"></span>
+                            <span asp-validation-for="Input.Tipo" class="text-danger"></span>
                         </div>
 
                         <!-- Descripción del Problema -->
                         <div class="mb-4">
-                            <label asp-for="Soporte.Descripcion" class="form-label">
+                            <label asp-for="Input.Descripcion" class="form-label">
                                 <i class="fas fa-file-alt me-2 text-primary"></i>Descripción del Problema
                             </label>
-                            <textarea asp-for="Soporte.Descripcion" class="form-control" rows="5"
+                            <textarea asp-for="Input.Descripcion" class="form-control" rows="5"
                                       placeholder="Describe detalladamente tu problema o consulta. Incluye pasos que seguiste, mensajes de error, o cualquier información relevante..."></textarea>
-                            <span asp-validation-for="Soporte.Descripcion" class="text-danger"></span>
+                            <span asp-validation-for="Input.Descripcion" class="text-danger"></span>
                             <div class="form-text">
                                 <i class="fas fa-lightbulb me-1"></i>Entre más detalles proporciones, mejor podremos ayudarte
                             </div>
