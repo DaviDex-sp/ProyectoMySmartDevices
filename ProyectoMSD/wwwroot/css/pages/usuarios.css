@@ -155,8 +155,8 @@
 /* Stats Cards */
 .stat-card {
     border-radius: 20px;
-    background: white;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--card-bg-solid);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .stat-card:hover {
@@ -175,7 +175,8 @@
 /* Layout Cards (Activity, Status, Users) */
 .layout-card {
     border-radius: 24px;
-    background: white;
+    background: var(--card-bg-solid);
+    transition: background 0.3s ease;
 }
 
 .card-title-muted {
@@ -184,8 +185,9 @@
 
 /* Activity Items */
 .activity-item {
-    background: rgba(248, 249, 250, 0.7);
+    background: var(--section-bg);
     border-left: 4px solid #8b5cf6;
+    transition: background 0.3s ease;
 }
 
 .activity-icon-dot {
@@ -197,7 +199,8 @@
 
 /* Status Items */
 .status-item {
-    background: rgba(248, 249, 250, 0.7);
+    background: var(--section-bg);
+    transition: background 0.3s ease;
 }
 
 .status-icon {
@@ -232,8 +235,8 @@
 }
 
 .user-card-item {
-    background: #fdfdfd;
-    transition: transform 0.2s, box-shadow 0.2s;
+    background: var(--card-bg-alt);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
 }
 
 .user-card-item:hover {
@@ -255,10 +258,12 @@
 .glass-card-persuasive {
     border-radius: 24px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.65);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    border: var(--glass-border);
     box-shadow: 0 15px 35px rgba(116, 81, 248, 0.1) !important;
+    transition: background 0.3s ease;
 }
 
 .glass-header {
@@ -303,11 +308,12 @@
 .robot-icon-wrap {
     width: 220px;
     height: 220px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.9);
+    background: var(--card-bg-solid);
+    border: 2px solid var(--border-subtle);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
     border-radius: 50%;
     z-index: 1;
+    transition: background 0.3s ease;
 }
 
 .text-gradient {
@@ -319,10 +325,11 @@
 
 .benefit-card {
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--glass-bg);
     backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s ease;
 }
 
 .benefit-card:hover {

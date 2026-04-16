@@ -1,25 +1,19 @@
 /* wwwroot/css/pages/propiedades.css */
-@import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
-@import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
-
-/* Contenedor principal */
-
 
 /* Utilities */
-.text-main { color: var(--text-main); }
-.text-muted { color: var(--text-muted); }
-.border-color-custom { border-color: var(--border-color) !important; }
+.text-main { color: var(--text-dark); }
+.border-color-custom { border-color: var(--glass-border) !important; }
 .bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
 
 .propiedades-container {
-    background: var(--bg-main);
+    background: var(--bg-light);
 }
 
 .glass-card {
-    background: var(--bg-card);
+    background: var(--card-bg);
     backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 
 .property-card {
@@ -27,12 +21,12 @@
     background: var(--card-bg);
     backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--card-shadow);
 }
 
 .property-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--hover-shadow);
 }
 
 .btn-primary-custom {
@@ -127,7 +121,7 @@
     color: white;
 }
 
-.text-primary-custom { color: var(--primary-color); }
+.text-primary-custom { color: var(--primary-blue); }
 .bg-primary-custom { background: var(--primary-gradient); color: var(--text-dark); }
 
 .property-img-container {

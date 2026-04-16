@@ -163,13 +163,14 @@
 .perfil-alert-success {
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.2);
-    color: #065f46;
+    color: var(--success-alert-color);
     border-radius: 14px;
     padding: 1rem 1.5rem;
     margin-bottom: 1.5rem;
     font-weight: 500;
     backdrop-filter: blur(10px);
     animation: perfil-slideIn 0.4s ease;
+    transition: color 0.3s ease;
 }
 
 @keyframes perfil-slideIn {
@@ -194,11 +195,12 @@
 
 /* Password Section */
 .perfil-password-section {
-    background: var(--extra-light-blue);
+    background: var(--section-bg);
     border-radius: 16px;
     margin-top: 1.5rem;
-    border: 1px solid var(--light-blue);
+    border: 1px solid var(--divider-color);
     overflow: hidden;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .perfil-password-header {
@@ -267,7 +269,7 @@
     font-size: 0.95rem;
     margin-bottom: 1.25rem;
     padding-bottom: 0.75rem;
-    border-bottom: 2px solid #f1f3f4;
+    border-bottom: 2px solid var(--divider-color);
 }
 
 .perfil-info-item {
@@ -275,7 +277,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid var(--divider-color);
+    transition: border-color 0.3s ease;
 }
 
 .perfil-info-item:last-child {
@@ -319,9 +322,10 @@
     padding: 0.6rem 0;
     font-size: 0.85rem;
     color: var(--text-dark);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    border-bottom: 1px solid var(--divider-color);
     display: flex;
     align-items: flex-start;
+    transition: border-color 0.3s ease;
 }
 
 .perfil-tips-list li:last-child {
