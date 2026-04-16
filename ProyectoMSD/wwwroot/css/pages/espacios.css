@@ -1,6 +1,4 @@
 /* wwwroot/css/pages/espacios.css */
-@import url('../temaClaro/variables.css') screen and (not (prefers-color-scheme: dark));
-@import url('../temaOscuro/variables.css') screen and (prefers-color-scheme: dark);
 
 /* ----- Index Page: Space Cards ----- */
 .space-card {
@@ -15,24 +13,23 @@
 }
 
 /* Utilities */
-.text-main { color: var(--text-main); }
-.text-muted { color: var(--text-muted); }
-.border-color-custom { border-color: var(--border-color) !important; }
+.text-main { color: var(--text-dark); }
+.border-color-custom { border-color: var(--glass-border) !important; }
 .bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
 
 .glass-card {
-    background: var(--bg-card);
+    background: var(--card-bg);
     backdrop-filter: var(--glass-blur);
     border: var(--glass-border);
     border-radius: 16px;
-    box-shadow: var(--shadow-md);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     padding: 1.5rem;
 }
 
 .glass-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--hover-shadow);
 }
 
 .card-header-custom {
@@ -205,6 +202,6 @@
     color: white;
 }
 
-.hover-primary:hover { color: var(--primary-color) !important; }
-.hover-danger:hover { color: var(--danger-color) !important; }
-.text-primary-custom { color: var(--primary-color); }
+.hover-primary:hover { color: var(--primary-blue) !important; }
+.hover-danger:hover { color: var(--support-red) !important; }
+.text-primary-custom { color: var(--primary-blue); }

@@ -43,6 +43,23 @@
     --danger-gradient: linear-gradient(135deg, rgba(239, 68, 68, 0.85), rgba(185, 28, 28, 0.9));
     --success-gradient: linear-gradient(135deg, rgba(16, 185, 129, 0.85), rgba(4, 120, 87, 0.9));
     --warning-gradient: linear-gradient(135deg, rgba(245, 158, 11, 0.85), rgba(180, 83, 9, 0.9));
+
+    /* ── Tokens Semánticos para Superficies Sólidas (Theming Dual) ── */
+    --card-bg-solid: #ffffff;
+    --card-bg-alt: #fdfdfd;
+    --section-bg: #f8f9fa;
+    --table-header-bg: #f8f9fa;
+    --table-row-hover: rgba(102, 126, 234, 0.05);
+    --divider-color: #f1f3f4;
+    --border-subtle: #e2e8f0;
+    --warning-box-bg: #fef2f2;
+    --warning-box-border: #fecaca;
+    --delete-container-bg: #ffffff;
+    --search-container-bg: rgba(255, 255, 255, 0.9);
+    --user-info-bg: #f8fafc;
+    --info-item-bg: #ffffff;
+    --success-alert-color: #065f46;
+    --faq-banner-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 /* ----- Modo Oscuro (Vanguardista Negro Puro) ----- */
@@ -62,6 +79,23 @@
     --danger-gradient: linear-gradient(135deg, rgba(220, 38, 38, 0.7), rgba(153, 27, 27, 0.85));
     --success-gradient: linear-gradient(135deg, rgba(5, 150, 105, 0.7), rgba(6, 78, 59, 0.85));
     --warning-gradient: linear-gradient(135deg, rgba(217, 119, 6, 0.7), rgba(146, 64, 14, 0.85));
+
+    /* ── Tokens Semánticos para Superficies Sólidas (Modo Oscuro) ── */
+    --card-bg-solid: rgba(18, 18, 18, 0.97);
+    --card-bg-alt: rgba(22, 22, 22, 0.95);
+    --section-bg: rgba(12, 12, 12, 0.9);
+    --table-header-bg: rgba(15, 15, 15, 0.95);
+    --table-row-hover: rgba(139, 92, 246, 0.07);
+    --divider-color: rgba(255, 255, 255, 0.07);
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --warning-box-bg: rgba(220, 38, 38, 0.12);
+    --warning-box-border: rgba(220, 38, 38, 0.3);
+    --delete-container-bg: rgba(18, 18, 18, 0.97);
+    --search-container-bg: rgba(18, 18, 18, 0.9);
+    --user-info-bg: rgba(12, 12, 12, 0.9);
+    --info-item-bg: rgba(22, 22, 22, 0.95);
+    --success-alert-color: #6ee7b7;
+    --faq-banner-bg: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
 }
 
 /* ----- Clases Utilitarias (Reemplazo de Inline Styles) ----- */
@@ -751,7 +785,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 }
 
 .form-header {
-    border-bottom: 2px solid #f1f3f4;
+    border-bottom: 2px solid var(--divider-color);
     margin-bottom: 2rem;
     padding-bottom: 1rem;
 }
@@ -920,7 +954,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 }
 
 .btn-secondary-custom {
-    background: white;
+    background: var(--card-bg-solid);
     border: 2px solid var(--primary-blue);
     color: var(--primary-blue);
     padding: 0.75rem 2rem;
@@ -1196,11 +1230,12 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Search Container ----- */
 .search-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--search-container-bg);
     border-radius: 15px;
     padding: 1.5rem;
     margin-bottom: 2rem;
     box-shadow: var(--card-shadow);
+    transition: background 0.3s ease;
 }
 
 /* ----- Edit/Delete Page Headers ----- */
@@ -1352,12 +1387,13 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* ----- Warning Box (Delete pages) ----- */
 .warning-box {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+    background: var(--warning-box-bg);
+    border: 1px solid var(--warning-box-border);
     border-radius: 12px;
     padding: 1rem;
     margin-bottom: 2rem;
     border-left: 4px solid #ef4444;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .warning-box h4 {
@@ -1378,15 +1414,16 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* Delete Container */
 .delete-container {
-    background: white;
+    background: var(--delete-container-bg);
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
     border: 1px solid rgba(239, 68, 68, 0.1);
+    transition: background 0.3s ease;
 }
 
 .delete-header {
-    border-bottom: 2px solid #fef2f2;
+    border-bottom: 2px solid var(--warning-box-bg);
     margin-bottom: 2rem;
     padding-bottom: 1rem;
 }
@@ -1408,10 +1445,11 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 /* User Info Display (Delete/Details pages) */
 .user-info {
-    background: #f8fafc;
+    background: var(--user-info-bg);
     border-radius: 15px;
     padding: 1.5rem;
     margin-bottom: 2rem;
+    transition: background 0.3s ease;
 }
 
 .info-grid {
@@ -1421,10 +1459,11 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 }
 
 .info-item {
-    background: white;
+    background: var(--info-item-bg);
     padding: 1rem;
     border-radius: 10px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-subtle);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .info-label {
