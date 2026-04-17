@@ -2,7 +2,316 @@
 
 /* Utilities */
 .text-main { color: var(--text-dark); }
-.border-color-custom { border-color: var(--glass-border) !important; }
+.border-color-custom { border-color: var(--border-subtle) !important; }
+.bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
+.theme-text-main { color: var(--text-dark); }
+
+/* ============================================================
+   PROP-PAGE-HEADER — Banner de cabecera auto-contenido
+   Usado en Details y Index (independiente de usuarios.css)
+   ============================================================ */
+.prop-page-header {
+    background: var(--primary-gradient);
+    border: var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    color: var(--text-dark);
+    box-shadow: var(--card-shadow);
+}
+
+.prop-page-header::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -8%;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.prop-header-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--primary-blue);
+    flex-shrink: 0;
+    backdrop-filter: blur(10px);
+}
+
+/* Badges de tipo de propiedad en el header */
+.prop-tipo-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+}
+
+.badge-tipo-casa     { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+.badge-tipo-apto     { background: rgba(59,130,246,0.2); color: #3b82f6; border: 1px solid rgba(59,130,246,0.35); }
+.badge-tipo-local    { background: rgba(245,158,11,0.2); color: #d97706; border: 1px solid rgba(245,158,11,0.35); }
+.badge-tipo-oficina  { background: rgba(6,182,212,0.2);  color: #0891b2; border: 1px solid rgba(6,182,212,0.35); }
+.badge-tipo-finca    { background: rgba(239,68,68,0.2);  color: #ef4444; border: 1px solid rgba(239,68,68,0.35); }
+.badge-tipo-default  { background: rgba(139,92,246,0.2); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.35); }
+
+.prop-pisos-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: var(--text-dark);
+    backdrop-filter: blur(8px);
+}
+
+/* ============================================================
+   PROP-DETAIL-PANEL — Panel glassmorphism para Details
+   ============================================================ */
+.prop-detail-panel {
+    background: var(--card-bg-solid);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.prop-detail-panel-header {
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary-blue);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--table-header-bg);
+    display: flex;
+    align-items: center;
+}
+
+/* Variantes de color del header */
+.prop-header-green  { color: #10b981; }
+.prop-header-purple { color: #8b5cf6; }
+.prop-header-cyan   { color: #06b6d4; }
+.prop-header-orange { color: #f59e0b; }
+
+.prop-detail-panel-body {
+    padding: 1.5rem;
+}
+
+/* Filas de detalle (icono + label + valor) */
+.prop-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--divider-color);
+    transition: background 0.2s ease;
+}
+
+.prop-detail-row:last-child { border-bottom: none; }
+
+.prop-detail-row:hover {
+    background: var(--table-row-hover);
+    border-radius: 10px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.prop-detail-icon-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: white;
+}
+
+.prop-icon-blue   { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+.prop-icon-green  { background: linear-gradient(135deg, #10b981, #34d399); }
+.prop-icon-purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+.prop-icon-cyan   { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+.prop-icon-orange { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.prop-icon-red    { background: linear-gradient(135deg, #ef4444, #f87171); }
+
+.prop-detail-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin-bottom: 2px;
+}
+
+.prop-detail-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* ============================================================
+   PROP-USER-CARD — Tarjeta de propietario en Details
+   ============================================================ */
+.prop-user-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    background: var(--section-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    transition: all 0.2s ease;
+}
+
+.prop-user-card:hover {
+    background: var(--table-row-hover);
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.prop-user-avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-blue);
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+.prop-rol-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(139,92,246,0.12);
+    color: #8b5cf6;
+    border: 1px solid rgba(139,92,246,0.2);
+    white-space: nowrap;
+}
+
+/* ============================================================
+   PROP-SPACE-TILE — Tarjeta de espacio en Details
+   ============================================================ */
+.prop-space-tile {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    background: var(--section-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    transition: all 0.25s ease;
+    cursor: default;
+}
+
+.prop-space-tile:hover {
+    background: var(--table-row-hover);
+    border-color: #8b5cf6;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(139,92,246,0.12);
+}
+
+/* Reutiliza prop-space-icon del CSS existente con ajuste */
+.prop-space-tile .prop-space-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+}
+
+/* ============================================================
+   PROP-COUNT-BADGE — Contador circular en header de panel
+   ============================================================ */
+.prop-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    background: rgba(139,92,246,0.15);
+    color: #8b5cf6;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 6px;
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+/* ============================================================
+   PROP-EMPTY-PANEL — Estado vacío en paneles Details
+   ============================================================ */
+.prop-empty-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.prop-empty-panel-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--section-bg);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* Dark mode overrides para Details */
+.dark-theme .prop-user-avatar {
+    background: rgba(139,92,246,0.15);
+    border-color: rgba(139,92,246,0.3);
+}
+
+.dark-theme .prop-detail-panel {
+    background: var(--card-bg-solid);
+    border-color: var(--border-subtle);
+}
+
+.dark-theme .prop-user-card,
+.dark-theme .prop-space-tile {
+    background: var(--section-bg);
+    border-color: var(--border-subtle);
+}
+
+
 .bg-card-item { background-color: rgba(128, 128, 128, 0.05); }
 
 .propiedades-container {
@@ -188,3 +497,188 @@
 }
 
 .hover-danger:hover { background-color: var(--danger-color); color: white; }
+
+/* ============================================================
+   PROPIEDADES INDEX REFACTORIZADO — MSD-24
+   Clases adicionales para el nuevo diseño alineado al sistema.
+   ============================================================ */
+
+/* === Hero de cada tarjeta === */
+.prop-card-hero {
+    height: 220px;
+    background: url('https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') center/cover no-repeat;
+}
+
+.prop-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+}
+
+/* Badge oscuro para número de pisos */
+.prop-badge-dark {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: #f1f5f9;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* === Botones del sistema de diseño === */
+.btn-secondary-custom {
+    background: var(--card-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 0.45rem 0.9rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-secondary-custom:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+.btn-danger-custom {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    padding: 0.45rem 0.9rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.btn-danger-custom:hover {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(239,68,68,0.3);
+}
+
+.btn-sm {
+    padding: 0.35rem 0.7rem !important;
+    font-size: 0.82rem !important;
+}
+
+/* === Stats mini-row en tarjeta === */
+.prop-stats-row {
+    display: flex;
+    text-align: center;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--section-bg);
+}
+
+.prop-stat-item {
+    flex: 1;
+    padding: 0.65rem 0.5rem;
+}
+
+.prop-stat-divider {
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+}
+
+/* === Buscador glassmorphism === */
+.prop-search-container {
+    position: relative;
+}
+
+.prop-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.prop-search-input {
+    width: 100%;
+    padding: 0.75rem 3rem 0.75rem 2.75rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    outline: none;
+    box-shadow: var(--card-shadow);
+    transition: all 0.25s ease;
+}
+
+.prop-search-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.prop-search-badge {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary-blue);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+/* === Empty state === */
+.prop-empty-state {
+    max-width: 420px;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    box-shadow: var(--card-shadow);
+}
+
+.prop-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: var(--section-bg);
+    color: var(--text-muted);
+    margin: 0 auto;
+}
+
+/* Dark mode extras */
+.dark-theme .prop-search-input {
+    background: rgba(18,18,18,0.9);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.dark-theme .btn-secondary-custom {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+    color: var(--text-dark);
+}
+
+.dark-theme .btn-secondary-custom:hover {
+    background: rgba(139,92,246,0.12);
+}
+

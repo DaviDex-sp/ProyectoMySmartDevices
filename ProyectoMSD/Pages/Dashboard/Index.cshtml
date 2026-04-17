@@ -9,12 +9,14 @@
     <link href="~/css/pages/dashboard.css" rel="stylesheet" />
 }
 
-<!-- Dashboard Header -->
+<!-- ========================================================
+     DASHBOARD HEADER
+     ======================================================== -->
 <div class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
             <h1><i class="fas fa-chart-line me-2"></i>Dashboard y Métricas Reales</h1>
-            <p>Panel analítico de MySmartDevice</p>
+            <p>Panel analítico Big Data — MySmartDevice</p>
         </div>
         <div class="header-badge">
             <i class="fas fa-circle text-success" style="font-size:0.5rem;"></i>
@@ -23,7 +25,9 @@
     </div>
 </div>
 
-<!-- KPI Cards -->
+<!-- ========================================================
+     KPI CARDS — Métricas Generales
+     ======================================================== -->
 <div class="kpi-grid">
     <div class="kpi-card blue">
         <div class="kpi-icon blue"><i class="fas fa-users"></i></div>
@@ -43,7 +47,7 @@
     <div class="kpi-card purple">
         <div class="kpi-icon purple"><i class="fas fa-building"></i></div>
         <div class="kpi-value">@Model.Metrics.TotalPropiedades</div>
-        <div class="kpi-label">Propiedades (Casas/Edificos)</div>
+        <div class="kpi-label">Propiedades Registradas</div>
     </div>
     <div class="kpi-card orange">
         <div class="kpi-icon orange"><i class="fas fa-ticket-alt"></i></div>
@@ -67,49 +71,83 @@
     </div>
 </div>
 
-<!-- Charts Row -->
+<!-- ========================================================
+     KPI CARDS — Big Data Admin (Estado y Cobertura)
+     ======================================================== -->
+<div class="big-data-kpi-section">
+    <h2 class="section-title-bd">
+        <i class="fas fa-database me-2"></i>Análisis Big Data — Estado de Clientes
+    </h2>
+    <div class="kpi-grid kpi-grid-4">
+        <div class="kpi-card green bd-card">
+            <div class="kpi-icon green"><i class="fas fa-user-check"></i></div>
+            <div class="kpi-value">@Model.Metrics.UsuariosActivos</div>
+            <div class="kpi-label">Usuarios Activos</div>
+            <div class="kpi-sub">
+                @(Model.Metrics.TotalUsuarios > 0
+                    ? Math.Round((double)Model.Metrics.UsuariosActivos / Model.Metrics.TotalUsuarios * 100, 1)
+                    : 0)% del total
+            </div>
+        </div>
+        <div class="kpi-card red bd-card">
+            <div class="kpi-icon red"><i class="fas fa-user-slash"></i></div>
+            <div class="kpi-value">@Model.Metrics.UsuariosInactivos</div>
+            <div class="kpi-label">Usuarios Inactivos</div>
+            <div class="kpi-sub">
+                @(Model.Metrics.TotalUsuarios > 0
+                    ? Math.Round((double)Model.Metrics.UsuariosInactivos / Model.Metrics.TotalUsuarios * 100, 1)
+                    : 0)% del total
+            </div>
+        </div>
+        <div class="kpi-card blue bd-card">
+            <div class="kpi-icon blue"><i class="fas fa-house-user"></i></div>
+            <div class="kpi-value">@Model.Metrics.UsuariosConPropiedades</div>
+            <div class="kpi-label">Con Propiedades</div>
+            <div class="kpi-sub">Cobertura activa del sistema</div>
+        </div>
+        <div class="kpi-card orange bd-card">
+            <div class="kpi-icon orange"><i class="fas fa-user-clock"></i></div>
+            <div class="kpi-value">@Model.Metrics.UsuariosSinPropiedades</div>
+            <div class="kpi-label">Sin Propiedades</div>
+            <div class="kpi-sub">Potencial de expansión</div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================================
+     GRÁFICOS
+     ======================================================== -->
 <div class="charts-grid">
-    <!-- Accesos últimos 7 días -->
     <div class="chart-card chart-wide">
         <h3><i class="fas fa-wave-square"></i>Accesos Exitosos — Últimos 7 Días</h3>
         <div class="chart-container">
             <canvas id="chartAccesos"></canvas>
         </div>
     </div>
-
-    <!-- Navegadores -->
     <div class="chart-card">
         <h3><i class="fas fa-globe"></i>Navegadores Más Usados</h3>
         <div class="chart-container">
             <canvas id="chartNavegadores"></canvas>
         </div>
     </div>
-
-    <!-- Páginas -->
     <div class="chart-card">
         <h3><i class="fas fa-mouse-pointer"></i>Páginas Más Visitadas</h3>
         <div class="chart-container">
             <canvas id="chartPaginas"></canvas>
         </div>
     </div>
-
-    <!-- Demografía: Ubicación -->
     <div class="chart-card">
         <h3><i class="fas fa-map-marker-alt"></i>Demografía por Ciudad</h3>
         <div class="chart-container">
             <canvas id="chartUbicacion"></canvas>
         </div>
     </div>
-
-    <!-- Demografía: Rol -->
     <div class="chart-card">
         <h3><i class="fas fa-id-badge"></i>Demografía por Tipo Cliente (Rol)</h3>
         <div class="chart-container">
             <canvas id="chartRol"></canvas>
         </div>
     </div>
-
-    <!-- Dispositivos -->
     <div class="chart-card">
         <h3><i class="fas fa-plug"></i>Dispositivos por Tipo</h3>
         <div class="chart-container">
@@ -118,7 +156,9 @@
     </div>
 </div>
 
-<!-- Data Tables -->
+<!-- ========================================================
+     TABLAS: Últimos Accesos y Soportes
+     ======================================================== -->
 <div class="row mt-4">
     <!-- Últimos Accesos -->
     <div class="col-lg-6 mb-4">
@@ -143,20 +183,14 @@
                                     <td><i class="fas fa-user me-1 text-primary"></i>@acceso.NombreUsuario</td>
                                     <td>
                                         @if (acceso.TipoAccion == "Login")
-                                        {
-                                            <span class="badge bg-success">Login</span>
-                                        }
+                                        { <span class="badge bg-success">Login</span> }
                                         else if (acceso.TipoAccion == "Logout")
-                                        {
-                                            <span class="badge bg-secondary">Logout</span>
-                                        }
+                                        { <span class="badge bg-secondary">Logout</span> }
                                         else
-                                        {
-                                            <span class="badge bg-info">@acceso.TipoAccion</span>
-                                        }
+                                        { <span class="badge bg-info">@acceso.TipoAccion</span> }
                                     </td>
                                     <td><code>@acceso.Ip</code></td>
-                                    <td class="text-muted" style="font-size:0.85rem;">@acceso.Fecha.ToString("dd/MM/yy HH:mm:")</td>
+                                    <td class="text-muted" style="font-size:0.85rem;">@acceso.Fecha.ToString("dd/MM/yy HH:mm")</td>
                                 </tr>
                             }
                         }
@@ -190,16 +224,12 @@
                             <tr>
                                 <td>#@sop.Id</td>
                                 <td>@sop.Tipo</td>
-                                <td>@(sop.IdUsuariosNavigation?.Nombre ?? "N/A")</td>
+                                <td>@sop.NombreUsuario</td>
                                 <td>
-                                    @if (!string.IsNullOrEmpty(sop.Respuesta))
-                                    {
-                                        <span class="badge bg-success">Respondido</span>
-                                    }
+                                    @if (sop.EstaRespondido)
+                                    { <span class="badge bg-success">Respondido</span> }
                                     else
-                                    {
-                                        <span class="badge bg-warning text-dark">Pendiente</span>
-                                    }
+                                    { <span class="badge bg-warning text-dark">Pendiente</span> }
                                 </td>
                             </tr>
                         }
@@ -210,13 +240,191 @@
     </div>
 </div>
 
-<!-- Chart.js CDN -->
+<!-- ========================================================
+     BIG DATA TABLE — Resumen de Clientes Paginado
+     ======================================================== -->
+<div class="big-data-section mt-2 mb-5">
+    <div class="usuarios-header-banner mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h2 class="fw-bold mb-1"><i class="fas fa-database me-2"></i>Panel de Clientes — Big Data</h2>
+                <p class="mb-0 opacity-75">Métricas individuales en tiempo real por cada cliente del sistema</p>
+            </div>
+            <div class="d-flex gap-3 align-items-center flex-wrap">
+                <div class="prop-stat-badge">
+                    <i class="fas fa-users me-2"></i>
+                    <span id="bdTotalBadge" class="fw-bold">@Model.PaginaClientes.TotalItems</span>
+                    <span class="opacity-75 ms-1">clientes</span>
+                </div>
+                <div class="big-data-search-wrap">
+                    <i class="fas fa-search big-data-search-icon"></i>
+                    <input type="text" id="bdSearch" class="big-data-search-input"
+                           placeholder="Buscar cliente..." autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla Big Data -->
+    <div class="data-table-card">
+        <div class="table-responsive">
+            <table class="dashboard-table big-data-table" id="bdTable">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th class="text-center"><i class="fas fa-building me-1"></i>Props.</th>
+                        <th class="text-center"><i class="fas fa-layer-group me-1"></i>Esp.</th>
+                        <th class="text-center"><i class="fas fa-mobile-alt me-1"></i>Disp.</th>
+                        <th class="text-center"><i class="fas fa-headset me-1"></i>Sop.</th>
+                        <th class="text-center"><i class="fas fa-sign-in-alt me-1"></i>Logins</th>
+                        <th>Último Acceso</th>
+                        <th class="text-center">Métricas</th>
+                    </tr>
+                </thead>
+                <tbody id="bdTableBody">
+                    @foreach (var cliente in Model.PaginaClientes.Items)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="user-avatar-circle bd-avatar">@cliente.Inicial</div>
+                                    <div>
+                                        <div class="fw-semibold theme-text-main" style="font-size:0.9rem;">@cliente.Nombre</div>
+                                        <div class="text-muted" style="font-size:0.78rem;">@cliente.Correo</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @if (cliente.Rol == "Admin")
+                                { <span class="badge bg-purple-soft"><i class="fas fa-crown me-1"></i>Admin</span> }
+                                else if (cliente.Rol == "Huesped")
+                                { <span class="badge bg-cyan-soft"><i class="fas fa-eye me-1"></i>Huésped</span> }
+                                else
+                                { <span class="badge bg-blue-soft"><i class="fas fa-user me-1"></i>Usuario</span> }
+                            </td>
+                            <td>
+                                @if (cliente.Estado?.ToLower() == "activo")
+                                { <span class="bd-status-dot active"></span> }
+                                else
+                                { <span class="bd-status-dot inactive"></span> }
+                                <span class="text-muted" style="font-size:0.85rem;">@cliente.Estado</span>
+                            </td>
+                            <td class="text-center fw-bold">@cliente.Propiedades</td>
+                            <td class="text-center fw-bold">@cliente.Espacios</td>
+                            <td class="text-center fw-bold">@cliente.Dispositivos</td>
+                            <td class="text-center">
+                                @if (cliente.Soportes > 0)
+                                { <span class="badge bg-warning text-dark">@cliente.Soportes</span> }
+                                else
+                                { <span class="text-muted">0</span> }
+                            </td>
+                            <td class="text-center fw-semibold text-success">@cliente.Logins</td>
+                            <td class="text-muted" style="font-size:0.82rem;">
+                                @(cliente.UltimoAcceso.HasValue
+                                    ? cliente.UltimoAcceso.Value.ToString("dd/MM/yy HH:mm")
+                                    : "—")
+                            </td>
+                            <td class="text-center">
+                                <button class="btn-primary-custom btn-sm bd-metrics-btn"
+                                        data-cliente-id="@cliente.Id"
+                                        data-cliente-nombre="@cliente.Nombre"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#clienteMetricasModal"
+                                        title="Ver métricas detalladas">
+                                    <i class="fas fa-chart-bar me-1"></i>Métricas
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        @if (Model.PaginaClientes.TotalPages > 1)
+        {
+            <div class="bd-pagination d-flex justify-content-between align-items-center px-3 py-3">
+                <span class="text-muted" style="font-size:0.85rem;">
+                    Mostrando @Model.PaginaClientes.From–@Model.PaginaClientes.To de @Model.PaginaClientes.TotalItems clientes
+                </span>
+                <div class="d-flex gap-2">
+                    @if (Model.PaginaClientes.HasPrevious)
+                    {
+                        <a asp-page="Index"
+                           asp-route-pageNum="@(Model.PaginaClientes.Page - 1)"
+                           asp-route-busqueda="@Model.Busqueda"
+                           class="btn-secondary-custom btn-sm">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    }
+                    <span class="bd-page-indicator">
+                        Página @Model.PaginaClientes.Page de @Model.PaginaClientes.TotalPages
+                    </span>
+                    @if (Model.PaginaClientes.HasNext)
+                    {
+                        <a asp-page="Index"
+                           asp-route-pageNum="@(Model.PaginaClientes.Page + 1)"
+                           asp-route-busqueda="@Model.Busqueda"
+                           class="btn-secondary-custom btn-sm">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ========================================================
+     MODAL — Métricas Individuales del Cliente (AJAX)
+     ======================================================== -->
+<div class="modal fade" id="clienteMetricasModal" tabindex="-1" aria-labelledby="clienteMetricasModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg glass-card">
+            <div class="modal-header border-0 bd-modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-avatar-circle bd-avatar" id="modalClienteAvatar">?</div>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0" id="clienteMetricasModalLabel">Métricas del Cliente</h5>
+                        <small class="text-muted" id="modalClienteCorreo"></small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4" id="modalMetricasBody">
+                <!-- Estado de carga -->
+                <div class="text-center py-5" id="modalLoading">
+                    <i class="fas fa-spinner fa-spin fa-2x text-primary mb-3"></i>
+                    <p class="text-muted">Cargando métricas...</p>
+                </div>
+                <!-- Contenido (población dinámica vía JS) -->
+                <div id="modalMetricasContent" class="d-none">
+
+                    <!-- KPIs del cliente -->
+                    <div class="kpi-grid kpi-grid-4 mb-4" id="modalKpis"></div>
+
+                    <!-- Timeline de movimientos -->
+                    <div class="data-table-card">
+                        <h3><i class="fas fa-history me-2"></i>Historial de Movimientos</h3>
+                        <div id="clienteTimeline" class="cliente-timeline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================================
+     SCRIPTS
+     ======================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
-    // Paleta de colores Modern Glassmorphism
-    const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#ef4444', '#6366f1'];
-    const COLORS_SOFT = ['rgba(59,130,246,0.6)', 'rgba(139,92,246,0.6)', 'rgba(236,72,153,0.6)', 'rgba(245,158,11,0.6)', 'rgba(16,185,129,0.6)', 'rgba(6,182,212,0.6)', 'rgba(239,68,68,0.6)', 'rgba(99,102,241,0.6)'];
+    // ---- Paleta Glassmorphism ----
+    const COLORS      = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#06b6d4','#ef4444','#6366f1'];
+    const COLORS_SOFT = COLORS.map(c => c + '99');
 
     Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
     Chart.defaults.plugins.legend.labels.usePointStyle = true;
@@ -228,75 +436,147 @@
         type: 'line',
         data: {
             labels: accesosData.labels,
-            datasets: [{
-                label: 'Ingresos Exitosos',
-                data: accesosData.data,
-                borderColor: '#8b5cf6',
-                backgroundColor: 'rgba(139,92,246,0.15)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 6,
-                pointBackgroundColor: '#8b5cf6',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                borderWidth: 3
-            }]
+            datasets: [{ label: 'Ingresos Exitosos', data: accesosData.data, borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.15)', fill: true, tension: 0.4, pointRadius: 6, pointBackgroundColor: '#8b5cf6', pointBorderColor: '#fff', pointBorderWidth: 2, borderWidth: 3 }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
     });
 
-    // 2. Navegadores Más Usados (Doughnut)
+    // 2. Navegadores (Doughnut)
     const navsData = @Html.Raw(Model.NavegadoresJson);
     new Chart(document.getElementById('chartNavegadores'), {
         type: 'doughnut',
-        data: {
-            labels: navsData.labels,
-            datasets: [{ data: navsData.data, backgroundColor: COLORS, borderWidth: 3, borderColor: '#fff' }]
-        },
+        data: { labels: navsData.labels, datasets: [{ data: navsData.data, backgroundColor: COLORS, borderWidth: 3, borderColor: '#fff' }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } }, cutout: '65%' }
     });
 
-    // 3. Páginas Más Visitadas (Bar Horizontal)
+    // 3. Páginas (Bar Horizontal)
     const paginasData = @Html.Raw(Model.PaginasJson);
     new Chart(document.getElementById('chartPaginas'), {
         type: 'bar',
-        data: {
-            labels: paginasData.labels,
-            datasets: [{ label: 'Visitas', data: paginasData.data, backgroundColor: COLORS_SOFT, borderColor: COLORS, borderWidth: 2, borderRadius: 8 }]
-        },
+        data: { labels: paginasData.labels, datasets: [{ label: 'Visitas', data: paginasData.data, backgroundColor: COLORS_SOFT, borderColor: COLORS, borderWidth: 2, borderRadius: 8 }] },
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
     });
 
-    // 4. Ubicación de Clientes (Pie)
+    // 4. Ubicación (Pie)
     const ubicacionData = @Html.Raw(Model.UbicacionJson);
     new Chart(document.getElementById('chartUbicacion'), {
         type: 'pie',
-        data: {
-            labels: ubicacionData.labels,
-            datasets: [{ data: ubicacionData.data, backgroundColor: COLORS.slice().reverse(), borderWidth: 3, borderColor: '#fff' }]
-        },
+        data: { labels: ubicacionData.labels, datasets: [{ data: ubicacionData.data, backgroundColor: COLORS.slice().reverse(), borderWidth: 3, borderColor: '#fff' }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
     });
 
-    // 5. Demografía Rol (Doughnut)
+    // 5. Roles (Doughnut)
     const rolData = @Html.Raw(Model.RolJson);
     new Chart(document.getElementById('chartRol'), {
         type: 'doughnut',
-        data: {
-            labels: rolData.labels,
-            datasets: [{ data: rolData.data, backgroundColor: ['#ec4899', '#3b82f6', '#f59e0b', '#10b981'], borderWidth: 3, borderColor: '#fff' }]
-        },
+        data: { labels: rolData.labels, datasets: [{ data: rolData.data, backgroundColor: ['#ec4899','#3b82f6','#f59e0b','#10b981'], borderWidth: 3, borderColor: '#fff' }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, cutout: '50%' }
     });
 
-    // 6. Dispositivos por Tipo (Bar)
+    // 6. Dispositivos (Bar)
     const dispData = @Html.Raw(Model.DispositivosTipoJson);
     new Chart(document.getElementById('chartDispositivos'), {
         type: 'bar',
-        data: {
-            labels: dispData.labels,
-            datasets: [{ label: 'Equipos', data: dispData.data, backgroundColor: COLORS_SOFT, borderColor: COLORS, borderWidth: 2, borderRadius: 8 }]
-        },
+        data: { labels: dispData.labels, datasets: [{ label: 'Equipos', data: dispData.data, backgroundColor: COLORS_SOFT, borderColor: COLORS, borderWidth: 2, borderRadius: 8 }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
     });
+
+    // ---- BIG DATA: Búsqueda dinámica (con debounce → AJAX) ----
+    let bdSearchTimeout = null;
+    const bdSearchInput = document.getElementById('bdSearch');
+    if (bdSearchInput) {
+        bdSearchInput.addEventListener('input', function () {
+            clearTimeout(bdSearchTimeout);
+            bdSearchTimeout = setTimeout(() => {
+                window.location.href = '/Dashboard?pageNum=1&busqueda=' + encodeURIComponent(this.value.trim());
+            }, 500);
+        });
+    }
+
+    // ---- MODAL: Cargar métricas individuales vía AJAX ----
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal       = document.getElementById('clienteMetricasModal');
+        const loadingEl   = document.getElementById('modalLoading');
+        const contentEl   = document.getElementById('modalMetricasContent');
+        const kpisEl      = document.getElementById('modalKpis');
+        const timelineEl  = document.getElementById('clienteTimeline');
+        const avatarEl    = document.getElementById('modalClienteAvatar');
+        const correoEl    = document.getElementById('modalClienteCorreo');
+        const titleEl     = document.getElementById('clienteMetricasModalLabel');
+
+        if (!modal) return;
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            const btn       = event.relatedTarget;
+            const clienteId = btn.getAttribute('data-cliente-id');
+            const nombre    = btn.getAttribute('data-cliente-nombre');
+
+            // Reset estado
+            loadingEl.classList.remove('d-none');
+            contentEl.classList.add('d-none');
+            titleEl.textContent = 'Métricas de ' + nombre;
+            avatarEl.textContent = nombre ? nombre[0].toUpperCase() : '?';
+
+            // Fetch AJAX
+            fetch('/Dashboard?handler=ClienteMetricas&clienteId=' + clienteId)
+                .then(r => r.json())
+                .then(data => {
+                    renderModalKpis(data, kpisEl);
+                    renderTimeline(data.movimientos || [], timelineEl);
+                    if (correoEl) correoEl.textContent = data.correo || '';
+                    loadingEl.classList.add('d-none');
+                    contentEl.classList.remove('d-none');
+                })
+                .catch(() => {
+                    loadingEl.innerHTML = '<p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Error al cargar métricas</p>';
+                });
+        });
+    });
+
+    function renderModalKpis(data, container) {
+        const kpis = [
+            { icon: 'fa-building',   color: 'blue',   val: data.totalPropiedades,  label: 'Propiedades' },
+            { icon: 'fa-layer-group',color: 'purple',  val: data.totalEspacios,     label: 'Espacios' },
+            { icon: 'fa-mobile-alt', color: 'cyan',   val: data.totalDispositivos, label: 'Dispositivos' },
+            { icon: 'fa-ticket-alt', color: 'orange', val: data.totalSoportes,     label: 'Soportes' },
+            { icon: 'fa-sign-in-alt',color: 'green',  val: data.totalLogins,       label: 'Logins Totales' },
+            { icon: 'fa-exclamation-circle', color: 'red', val: data.soportesPendientes, label: 'Pendientes' }
+        ];
+        container.innerHTML = kpis.map(k =>
+            `<div class="kpi-card ${k.color} bd-card">
+                <div class="kpi-icon ${k.color}"><i class="fas ${k.icon}"></i></div>
+                <div class="kpi-value">${k.val}</div>
+                <div class="kpi-label">${k.label}</div>
+            </div>`
+        ).join('');
+    }
+
+    function renderTimeline(movimientos, container) {
+        if (!movimientos.length) {
+            container.innerHTML = '<p class="text-center text-muted py-4"><i class="fas fa-clock me-2"></i>Sin movimientos registrados aún</p>';
+            return;
+        }
+        container.innerHTML = movimientos.map(m => {
+            const fecha = new Date(m.fecha);
+            const fechaStr = fecha.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })
+                           + ' ' + fecha.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+            return `
+            <div class="timeline-item">
+                <div class="timeline-icon-wrap">
+                    <div class="timeline-icon ${m.colorClase}">
+                        <i class="fas ${m.icono}"></i>
+                    </div>
+                </div>
+                <div class="timeline-content">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong class="theme-text-main">${m.tipoAccion}</strong>
+                            <p class="text-muted mb-0 small">${m.descripcion}</p>
+                        </div>
+                        <small class="text-muted timeline-fecha">${fechaStr}</small>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
 </script>
