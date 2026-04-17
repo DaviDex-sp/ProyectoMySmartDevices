@@ -309,3 +309,282 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================================
+   BIG DATA — Nuevas secciones MSD-24
+   ============================================================ */
+
+/* === Sección Big Data KPIs Admin === */
+.big-data-kpi-section {
+    margin-bottom: 2.5rem;
+}
+
+.section-title-bd {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title-bd i {
+    color: var(--primary-blue);
+}
+
+/* Grid de 4 columnas para Big Data KPIs */
+.kpi-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Sub-texto en KPI cards del Big Data */
+.kpi-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    font-weight: 400;
+}
+
+/* BD Card modifier */
+.bd-card {
+    border-radius: 16px;
+    padding: 1.25rem;
+}
+
+/* === Big Data Table === */
+.big-data-table th,
+.big-data-table td {
+    white-space: nowrap;
+}
+
+.big-data-table td {
+    vertical-align: middle;
+}
+
+/* Avatar pequeño para tabla Big Data */
+.bd-avatar {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1rem !important;
+    border-radius: 10px !important;
+    flex-shrink: 0;
+}
+
+/* Status dot */
+.bd-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.bd-status-dot.active   { background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+.bd-status-dot.inactive { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+
+/* Role badges */
+.bg-purple-soft {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+    border: 1px solid rgba(139,92,246,0.2);
+}
+
+.bg-blue-soft {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    border: 1px solid rgba(59,130,246,0.2);
+}
+
+.bg-cyan-soft {
+    background: rgba(6, 182, 212, 0.12);
+    color: #06b6d4;
+    border: 1px solid rgba(6,182,212,0.2);
+}
+
+/* === Big Data Section Banner === */
+.big-data-section {
+    margin-top: 1rem;
+}
+
+/* Stat badge en header del banner */
+.prop-stat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    color: var(--text-dark);
+}
+
+/* Big Data Search (en banner) */
+.big-data-search-wrap {
+    position: relative;
+    min-width: 220px;
+}
+
+.big-data-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.big-data-search-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    color: var(--text-dark);
+    font-size: 0.87rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.big-data-search-input::placeholder { color: rgba(255,255,255,0.6); }
+
+.big-data-search-input:focus {
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+}
+
+/* === Paginación Big Data === */
+.bd-pagination {
+    border-top: 1px solid var(--divider-color);
+    margin-top: 0.5rem;
+}
+
+.bd-page-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    background: var(--section-bg);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: var(--text-light);
+    border: 1px solid var(--border-subtle);
+}
+
+/* === Modal Big Data — Header === */
+.bd-modal-header {
+    background: var(--primary-gradient);
+    border-radius: 0.5rem 0.5rem 0 0;
+    padding: 1.25rem 1.5rem;
+}
+
+/* === Timeline de Movimientos === */
+.cliente-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 0;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--divider-color);
+    transition: background 0.2s ease;
+}
+
+.timeline-item:last-child {
+    border-bottom: none;
+}
+
+.timeline-item:hover {
+    background: var(--table-row-hover);
+    border-radius: 8px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.timeline-icon-wrap {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 2px;
+}
+
+.timeline-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    background: var(--section-bg);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.2s ease;
+}
+
+.timeline-icon.text-success { color: #10b981 !important; background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
+.timeline-icon.text-secondary { color: #64748b !important; background: rgba(100,116,139,0.1); border-color: rgba(100,116,139,0.2); }
+.timeline-icon.text-primary { color: #3b82f6 !important; background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); }
+.timeline-icon.text-warning { color: #f59e0b !important; background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); }
+.timeline-icon.text-danger  { color: #ef4444 !important; background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); }
+.timeline-icon.text-info    { color: #06b6d4 !important; background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.2); }
+.timeline-icon.text-muted   { color: #94a3b8 !important; background: var(--section-bg); }
+.timeline-icon.text-purple  { color: #8b5cf6 !important; background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.2); }
+
+.timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-fecha {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* Dark mode: tabla Big Data */
+.dark-theme .big-data-search-input {
+    color: #f8fafc;
+    background: rgba(18,18,18,0.8);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.dark-theme .big-data-search-input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* Responsive Big Data */
+@media (max-width: 1200px) {
+    .kpi-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .kpi-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .big-data-search-wrap {
+        min-width: 160px;
+    }
+
+    .bd-modal-header {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
