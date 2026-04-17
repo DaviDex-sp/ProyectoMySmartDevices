@@ -208,10 +208,20 @@
                                     <p class="mb-1 text-theme-dynamic small"><i class="fas fa-phone me-1"></i> @(item.Telefono ?? "N/A")</p>
                                     <p class="mb-0 text-muted small">@item.Acesso</p>
                                 </div>
+                                @{
+                                    // Comparación exacta: solo "activo" es estado positivo.
+                                    // "inactivo" y "pendiente" son semánticamente equivalentes (no activo).
+                                    var estadoNormalizado = item.Acesso?.Trim().ToLower() ?? "";
+                                    var esActivo = estadoNormalizado == "activo" || estadoNormalizado == "yes";
+                                    // Label canónico: unificar "inactivo" y "pendiente" en un solo término visual
+                                    var labelEstado = esActivo ? "ACTIVO" : (estadoNormalizado == "pendiente" || estadoNormalizado == "inactivo" ? "PENDIENTE" : estadoNormalizado.ToUpper());
+                                    var claseIndicador = esActivo ? "status-active" : "status-inactive";
+                                    var claseTexto = esActivo ? "text-success" : "text-warning";
+                                }
                                 <div class="status-box">
-                                    <span class="status-indicator @(item.Acesso?.ToLower().Contains("activo") == true || item.Acesso?.ToLower().Contains("yes") == true ? "status-active" : "status-inactive")"></span>
-                                    <span class="small fw-bold @(item.Acesso?.ToLower().Contains("activo") == true || item.Acesso?.ToLower().Contains("yes") == true ? "text-success" : "text-danger")">
-                                        @(item.Acesso?.ToUpper() ?? "UNKNOWN")
+                                    <span class="status-indicator @claseIndicador"></span>
+                                    <span class="small fw-bold @claseTexto">
+                                        @labelEstado
                                     </span>
                                 </div>
                                 <div class="ms-auto btn-group">

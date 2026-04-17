@@ -96,8 +96,9 @@
     margin-right: 6px;
 }
 
-.status-active { background-color: #10b981; box-shadow: 0 0 10px #10b981; }
-.status-inactive { background-color: #ef4444; box-shadow: 0 0 10px #ef4444; }
+.status-active   { background-color: #10b981; box-shadow: 0 0 10px #10b981; }
+/* "inactivo" y "pendiente" son el mismo estado: no activo. Se representa en ámbar (warning), no en rojo (error). */
+.status-inactive { background-color: #f59e0b; box-shadow: 0 0 10px #f59e0b; }
 
 /* Dashboard informativo para el usuario */
 .user-info-panel {
