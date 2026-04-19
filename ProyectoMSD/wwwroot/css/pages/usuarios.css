@@ -84,7 +84,7 @@
     justify-content: center;
     font-weight: 700;
     font-size: 1.2rem;
-    color: white;
+    color: var(--text-inverse);
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
@@ -146,7 +146,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .text-shadow-custom {
@@ -208,7 +208,7 @@
     width: 45px;
     height: 45px;
     background: #10b981;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .status-icon.warning {
@@ -225,14 +225,14 @@
     border: none;
     border-radius: 20px;
     padding: 10px 25px;
-    color: white;
+    color: var(--text-inverse);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .btn-gradient-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
-    color: white;
+    color: var(--text-inverse);
 }
 
 .user-card-item {

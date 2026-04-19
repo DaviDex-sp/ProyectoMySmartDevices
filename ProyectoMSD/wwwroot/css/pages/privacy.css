@@ -72,11 +72,11 @@
 /* Summary Section */
 .summary-section {
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-    color: white;
+    color: var(--text-inverse);
 }
 
 .summary-section h2 {
-    color: white;
+    color: var(--text-inverse);
 }
 
 .summary-grid {
@@ -160,7 +160,7 @@
 .measure-item {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(168, 85, 247, 0.8));
     backdrop-filter: blur(8px);
-    color: white;
+    color: var(--text-inverse);
     padding: 25px;
     border-radius: 16px;
     text-align: center;
@@ -184,7 +184,7 @@
     margin-top: 10px;
     padding: 8px 16px;
     background: #667eea;
-    color: white;
+    color: var(--text-inverse);
     text-decoration: none;
     border-radius: 5px;
     font-size: 0.9em;
@@ -220,7 +220,7 @@
 
 .data-table th {
     background: #667eea;
-    color: white;
+    color: var(--text-inverse);
     font-weight: 600;
 }
 
@@ -276,12 +276,12 @@
 
 .cookie-status.essential {
     background: #27ae60;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .cookie-status.optional {
     background: #f39c12;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .cookie-actions {
@@ -294,7 +294,7 @@
     display: inline-block;
     padding: 12px 25px;
     background: #667eea;
-    color: white;
+    color: var(--text-inverse);
     text-decoration: none;
     border-radius: 6px;
     font-weight: 600;

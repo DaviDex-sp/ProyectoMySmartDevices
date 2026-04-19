@@ -130,14 +130,14 @@
 .icon-container-lg {
     width: 100px;
     height: 100px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 4px solid rgba(255, 255, 255, 0.3);
+    background: var(--card-bg-alt);
+    border: 4px solid var(--primary-blue);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
-    color: white;
+    color: var(--primary-blue);
 }
 
 .bg-gradient-danger {
@@ -218,7 +218,7 @@ body {
 .dark-theme .form-control, .dark-theme .form-select {
     background-color: #111 !important;
     border-color: #333 !important;
-    color: #fff !important;
+    color: var(--text-inverse) !important;
 }
 
 /* Transiciones Suaves */
@@ -269,7 +269,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-inverse);
     font-size: 1rem;
     margin-right: 0.75rem;
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
@@ -409,7 +409,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     align-items: center;
     justify-content: center;
     font-size: 0.85rem;
-    color: white;
+    color: var(--text-inverse);
     flex-shrink: 0;
     transition: transform 0.2s ease;
 }
@@ -463,7 +463,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-nav-theme-toggle:hover {
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-inverse);
     transform: rotate(15deg) scale(1.1);
     box-shadow: var(--hover-shadow);
 }
@@ -503,7 +503,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     top: -4px;
     right: -4px;
     background: linear-gradient(135deg, #ef4444, #f87171);
-    color: white;
+    color: var(--text-inverse);
     font-size: 0.65rem;
     font-weight: 700;
     min-width: 18px;
@@ -555,7 +555,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-nav-profile:hover {
     background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-    color: white;
+    color: var(--text-inverse);
     border-color: transparent;
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35);
@@ -575,7 +575,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-nav-logout:hover {
     background: linear-gradient(135deg, #ef4444, #f87171);
-    color: white;
+    color: var(--text-inverse);
     border-color: transparent;
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
@@ -604,7 +604,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    color: white;
+    color: var(--text-inverse);
     padding: 3rem 2rem;
     margin-bottom: 2rem;
     position: relative;
@@ -712,7 +712,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .table-header {
     background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    color: white;
+    color: var(--text-inverse);
     padding: 2rem;
     position: relative;
 }
@@ -938,7 +938,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 .btn-primary-custom {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     border: none;
-    color: white;
+    color: var(--text-inverse);
     padding: 0.75rem 2rem;
     border-radius: 12px;
     font-weight: 600;
@@ -967,14 +967,14 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-secondary-custom:hover {
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-1px);
 }
 
 .btn-danger-custom {
     background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
     border: none;
-    color: white;
+    color: var(--text-inverse);
     padding: 0.75rem 2rem;
     border-radius: 12px;
     font-weight: 600;
@@ -993,7 +993,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 .btn-purple-glow {
     background: linear-gradient(135deg, #a855f7 0%, #8b5cf6 100%);
     border: none;
-    color: white;
+    color: var(--text-inverse);
     padding: 0.75rem 2rem;
     border-radius: 24px;
     font-weight: 600;
@@ -1004,7 +1004,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 .btn-purple-glow:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.55);
-    color: white;
+    color: var(--text-inverse);
 }
 
 /* Action Buttons (CRUD tables) */
@@ -1032,7 +1032,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-edit:hover {
     background: #ffc107;
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-2px);
 }
 
@@ -1043,7 +1043,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-details:hover {
     background: #17a2b8;
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-2px);
 }
 
@@ -1054,7 +1054,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-delete:hover {
     background: #dc3545;
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-2px);
 }
 
@@ -1066,7 +1066,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     width: 60px;
     height: 60px;
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-inverse);
     border: none;
     border-radius: 50%;
     font-size: 1.5rem;
@@ -1081,7 +1081,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .create-button:hover {
     background: #2c5aa0;
-    color: white;
+    color: var(--text-inverse);
     transform: scale(1.1);
     box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
     text-decoration: none;
@@ -1146,7 +1146,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     bottom: 5px;
     right: 5px;
     background: #06b6d4;
-    color: white;
+    color: var(--text-inverse);
     padding: 0.25rem 0.75rem;
     border-radius: 15px;
     font-size: 0.7rem;
@@ -1162,7 +1162,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     bottom: 10px;
     right: 10px;
     background: #dc2626;
-    color: white;
+    color: var(--text-inverse);
     padding: 0.25rem 0.75rem;
     border-radius: 15px;
     font-size: 0.7rem;
@@ -1216,7 +1216,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     justify-content: center;
     font-size: 2.5rem;
     font-weight: 600;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 1rem;
     backdrop-filter: blur(10px);
 }
@@ -1243,7 +1243,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     border-radius: 20px;
     padding: 2rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 2rem;
     box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
     position: relative;
@@ -1280,7 +1280,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     border-radius: 20px;
     padding: 2rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 2rem;
     box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
     position: relative;
@@ -1312,7 +1312,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 1rem;
     backdrop-filter: blur(10px);
 }
@@ -1337,7 +1337,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
     border-radius: 20px;
     padding: 2rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 2rem;
     box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
     position: relative;
@@ -1369,7 +1369,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 1rem;
     backdrop-filter: blur(10px);
 }
@@ -1624,7 +1624,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 /* ----- Admin Dashboard Button ----- */
 .btn-admin-dashboard {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
+    color: var(--text-inverse);
     border: none;
     padding: 0.4rem 1rem;
     border-radius: 10px;
@@ -1648,7 +1648,7 @@ body, .card, .navbar, .footer, .settings-card, .form-control, .form-select {
 
 .btn-admin-dashboard:hover {
     background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
 }

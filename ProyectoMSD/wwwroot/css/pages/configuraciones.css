@@ -33,7 +33,7 @@
 
 .configuraciones-table .table-header {
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-inverse);
     border-bottom: 1px solid var(--glass-border);
 }
 
