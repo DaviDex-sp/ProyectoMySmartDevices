@@ -4,6 +4,7 @@
     --bg-card: rgba(30, 30, 30, 0.95);
     --text-main: #e0e0e0;
     --text-muted: #a0a0a0;
+    --text-inverse: #ffffff;
     --border-color: rgba(255, 255, 255, 0.1);
     --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.4);

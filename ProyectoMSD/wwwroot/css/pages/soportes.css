@@ -160,7 +160,7 @@
     border: none;
     border-radius: 25px;
     padding: 0.75rem 2rem;
-    color: white;
+    color: var(--text-inverse);
     font-weight: 600;
     transition: all 0.3s ease;
     position: fixed;
@@ -173,7 +173,7 @@
 
 .btn-create:hover {
     background: #6a9c56;
-    color: white;
+    color: var(--text-inverse);
     transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(127, 176, 105, 0.6);
 }

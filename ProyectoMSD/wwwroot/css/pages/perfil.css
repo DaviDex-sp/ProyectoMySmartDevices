@@ -15,7 +15,7 @@
     background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, #ec4899 100%);
     border-radius: 24px;
     padding: 2.5rem;
-    color: white;
+    color: var(--text-inverse);
     margin-bottom: 2rem;
     position: relative;
     overflow: hidden;
@@ -51,7 +51,7 @@
     justify-content: center;
     font-size: 2.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-inverse);
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 2;
@@ -76,7 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-inverse);
     font-size: 0.75rem;
     cursor: pointer;
     z-index: 3;
@@ -242,7 +242,7 @@
 
 .perfil-btn-toggle-pass:hover {
     background: var(--primary-blue);
-    color: white;
+    color: var(--text-inverse);
 }
 
 /* Sidebar */

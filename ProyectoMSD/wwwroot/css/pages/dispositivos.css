@@ -112,7 +112,7 @@
 .create-button:hover, .hover-lift:hover {
     transform: scale(1.1);
     box-shadow: var(--shadow-lg);
-    color: white;
+    color: var(--text-inverse);
 }
 
 .fs-7 { font-size: 0.85rem; }

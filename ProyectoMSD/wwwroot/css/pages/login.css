@@ -235,7 +235,7 @@
     border-radius: 25px;
     padding: 12px 2rem;
     font-weight: 600;
-    color: white;
+    color: var(--text-inverse);
     font-size: 1.1rem;
     transition: all 0.3s ease;
     width: 100%;

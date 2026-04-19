@@ -71,7 +71,7 @@
 
 .edit-btn:hover {
     background: #0d6efd;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .delete-btn {
@@ -81,7 +81,7 @@
 
 .delete-btn:hover {
     background: #dc3545;
-    color: white;
+    color: var(--text-inverse);
 }
 
 /* ----- Device Stats (in Space card) ----- */
@@ -168,12 +168,12 @@
 
 .status-on {
     background-color: #198754 !important;
-    color: white !important;
+    color: var(--text-inverse) !important;
 }
 
 .status-off {
     background-color: #dc3545 !important;
-    color: white !important;
+    color: var(--text-inverse) !important;
 }
 
 .status-indicator {
@@ -199,7 +199,7 @@
 
 .btn-primary-custom:hover {
     opacity: 0.9;
-    color: white;
+    color: var(--text-inverse);
 }
 
 .hover-primary:hover { color: var(--primary-blue) !important; }
