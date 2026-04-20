@@ -19,7 +19,6 @@ namespace ProyectoMSD.Modelos.DTOs
         public int TotalDispositivos { get; set; }
         public double ConsumoEnergeticoSimulado { get; set; }
         
-        // UI Helpers
-        public string BadgeClass { get; set; } = "bg-secondary";
+        // UI Helpers (Arquitectura: Removido BadgeClass por anti-patrón Smart UI)
     }
 }

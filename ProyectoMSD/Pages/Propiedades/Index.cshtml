@@ -77,7 +77,16 @@
                         </div>
                         <!-- Badge tipo -->
                         <div class="position-absolute top-0 start-0 m-3">
-                            <span class="badge @item.BadgeClass fs-6 px-3 py-2 rounded-pill shadow-sm">
+                            @{
+                                string badgeClass = "bg-secondary";
+                                var t = item.Tipo?.ToLower() ?? "";
+                                if(t == "casa") badgeClass = "bg-success";
+                                else if(t == "apartamento") badgeClass = "bg-primary";
+                                else if(t == "local") badgeClass = "bg-warning text-dark";
+                                else if(t == "oficina") badgeClass = "bg-info";
+                                else if(t == "finca") badgeClass = "bg-danger";
+                            }
+                            <span class="badge @badgeClass fs-6 px-3 py-2 rounded-pill shadow-sm">
                                 <i class="fas fa-tag me-1"></i>@item.Tipo
                             </span>
                         </div>

@@ -55,8 +55,8 @@ namespace ProyectoMSD.Services
                     PropietarioInicial = (propietario?.Nombre?.Length > 0) ? propietario.Nombre.Substring(0, 1).ToUpper() : "U",
                     TotalEspacios = p.Espacios?.Count ?? 0,
                     TotalDispositivos = totalDispositivos,
-                    ConsumoEnergeticoSimulado = Random.Shared.Next(18, 35) + Random.Shared.NextDouble(),
-                    BadgeClass = ObtenerBadgeTipo(p.Tipo)
+                    // TODO: (Arch-1) Aislar simulación domótica de este servicio.
+                    ConsumoEnergeticoSimulado = Random.Shared.Next(18, 35) + Random.Shared.NextDouble()
                 };
             }).ToList();
         }
@@ -64,21 +64,6 @@ namespace ProyectoMSD.Services
         public async Task<int> GetTotalPropiedadesAsync()
         {
             return await _context.Propiedades.CountAsync();
-        }
-
-        private string ObtenerBadgeTipo(string? tipo)
-        {
-            if (string.IsNullOrEmpty(tipo)) return "bg-secondary";
-            var t = tipo.ToLower();
-            switch (t)
-            {
-                case "casa": return "bg-success";
-                case "apartamento": return "bg-primary";
-                case "local": return "bg-warning text-dark";
-                case "oficina": return "bg-info";
-                case "finca": return "bg-danger";
-                default: return "bg-secondary";
-            }
         }
     }
 }
