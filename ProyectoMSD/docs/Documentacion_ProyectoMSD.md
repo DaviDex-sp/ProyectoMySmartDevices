@@ -85,6 +85,7 @@ Aquí el flujo UI detallado de cómo interactúa el usuario y cada módulo dentr
 
 ### Gestión Domótica (`Dispositivos/` y `Almacenan/`)
 *   Permite cargar en el sistema toda serie de gadgets tecnológicos (`Dispositivos`) para posteriormente, con el esquema relacional intermedio `Almacenan`, emparejar que el "Foco Smart A" estará funcionado bajo la red Wi-Fi del espacio "Habitación 1".
+*   **[NUEVO] Telemetría y Control IoT Bidireccional (SignalR):** La página de detalles de dispositivos usa WebSockets (SignalR `DispositivosHub`) para graficar telemetría en Tiempo Real de Temperatura y Humedad provenientes del sensor (Vía HiveMQ). Simultáneamente, orquesta los botones de apagado enviando peticiones POST al Controlador `MqttComandosController`, consolidando tanto un control remoto asíncrono como lectura instantánea.
 
 ### Control de Fallos y Soporte técnico (`Soportes/`)
 *   Sección destinada al contacto rápido y tickets de soporte. Los usuarios crean tickets (Ej. "Falla conexión BD de panel LED"), y posteriormente el Administrador visualizará aquellos donde la columna `Respuesta` se encuentre vacía (KPI) para gestionarlos activamente.
@@ -109,6 +110,9 @@ Para un entendimiento rápido, a continuación las funciones operacionales clave
 
 4.  **`GetMetricsAsync()` (en `DashboardService.cs`):** 
     Retorna un masivo `DashboardMetricsDto`. Encapsula múltiples consultas asincronas a EF (.CountAsync(), .Average(), agrupaciones relacionales). Calcula Demografía en servidor para liberar carga al cliente, y es la encargada de nutrir librerías visuales tipo `Chart.js` que luego despliega la vista del Admin.
+
+5.  **`PublishCommandAsync()` (en `MqttPublisherService.cs`) y `IHubContext`:** 
+    Es el core del control Cloud-Native IoT. Separan las responsabilidades bidireccionales donde las instrucciones de interfaz de usuario hacia la máquina se publican (Push/Write) en su propio sub-proceso, mientras que el Background Service escucha asincrónicamente inyectando WebSockets en los clientes subscritos a un dispositivo.
 
 ---
 **NOTA DE SEGURIDAD (Regla 1 y 3 del desarrollador):** El entorno actual inyecta directamente credenciales sensibles vinculadas a Azure, SendGrid o APIs. La configuración del entorno (.json) nunca debe ser sincronizada a repositorios como GitHub por estrictas medidas de seguridad implantadas en el pipeline.

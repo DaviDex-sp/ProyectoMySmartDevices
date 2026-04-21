@@ -19,10 +19,8 @@ Este servicio se ejecuta en segundo plano (`BackgroundService`) dentro del pipel
 ## Resiliencia y Fallos
 Si el broker se desconecta abruptamente, se captura la excepción a través del evento `DisconnectedAsync`, el cual instanciará un bucle de reintento (`Task.Delay(TimeSpan.FromSeconds(5))`) de manera infinita hasta recuperar la conectividad de red o la disponibilidad del servicio de HiveMQ.
 
-## Ejemplo de Uso
-Al tratarse de un `BackgroundService`, no se invoca directamente en los controladores ni se inyecta en ninguna vista o DTO de negocio. Se inicia automáticamente junto con la aplicación y opera independientemente procesando mensajes de hardware. 
+## Flujo de Trabajo y Sincronismo DOM (SignalR)
+Durante el ciclo inicial del proyecto, los datos de hardware eran limitados a visualización en consola. Actualmente se rediseñó la arquitectura de propagación:
 
-El servicio imprime internamente la carga útil recibida en el log de depuración:
-```csharp
-[MQTT RECIBIDO] Tópico: domotica/sensores/clima | Payload: {"temperatura": 25.5, "humedad": 60}
-```
+Al llegar un payload en el evento `ApplicationMessageReceivedAsync`, el servicio inyecta un `IHubContext<DispositivoHub>` de ASP.NET SignalR de forma perimetral. Utiliza el conector `Clients.All.SendAsync("ReceiveTelemetry", topic, payload)` para reenviar el binario codificado directamente al Socket TLS / HTTPS abierto en el navegador de los usuarios con rol de administrador en la Vista `Details.cshtml`.
+Esto facilita una arquitectura *Pushing/Reactive* en vez de un Polling Ajax pesado, liberando de consultas innecesarias al sistema de Base de Datos principal (MySQL).

@@ -6,67 +6,201 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/pages/propiedades.css" />
     <link href="~/css/pages/dispositivos.css" rel="stylesheet" />
 }
 
-<div class="main-container" style="max-width: 800px;">
-    <!-- Header -->
-    <div class="profile-header glass-card-header" style="border-bottom: 2px solid var(--primary-blue, #4a90e2);">
-        <div class="d-flex align-items-center">
-            <div class="position-relative me-4">
-                <div class="device-icon" style="width:100px; height:100px; background:rgba(74, 144, 226, 0.1); border:2px solid rgba(74, 144, 226, 0.3); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:var(--primary-blue, #4a90e2);">
-                    <i class="fas fa-mobile-alt"></i>
-                </div>
-            </div>
-            <div class="flex-grow-1">
-                <h2 class="mb-2 theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Nombre)</h2>
-                <div class="profile-status text-muted">
-                    Información detallada del dispositivo
-                </div>
-            </div>
-        </div>
-    </div>
+@{
+    var estado = Model.Dispositivo.Estado?.ToLower() ?? "";
+    var badgeClass = estado.Contains("activo") || estado.Contains("encendido") 
+                     ? "bg-success" 
+                     : "bg-secondary";
+}
 
-    <!-- Detalles -->
-    <div class="form-container mt-4">
-        <div class="form-header">
-            <h3><i class="fas fa-info-circle me-2"></i>Detalles del Dispositivo</h3>
-        </div>
-        
-        <div class="glass-card-inner p-4 mt-3">
-            <div class="info-grid text-start">
-                <div class="row w-100 m-0">
-                    <div class="col-md-6 mb-3">
-                        <strong class="d-block theme-text-main"><i class="fas fa-tag me-1"></i>Nombre</strong>
-                        <span class="theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Nombre)</span>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong class="d-block theme-text-main"><i class="fas fa-list me-1"></i>Tipo</strong>
-                        <span class="theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Tipo)</span>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong class="d-block theme-text-main"><i class="fas fa-tasks me-1"></i>Usos</strong>
-                        <span class="theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Usos)</span>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong class="d-block theme-text-main"><i class="fas fa-industry me-1"></i>Marca</strong>
-                        <span class="theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Marca)</span>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <strong class="d-block theme-text-main"><i class="fas fa-check-circle me-1"></i>Estado</strong>
-                        <span class="theme-text-main">@Html.DisplayFor(model => model.Dispositivo.Estado)</span>
-                    </div>
-                </div>
+<!-- =====================================================
+     HEADER BANNER — Reutilizando estilos de Propiedades
+     ===================================================== -->
+<div class="prop-page-header mb-4 mt-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="prop-header-icon">
+                <i class="fas fa-microchip"></i>
+            </div>
+            <div>
+                <h1 class="fw-bold mb-0" style="font-size:1.9rem;">@Html.DisplayFor(model => model.Dispositivo.Nombre)</h1>
+                <p class="mb-0 opacity-75" style="font-size:0.95rem;">
+                    <i class="fas fa-satellite-dish me-1"></i>Monitorización IoT
+                </p>
             </div>
         </div>
-
-        <div class="d-flex justify-content-between align-items-center mt-5">
-            <a asp-page="./Index" class="btn-secondary-custom">
-                <i class="fas fa-arrow-left me-2"></i>Volver a la lista
-            </a>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+            <span class="prop-tipo-badge @badgeClass shadow-sm text-white px-3 py-1 rounded-pill fw-bold">
+                <i class="fas fa-power-off me-1"></i>@Model.Dispositivo.Estado
+            </span>
             <a asp-page="./Edit" asp-route-id="@Model.Dispositivo.Id" class="btn-primary-custom">
-                <i class="fas fa-edit me-2"></i>Editar Dispositivo
+                <i class="fas fa-edit me-1"></i>Editar
+            </a>
+            <a asp-page="./Index" class="btn-secondary-custom">
+                <i class="fas fa-arrow-left me-1"></i>Volver
             </a>
         </div>
     </div>
 </div>
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+     ===================================================== -->
+<div class="row g-4 mb-4">
+    <!-- Panel: Información General -->
+    <div class="col-md-6">
+        <div class="prop-detail-panel h-100">
+            <div class="prop-detail-panel-header">
+                <i class="fas fa-info-circle me-2"></i>Información Técnica
+            </div>
+            <div class="prop-detail-panel-body">
+                <div class="prop-detail-row">
+                    <div class="prop-detail-icon-box prop-icon-blue">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div>
+                        <small class="prop-detail-label">Tipo de Dispositivo</small>
+                        <div class="prop-detail-value">@Html.DisplayFor(model => model.Dispositivo.Tipo)</div>
+                    </div>
+                </div>
+
+                <div class="prop-detail-row">
+                    <div class="prop-detail-icon-box prop-icon-purple">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div>
+                        <small class="prop-detail-label">Marca Comercial</small>
+                        <div class="prop-detail-value">@Html.DisplayFor(model => model.Dispositivo.Marca)</div>
+                    </div>
+                </div>
+
+                <div class="prop-detail-row">
+                    <div class="prop-detail-icon-box prop-icon-cyan">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div>
+                        <small class="prop-detail-label">Usos / Propósito</small>
+                        <div class="prop-detail-value">@Html.DisplayFor(model => model.Dispositivo.Usos)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel: Telemetría y Control (MQTT) -->
+    <div class="col-md-6">
+        <div class="prop-detail-panel h-100">
+            <div class="prop-detail-panel-header prop-header-green">
+                <i class="fas fa-wifi me-2"></i>Control y Monitorización (Tiempo Real)
+            </div>
+            <div class="prop-detail-panel-body">
+                <div class="d-flex flex-column gap-3 h-100 justify-content-center">
+                    <div class="prop-detail-row d-flex flex-column align-items-center mb-0" style="background: rgba(46, 204, 113, 0.05); padding: 1.5rem; border: 1px solid rgba(46,204,113,0.2);">
+                        <i class="fas fa-thermometer-half fa-2x text-success mb-2"></i>
+                        <small class="prop-detail-label text-success fw-bold text-uppercase tracking-wide">Temperatura</small>
+                        <h2 class="prop-detail-value mt-2 fw-bolder text-success" id="mqtt-temperatura">-- °C</h2>
+                    </div>
+
+                    <div class="prop-detail-row d-flex flex-column align-items-center mb-0" style="background: rgba(52, 152, 219, 0.05); padding: 1.5rem; border: 1px solid rgba(52,152,219,0.2);">
+                        <i class="fas fa-tint fa-2x text-info mb-2"></i>
+                        <small class="prop-detail-label text-info fw-bold text-uppercase tracking-wide">Humedad</small>
+                        <h2 class="prop-detail-value mt-2 fw-bolder text-info" id="mqtt-humedad">-- %</h2>
+                    </div>
+
+                    <div class="mt-3 text-center w-100">
+                        <small class="prop-detail-label d-block text-uppercase mb-2 text-muted fw-bold"><i class="fas fa-power-off me-1"></i>Acciones</small>
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="button" class="btn btn-success flex-fill rounded-pill shadow-sm py-2" onclick="enviarComando('ON')" id="btn-on">
+                                <i class="fas fa-bolt me-1"></i> Encender
+                            </button>
+                            <button type="button" class="btn btn-danger flex-fill rounded-pill shadow-sm py-2" onclick="enviarComando('OFF')" id="btn-off">
+                                <i class="fas fa-power-off me-1"></i> Apagar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/dispositivos")
+            .withAutomaticReconnect()
+            .build();
+
+        hubConnection.on("ReceiveTelemetry", function (topic, payload) {
+            console.log("MQTT RealTime:", topic, payload);
+            try {
+                // Suponiendo que el ESP32 envía: {"temperatura": 25.5, "humedad": 60}
+                const data = JSON.parse(payload);
+                
+                // Actualiza UI si existe la propiedad, considerando el patrón de Wokwi
+                if (data.temp !== undefined) {
+                    document.getElementById("mqtt-temperatura").innerText = data.temp + " °C";
+                } else if (data.temperatura !== undefined) {
+                    document.getElementById("mqtt-temperatura").innerText = data.temperatura + " °C";
+                } else if (data.Temperatura !== undefined) {
+                    document.getElementById("mqtt-temperatura").innerText = data.Temperatura + " °C";
+                }
+
+                if (data.humidity !== undefined) {
+                    document.getElementById("mqtt-humedad").innerText = data.humidity + " %";
+                } else if (data.humedad !== undefined) {
+                    document.getElementById("mqtt-humedad").innerText = data.humedad + " %";
+                } else if (data.Humedad !== undefined) {
+                    document.getElementById("mqtt-humedad").innerText = data.Humedad + " %";
+                }
+            } catch (e) {
+                console.warn("Payload MQTT no es JSON o hubo error de parsing:", payload);
+                // Opcional: mostrar raw string
+                document.getElementById("mqtt-temperatura").innerText = payload;
+            }
+        });
+
+        hubConnection.start().then(function () {
+            console.log("Conectado al Hub de SignalR (MQTT Dispositivos)");
+        }).catch(function (err) {
+            return console.error("Error SignalR: " + err.toString());
+        });
+
+        async function enviarComando(accion) {
+            const btn = (accion === 'ON') ? document.getElementById("btn-on") : document.getElementById("btn-off");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/MqttComandos/enviar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        targetTopic: "domotica/comandos/clima",
+                        accion: accion,
+                        valor: "test"
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    console.log("Comando enviado exitosamente:", result.message);
+                } else {
+                    alert("Error Backend: " + result.message);
+                }
+            } catch (error) {
+                console.error("Error en petición REST:", error);
+                alert("Error de comunicación con el App Services / Aiven.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+}

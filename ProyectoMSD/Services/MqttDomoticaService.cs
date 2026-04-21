@@ -1,6 +1,9 @@
 using MQTTnet;
 using MQTTnet.Client;
 using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.SignalR;
+using ProyectoMSD.Hubs;
 
 namespace ProyectoMSD.Services
 {
@@ -8,10 +11,12 @@ namespace ProyectoMSD.Services
     {
         private readonly IMqttClient _mqttClient;
         private readonly ILogger<MqttDomoticaService> _logger;
+        private readonly IHubContext<DispositivoHub> _hubContext;
 
-        public MqttDomoticaService(ILogger<MqttDomoticaService> logger)
+        public MqttDomoticaService(ILogger<MqttDomoticaService> logger, IHubContext<DispositivoHub> hubContext)
         {
             _logger = logger;
+            _hubContext = hubContext;
             var factory = new MqttFactory();
             _mqttClient = factory.CreateMqttClient();
         }
@@ -39,16 +44,15 @@ namespace ProyectoMSD.Services
             };
 
             // 3. Configurar qué hacer cuando llega un mensaje
-            _mqttClient.ApplicationMessageReceivedAsync += e =>
+            _mqttClient.ApplicationMessageReceivedAsync += async e =>
             {
                 var topic = e.ApplicationMessage.Topic;
                 var payload = Encoding.UTF8.GetString(e.ApplicationMessage.PayloadSegment);
 
-                // Por ahora, lo imprimimos en la consola de Visual Studio.
-                // En el siguiente paso, enviaremos esto a tu Razor Page.
                 _logger.LogInformation($"[MQTT RECIBIDO] Tópico: {topic} | Payload: {payload}");
 
-                return Task.CompletedTask;
+                // Retransmitir al Frontend usando SignalR
+                await _hubContext.Clients.All.SendAsync("ReceiveTelemetry", topic, payload);
             };
 
             // 4. Conectar y suscribirse
