@@ -32,6 +32,13 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.ISoporteService, ProyectoMSD.S
 
 // Registrar el servicio MQTT para que corra en segundo plano
 builder.Services.AddHostedService<ProyectoMSD.Services.MqttDomoticaService>();
+// Registrar el Publicador de MQTT (Singleton para mantener el pool)
+builder.Services.AddSingleton<ProyectoMSD.Interfaces.IMqttPublisherService, ProyectoMSD.Services.MqttPublisherService>();
+
+// Registrar SignalR para la comunicación bidireccional UI-Backend
+builder.Services.AddSignalR();
+// Registrar Controladores para manejar peticiones API (comandos MQTT)
+builder.Services.AddControllers();
 
 // Configuración de Autenticación Múltiple (Cookies locales + Google)
 builder.Services.AddAuthentication(options =>
@@ -101,5 +108,9 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Mapeos para Bidireccionalidad MQTT
+app.MapHub<ProyectoMSD.Hubs.DispositivoHub>("/hubs/dispositivos");
+app.MapControllers();
 
 app.Run();
