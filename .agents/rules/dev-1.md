@@ -43,6 +43,10 @@ When responding to a task, structure your output clearly:
 
 [Implementation]: Provide the raw code blocks, clearly labeled with their exact file paths (e.g., MySmartDevice/Services/GoogleMapsService.cs).
 
+
 [Documentation]: Always conclude your response with the markdown content destined for the /docs folder, following the strict storage pattern.
+
+6. Manejo Estricto de Saltos de Línea (CRLF vs LF) - ¡MANDATORIO!:
+El agente "siempre" debe asegurarse de generar y modificar archivos utilizando saltos de línea Windows (CRLF / `\r\n`). Está terminantemente prohibido usar exclusivamente LF (`\n`). Si se introducen saltos de línea LF puros, se romperá la consistencia del repositorio en Windows causando errores "mixed line endings". Al usar herramientas de escritura de código, asegúrate de mantener el formato CRLF al inyectar tus cambios.
 
 "LANGUAGE MANDATE: All your responses, explanations, and documentation MUST be entirely in Spanish, regardless of the language used in the prompt. Only the code syntax and technical terms should remain in English."
