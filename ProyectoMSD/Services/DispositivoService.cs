@@ -19,10 +19,13 @@ namespace ProyectoMSD.Services
 
         public async Task<List<DispositivoDto>> GetDispositivosAsync()
         {
-            var dispositivos = await _context.Dispositivos.ToListAsync();
+            var dispositivos = await _context.Dispositivos.AsNoTracking().ToListAsync();
             return dispositivos.Select(d => new DispositivoDto
             {
                 Id = d.Id,
+                IdEspacio = d.IdEspacio,
+                MAC_Address = d.MAC_Address ?? string.Empty,
+                Protocolo = d.Protocolo ?? string.Empty,
                 Nombre = d.Nombre ?? string.Empty,
                 Estado = d.Estado ?? string.Empty,
                 Tipo = d.Tipo ?? string.Empty,
@@ -79,6 +82,56 @@ namespace ProyectoMSD.Services
             {
                 dispositivo.Estado = "Activo";
             }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
+        }
+
+        public async Task<DispositivoDto?> GetByIdAsync(int id)
+        {
+            var dispositivo = await _context.Dispositivos
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (dispositivo == null) return null;
+
+            return new DispositivoDto
+            {
+                Id = dispositivo.Id,
+                IdEspacio = dispositivo.IdEspacio,
+                MAC_Address = dispositivo.MAC_Address ?? string.Empty,
+                Protocolo = dispositivo.Protocolo ?? string.Empty,
+                Nombre = dispositivo.Nombre ?? string.Empty,
+                Tipo = dispositivo.Tipo ?? string.Empty,
+                Marca = dispositivo.Marca ?? string.Empty,
+                Usos = dispositivo.Usos ?? string.Empty,
+                Estado = dispositivo.Estado ?? string.Empty,
+                IsActive = DispositivoActivo(dispositivo.Estado),
+                IconClass = ObtenerIcono(dispositivo.Tipo),
+                BadgeClass = ObtenerBadge(dispositivo.Tipo)
+            };
+        }
+
+        public async Task<bool> UpdateAsync(DispositivoDto dto)
+        {
+            var dispositivo = await _context.Dispositivos.FindAsync(dto.Id);
+            if (dispositivo == null) return false;
+
+            dispositivo.IdEspacio = dto.IdEspacio;
+            dispositivo.MAC_Address = dto.MAC_Address;
+            dispositivo.Protocolo = dto.Protocolo;
+            dispositivo.Nombre = dto.Nombre;
+            dispositivo.Tipo = dto.Tipo;
+            dispositivo.Marca = dto.Marca;
+            dispositivo.Usos = dto.Usos;
+            dispositivo.Estado = dto.Estado;
 
             try
             {

@@ -9,5 +9,7 @@ namespace ProyectoMSD.Interfaces
         Task<List<DispositivoDto>> GetDispositivosAsync();
         Task<int> GetTotalDispositivosAsync();
         Task<bool> ToggleEstadoAsync(int id);
+        Task<DispositivoDto?> GetByIdAsync(int id);
+        Task<bool> UpdateAsync(DispositivoDto dto);
     }
 }
