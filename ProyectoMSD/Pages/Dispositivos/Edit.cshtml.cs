@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ProyectoMSD.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ProyectoMSD.Interfaces;
+using ProyectoMSD.Modelos.DTOs;
 using System.Threading.Tasks;
 
 namespace ProyectoMSD.Pages.Dispositivos
@@ -14,15 +11,17 @@ namespace ProyectoMSD.Pages.Dispositivos
     [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly ProyectoMSD.Modelos.AppDbContext _context;
+        private readonly IDispositivoService _dispositivoService;
+        private readonly IEspacioService _espacioService;
 
-        public EditModel(ProyectoMSD.Modelos.AppDbContext context)
+        public EditModel(IDispositivoService dispositivoService, IEspacioService espacioService)
         {
-            _context = context;
+            _dispositivoService = dispositivoService;
+            _espacioService = espacioService;
         }
 
         [BindProperty]
-        public Dispositivo Dispositivo { get; set; } = default!;
+        public DispositivoDto Dispositivo { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,48 +30,40 @@ namespace ProyectoMSD.Pages.Dispositivos
                 return NotFound();
             }
 
-            var dispositivo =  await _context.Dispositivos.FirstOrDefaultAsync(m => m.Id == id);
+            var dispositivo = await _dispositivoService.GetByIdAsync(id.Value);
             if (dispositivo == null)
             {
                 return NotFound();
             }
+
             Dispositivo = dispositivo;
+            await CargarEspaciosAsync(Dispositivo.IdEspacio);
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                await CargarEspaciosAsync(Dispositivo.IdEspacio);
                 return Page();
             }
 
-            _context.Attach(Dispositivo).State = EntityState.Modified;
-
-            try
+            var success = await _dispositivoService.UpdateAsync(Dispositivo);
+            if (!success)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DispositivoExists(Dispositivo.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "No se pudo actualizar el dispositivo. Inténtalo de nuevo.");
+                await CargarEspaciosAsync(Dispositivo.IdEspacio);
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool DispositivoExists(int id)
+        private async Task CargarEspaciosAsync(int selectedId = 0)
         {
-            return _context.Dispositivos.Any(e => e.Id == id);
+            var espacios = await _espacioService.GetEspaciosConDispositivosAsync();
+            ViewData["IdEspacio"] = new SelectList(espacios, "Id", "Nombre", selectedId);
         }
     }
 }
