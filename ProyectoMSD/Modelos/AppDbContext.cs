@@ -78,8 +78,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Nombre).HasMaxLength(100);
             entity.Property(e => e.Tipo).HasMaxLength(50);
             entity.Property(e => e.Usos).HasMaxLength(255);
-            entity.Property(e => e.MAC_Address).HasMaxLength(50);
+            entity.Property(e => e.MAC_Address).HasMaxLength(50).HasColumnName("MAC_Address");
             entity.Property(e => e.Protocolo).HasMaxLength(50);
+            entity.Property(e => e.ComponentesJson)
+                .HasColumnType("varchar(2000)")
+                .HasColumnName("ComponentesJson")
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<Espacio>(entity =>

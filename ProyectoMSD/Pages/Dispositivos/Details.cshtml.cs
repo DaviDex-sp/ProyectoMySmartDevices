@@ -1,42 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using ProyectoMSD.Modelos;
+using ProyectoMSD.Interfaces;
+using ProyectoMSD.Modelos.DTOs;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoMSD.Pages.Dispositivos
 {
+    /// <summary>
+    /// PageModel para la pagina de detalles de un dispositivo IoT.
+    /// Carga el dispositivo y sus componentes controlables via IDispositivoService.
+    /// No accede directamente a AppDbContext (arquitectura limpia).
+    /// </summary>
     public class DetailsModel : PageModel
     {
-        private readonly ProyectoMSD.Modelos.AppDbContext _context;
+        private readonly IDispositivoService _dispositivoService;
 
-        public DetailsModel(ProyectoMSD.Modelos.AppDbContext context)
+        public DetailsModel(IDispositivoService dispositivoService)
         {
-            _context = context;
+            _dispositivoService = dispositivoService;
         }
 
-        public Dispositivo Dispositivo { get; set; } = default!;
+        public DispositivoDto? Dispositivo { get; set; }
+        public List<ComponenteDto> Componentes { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var dispositivo = await _context.Dispositivos.FirstOrDefaultAsync(m => m.Id == id);
+            Dispositivo = await _dispositivoService.GetByIdAsync(id.Value);
+            if (Dispositivo == null) return NotFound();
 
-            if (dispositivo is not null)
-            {
-                Dispositivo = dispositivo;
-
-                return Page();
-            }
-
-            return NotFound();
+            Componentes = await _dispositivoService.GetComponentesAsync(id.Value);
+            return Page();
         }
     }
 }

@@ -89,6 +89,24 @@
                             <span asp-validation-for="Dispositivo.Estado" class="text-danger fw-bold"></span>
                         </div>
 
+                        <hr class="my-4">
+
+                        <!-- EDITOR VISUAL DE COMPONENTES -->
+                        <div class="mb-4">
+                            <h5 class="fw-bold mb-3"><i class="fas fa-puzzle-piece me-2"></i>Componentes Controlables</h5>
+                            <p class="text-muted small">Define qué partes de este dispositivo pueden recibir comandos (ej: 'Luz', 'Motor').</p>
+                            
+                            <input type="hidden" asp-for="Dispositivo.ComponentesJson" id="ComponentesJson" />
+                            
+                            <div id="components-container" class="row g-3 mb-3">
+                                <!-- Aquí se renderizan los componentes en JS -->
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline-info btn-sm rounded-pill" onclick="addComponente()">
+                                <i class="fas fa-plus me-1"></i>Añadir Componente
+                            </button>
+                        </div>
+
                         <div class="d-flex justify-content-between mt-4">
                             <a asp-page="Index" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-1"></i>Volver
@@ -110,13 +128,100 @@
     }
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('=== FORMULARIO DISPOSITIVO CARGADO ===');
+        // ==========================================
+        //  UI COMPONENT BUILDER (JSON Generator)
+        // ==========================================
+        let componentes = [];
 
-            const form = document.querySelector('form');
-            form.addEventListener('submit', function(event) {
-                console.log('Enviando formulario dispositivo...');
+        function addComponente() {
+            componentes.push({
+                nombreInterno: `comp_${Date.now()}`,
+                etiqueta: "Nuevo Componente",
+                icono: "fas fa-microchip",
+                comandos: []
             });
+            render();
+        }
+
+        function updateComponente(index, field, value) {
+            componentes[index][field] = value;
+            syncHidden();
+        }
+
+        function removeComponente(index) {
+            componentes.splice(index, 1);
+            render();
+        }
+
+        function addComando(compIndex) {
+            const cmd = prompt("Ingresa el comando (ej: encender, off, subir_volumen):");
+            if (cmd && cmd.trim() !== "") {
+                componentes[compIndex].comandos.push(cmd.trim().toLowerCase());
+                render();
+            }
+        }
+
+        function removeComando(compIndex, cmdIndex) {
+            componentes[compIndex].comandos.splice(cmdIndex, 1);
+            render();
+        }
+
+        function syncHidden() {
+            const hiddenInput = document.getElementById("ComponentesJson");
+            hiddenInput.value = componentes.length > 0 ? JSON.stringify(componentes) : "";
+        }
+
+        function render() {
+            const container = document.getElementById("components-container");
+            container.innerHTML = "";
+
+            componentes.forEach((comp, idx) => {
+                const html = `
+                    <div class="col-md-6 mb-3">
+                        <div class="card bg-dark text-white shadow-sm border-secondary h-100">
+                            <div class="card-header bg-secondary bg-opacity-25 d-flex justify-content-between align-items-center py-2">
+                                <div><i class="${comp.icono} me-2 text-info"></i><span class="fw-bold">${comp.etiqueta}</span></div>
+                                <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeComponente(${idx})"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="card-body p-3">
+                                <div class="mb-2">
+                                    <label class="form-label small text-muted mb-1">Nombre Visual (Etiqueta)</label>
+                                    <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" value="${comp.etiqueta}" onchange="updateComponente(${idx}, 'etiqueta', this.value); render();">
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small text-muted mb-1">Nombre Interno (Clave MQTT)</label>
+                                    <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" value="${comp.nombreInterno}" onchange="updateComponente(${idx}, 'nombreInterno', this.value)">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted mb-1">Clase Icono (FontAwesome)</label>
+                                    <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" value="${comp.icono}" onchange="updateComponente(${idx}, 'icono', this.value); render();">
+                                </div>
+                                <div class="border-top border-secondary pt-2 mt-2">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-info fw-bold">Comandos</small>
+                                        <button type="button" class="btn btn-sm btn-outline-success border-0 py-0" onclick="addComando(${idx})"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        ${comp.comandos.length === 0 ? '<small class="text-muted fst-italic">Sin comandos</small>' : ''}
+                                        ${comp.comandos.map((c, cIdx) => `
+                                            <span class="badge bg-secondary d-flex align-items-center gap-1">
+                                                ${c} <i class="fas fa-times text-danger" style="cursor:pointer;" onclick="removeComando(${idx}, ${cIdx})"></i>
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+            syncHidden();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar vacío
+            syncHidden();
         });
     </script>
 }
