@@ -1,9 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+
 namespace ProyectoMSD.Modelos.DTOs
 {
-    public class ComandoDispositivoDto
+    /// <summary>
+    /// DTO estructurado para el despacho de comandos a dispositivos IoT via MQTT.
+    /// El backend construye el JSON final — el frontend solo declara la intención.
+    /// </summary>
+    public class ComandoEstructuradoDto
     {
-        public string TargetTopic { get; set; } = string.Empty;
-        public string Accion { get; set; } = string.Empty; // e.g., "ON", "OFF", "SET_TEMP"
-        public string Valor { get; set; } = string.Empty;
+        /// <summary>MAC Address del dispositivo destino. Ej: "24:62:AB:F3:10:A8"</summary>
+        [Required]
+        public string MacDestino { get; set; } = string.Empty;
+
+        /// <summary>Nombre interno del componente a controlar. Ej: "luz_sala"</summary>
+        [Required]
+        public string Componente { get; set; } = string.Empty;
+
+        /// <summary>Acción a ejecutar sobre el componente. Ej: "encender", "apagar"</summary>
+        [Required]
+        public string Comando { get; set; } = string.Empty;
     }
 }

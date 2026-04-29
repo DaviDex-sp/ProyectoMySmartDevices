@@ -14,6 +14,9 @@ namespace ProyectoMSD.Modelos.DTOs
         public string Marca { get; set; } = string.Empty;
         public string Usos { get; set; } = string.Empty;
 
+        // UI Builder JSON
+        public string? ComponentesJson { get; set; }
+
         // UI Helpers
         public bool IsActive { get; set; }
         public string IconClass { get; set; } = "fas fa-microchip";

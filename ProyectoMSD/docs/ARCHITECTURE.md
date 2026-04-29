@@ -1,7 +1,7 @@
-﻿# 🏗️ Arquitectura del Proyecto — MySmartDevice
+# 🏗️ Arquitectura del Proyecto — MySmartDevice
 > **Versión:** 2.1.0 — Actualizado: Abril 2026
 > **Responsable:** Arquitecto de Software (arch-1)
-> **LINE ENDING MANDATE:** Todos los archivos del repositorio usan Windows CRLF (`\r\n`). LF puro está estrictamente prohibido.
+> **LINE ENDING MANDATE:** Todos los archivos del repositorio usan Windows CRLF (` `). LF puro está estrictamente prohibido.
 
 ---
 

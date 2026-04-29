@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -46,6 +46,14 @@ public partial class Dispositivo
     [Required(ErrorMessage = "El estado inicial es obligatorio.")]
     [StringLength(30)]
     public string Estado { get; set; } = "Apagado";
+
+    // --- COMPONENTES IoT CONTROLABLES ---
+    /// <summary>
+    /// JSON serializado de List&lt;ComponenteDto&gt;.
+    /// Define los componentes y comandos disponibles para este dispositivo específico.
+    /// Ejemplo: [{"nombreInterno":"luz_sala","etiqueta":"Luz Sala","icono":"fas fa-lightbulb","comandos":["encender","apagar"]}]
+    /// </summary>
+    public string? ComponentesJson { get; set; }
 
     // --- RELACIONES ACTIVAS ---
     public virtual ICollection<Configuracione> Configuraciones { get; set; } = new List<Configuracione>();

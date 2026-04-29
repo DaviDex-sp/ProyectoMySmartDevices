@@ -53,7 +53,7 @@ namespace ProyectoMSD.Migrations
 
                     b.HasIndex("IdEspaciosNavigationId");
 
-                    b.ToTable("Almacenan");
+                    b.ToTable("Almacenan", (string)null);
                 });
 
             modelBuilder.Entity("ProyectoMSD.Modelos.Configuracione", b =>

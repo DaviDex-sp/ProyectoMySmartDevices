@@ -25,6 +25,10 @@ builder.Services.AddScoped<ProyectoMSD.Interfaces.IConfiguracionService, Proyect
 // Registrar la capa de Servicios de Propiedades, Espacios y Dispositivos
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IPropiedadService, ProyectoMSD.Services.PropiedadService>();
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IEspacioService, ProyectoMSD.Services.EspacioService>();
+
+// Registrar el servicio de Notificaciones (Scoped — depende de AppDbContext)
+// Debe registrarse ANTES de IDispositivoService ya que es una dependencia de su constructor
+builder.Services.AddScoped<ProyectoMSD.Interfaces.INotificacionService, ProyectoMSD.Services.NotificacionService>();
 builder.Services.AddScoped<ProyectoMSD.Interfaces.IDispositivoService, ProyectoMSD.Services.DispositivoService>();
 
 // Registrar la capa de Servicios del Módulo de Soporte (sanitización + CRUD)

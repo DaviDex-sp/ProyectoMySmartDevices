@@ -1,97 +1,79 @@
-# DispositivoService — Documentation
+﻿# DispositivoService - Documentacion del Modulo
 
-## Purpose
+## Proposito
 
-`DispositivoService` is the single source of truth for all device-related data access in the MySmartDevice project. It implements `IDispositivoService` and acts as the exclusive intermediary between the database (`AppDbContext`) and any PageModel or Controller that needs device data. No PageModel or Controller may access `AppDbContext` directly for device operations.
+DispositivoService gestiona todas las operaciones de acceso a datos de la entidad Dispositivo. Expone una interfaz limpia basada en DTOs hacia los PageModels y Controladores, manteniendo la capa de persistencia completamente oculta de la interfaz de usuario.
 
-## Dependencies
+Actualizacion en esta version: se anio el metodo CreateAsync que persiste el nuevo Dispositivo en la base de datos y genera automaticamente una notificacion de tipo configuracion para el usuario autenticado que realizo el registro, invocando a INotificacionService.
 
-| Dependency | Type | Notes |
+---
+
+## Dependencias
+
+| Dependencia | Tipo | Ciclo de vida | Proposito |
+|---|---|---|---|
+| AppDbContext | EF Core DbContext | Scoped | Operaciones CRUD sobre dispositivos |
+| INotificacionService | Interfaz de servicio | Scoped | Emision de notificacion post-creacion |
+
+Registro en DI (Program.cs):
+
+    // INotificacionService DEBE registrarse ANTES que IDispositivoService
+    builder.Services.AddScoped<INotificacionService, NotificacionService>();
+    builder.Services.AddScoped<IDispositivoService, DispositivoService>();
+
+---
+
+## API Publica / Interfaz
+
+### GetDispositivosAsync()
+
+Retorna todos los dispositivos mapeados a DispositivoDto, incluyendo helpers de UI calculados (IconClass, BadgeClass, IsActive).
+
+### GetByIdAsync(int id)
+
+Retorna un unico DTO de dispositivo por ID, o null si no existe.
+
+### GetTotalDispositivosAsync()
+
+Retorna el conteo total de dispositivos registrados. Usado por el Dashboard de metricas.
+
+### ToggleEstadoAsync(int id)
+
+Alterna el campo Estado entre Activo e Inactivo. Retorna false si el dispositivo no existe o si ocurre un error en la base de datos.
+
+### UpdateAsync(DispositivoDto dto)
+
+Actualiza todos los campos modificables de un dispositivo existente a partir de un DTO. Retorna false en caso de fallo.
+
+### CreateAsync(Dispositivo dispositivo, int idUsuarioCreador) - NUEVO
+
+| Parametro | Tipo | Descripcion |
 |---|---|---|
-| `AppDbContext` | EF Core DbContext | Injected via DI (`Scoped`) |
-| `Microsoft.EntityFrameworkCore` | NuGet | LINQ query support |
-| `ProyectoMSD.Modelos.DTOs.DispositivoDto` | Internal DTO | Data transfer contract |
-| `ProyectoMSD.Modelos.Dispositivo` | Entity | EF Core entity model |
+| dispositivo | Dispositivo | Entidad con todos los campos requeridos completados |
+| idUsuarioCreador | int | ID del usuario autenticado que ejecuta el registro |
 
-## Public API / Interface
+Retorna: el ID del dispositivo recien creado.
 
-### `GetDispositivosAsync()`
-```csharp
-Task<List<DispositivoDto>> GetDispositivosAsync()
-```
-Returns all devices as a list of `DispositivoDto`. Uses `AsNoTracking()` for read-only performance. Populates all fields including the IoT fields (`MAC_Address`, `Protocolo`, `IdEspacio`) and UI helpers (`IconClass`, `BadgeClass`, `IsActive`).
+Comportamiento:
+1. Ejecuta _context.Dispositivos.Add(dispositivo) + SaveChangesAsync().
+2. Tras el guardado exitoso, invoca _notificacionService.CrearAsync con tipo configuracion y ruta de redireccion a la pagina de detalles del dispositivo.
 
 ---
 
-### `GetTotalDispositivosAsync()`
-```csharp
-Task<int> GetTotalDispositivosAsync()
-```
-Returns the total device count. Used by the Dashboard analytics layer.
+## Ejemplo de Uso
+
+    // En el PageModel Create.cshtml.cs
+    var userIdClaim = User.FindFirstValue("UserId");
+    int idUsuario   = int.TryParse(userIdClaim, out int uid) ? uid : 0;
+
+    await _dispositivoService.CreateAsync(Dispositivo, idUsuario);
+    return RedirectToPage("./Index");
 
 ---
 
-### `ToggleEstadoAsync(int id)`
-```csharp
-Task<bool> ToggleEstadoAsync(int id)
-```
-Toggles the device state between `"Activo"` and `"Inactivo"`. Returns `true` on success, `false` if the device was not found or a `DbUpdateException` occurred.
+## Notas Tecnicas
 
-| Parameter | Type | Description |
-|---|---|---|
-| `id` | `int` | Primary key of the device to toggle |
-
----
-
-### `GetByIdAsync(int id)` *(New)*
-```csharp
-Task<DispositivoDto?> GetByIdAsync(int id)
-```
-Fetches a single device by its primary key using `AsNoTracking()`. Returns a fully-mapped `DispositivoDto` or `null` if no device is found. Used by the Edit page to pre-populate the form.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `id` | `int` | Primary key of the device to fetch |
-
-**Returns:** `DispositivoDto?` — all fields populated including `IdEspacio`, `MAC_Address`, `Protocolo`.
-
----
-
-### `UpdateAsync(DispositivoDto dto)` *(New)*
-```csharp
-Task<bool> UpdateAsync(DispositivoDto dto)
-```
-Finds the tracked entity by `dto.Id`, applies all field assignments explicitly, and persists via `SaveChangesAsync()`. Returns `true` on success. Returns `false` if the device was not found or a `DbUpdateException` occurred. The PageModel is responsible for displaying an error message when `false` is returned.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `dto` | `DispositivoDto` | DTO carrying all updated field values |
-
-**Fields updated:** `IdEspacio`, `MAC_Address`, `Protocolo`, `Nombre`, `Tipo`, `Marca`, `Usos`, `Estado`.
-
----
-
-## Usage Example
-
-### Edit PageModel (thin orchestrator pattern)
-```csharp
-// OnGetAsync
-var dispositivo = await _dispositivoService.GetByIdAsync(id.Value);
-if (dispositivo == null) return NotFound();
-Dispositivo = dispositivo;
-
-// OnPostAsync
-var success = await _dispositivoService.UpdateAsync(Dispositivo);
-if (!success)
-{
-    ModelState.AddModelError(string.Empty, "No se pudo actualizar el dispositivo.");
-    return Page();
-}
-return RedirectToPage("./Index");
-```
-
-## Architectural Notes
-
-- `GetByIdAsync` and `GetDispositivosAsync` use `AsNoTracking()` — they are read-only queries. EF Core will not track these instances.
-- `UpdateAsync` uses `FindAsync(dto.Id)` which returns a tracked entity, enabling change detection on `SaveChangesAsync()`.
-- The service is registered as `Scoped` — one instance per HTTP request, sharing the same `AppDbContext` within that request lifetime.
+- idUsuarioCreador toma el valor 0 si el claim no esta presente. Esto no deberia ocurrir gracias al filtro Authorize aplicado en el PageModel.
+- GetDispositivosAsync y GetByIdAsync usan AsNoTracking() para optimizar el rendimiento en consultas de solo lectura.
+- Los helpers de UI (IsActive, IconClass, BadgeClass) se calculan en metodos privados para mantener el DTO limpio y libre de logica.
+- El orden de registro en DI es obligatorio: INotificacionService debe registrarse antes que IDispositivoService ya que es dependencia de su constructor.
