@@ -36,6 +36,21 @@ namespace ProyectoMSD.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (string.IsNullOrWhiteSpace(Correo) || string.IsNullOrWhiteSpace(Password))
+            {
+                ModelState.AddModelError("", "El correo y la contraseña son obligatorios.");
+                return Page();
+            }
+
+            if (Correo.Length > 200 || Password.Length > 200)
+            {
+                ModelState.AddModelError("", "Credenciales inválidas.");
+                return Page();
+            }
+
+            // Sanitización paramétrica de correos. No alteramos Password para preservar caracteres especiales.
+            Correo = Correo.Trim().ToLower();
+
             var usuario = await _usuarioService.AuthenticateAsync(Correo, Password);
 
             if (usuario != null)
